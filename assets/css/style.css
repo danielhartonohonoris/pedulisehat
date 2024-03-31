@@ -1144,3 +1144,21 @@ body.nav-active { overflow: hidden; }
   .contact-item { margin-block-start: 0; }
 
 }
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 80px;
+  height: auto;
+}
+
+.logo-text {
+  font-family: var(--ff-rubik);
+  font-weight: var(--fw-500);
+  margin-left: 10px;
+  font-size: 2.2rem;
+  color: white;
+  line-height: 1.1; 
+}
