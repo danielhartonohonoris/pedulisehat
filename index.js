@@ -17,6 +17,10 @@ app.get("/medicine", (req, res) => {
     res.render("medicine.ejs");
 });
 
+app.get("/owner", (req, res) => {
+    res.render("owner.ejs");
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
