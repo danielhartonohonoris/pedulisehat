@@ -1,9 +1,23 @@
 const express = require("express");
 const app = express();
+const dotenv = require("dotenv");
 const path = require("path");
-const port = 3100;
+const mongoose = require("mongoose");
 
-//iki ejs
+dotenv.config();
+
+mongoose.connect(process.env.MONGO_URL).then(() => {
+    console.log(`MongoDB connected at ${process.env.MONGO_URL}`);
+}).catch((err) => {
+    console.log(err.message);
+});
+
+const port = process.env.PORT || 5000;
+
+app.use(express.json());
+app.use("/api/todolistitems", require("./routes/api/todolistitems"));
+
+//ejs
 
 app.set('view engine', 'ejs');
 
