@@ -85,3 +85,38 @@ const revealElementOnScroll = function () {
 window.addEventListener("scroll", revealElementOnScroll);
 
 window.addEventListener("load", revealElementOnScroll);
+
+// toggle berita
+document.addEventListener("DOMContentLoaded", function() {
+  var toggleBtn = document.getElementById("toggleBtn");
+  var teksAwal = document.getElementById("teksAwal");
+  var teksLengkap = document.getElementById("teksLengkap");
+
+  toggleBtn.addEventListener("click", function(event) {
+      event.preventDefault();
+      if (teksLengkap.style.display === "none") {
+          teksLengkap.style.display = "block";
+          toggleBtn.innerHTML = "Tutup";
+      } else {
+          teksLengkap.style.display = "none";
+          toggleBtn.innerHTML = "Baca Selengkapnya";
+      }
+  });
+});
+
+function toggleText() {
+  var teksLengkap = this.parentElement.querySelector("#teksLengkap");
+  var toggleBtn = this;
+  
+  if (teksLengkap.style.display === "none" || teksLengkap.style.display === "") {
+      teksLengkap.style.display = "block";
+      toggleBtn.textContent = "Tutup";
+  } else {
+      teksLengkap.style.display = "none";
+      toggleBtn.textContent = "Baca Selengkapnya";
+  }
+}
+document.querySelectorAll('.toggleBtn').forEach(item => {
+item.addEventListener('click', toggleText)
+})
+
