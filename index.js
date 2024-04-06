@@ -77,3 +77,8 @@ app.get("/owner", (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+
+app.get("/information", (req, res) => {
+    res.render("information.ejs");
+});
