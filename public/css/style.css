@@ -1156,10 +1156,29 @@ body.nav-active {
 
   /**
    * LISTING
+   /* Custom CSS */
+.carousel-container {
+  width: 50%; /* Menentukan lebar maksimum carousel */
+  margin: auto; /* Untuk membuat carousel berada di tengah halaman */
+}
+
+.carousel slide {
+  width: 50%; /* Menentukan lebar maksimum carousel */
+  margin: auto; /* Untuk membuat carousel berada di tengah halaman */
+}
+
+.carousel-inner img {
+  width: 100%; /* Menyesuaikan lebar gambar dengan lebar carousel */
+  height: auto; /* Mengatur tinggi gambar agar sesuai proporsinya */
+  display: block; /* Mengatur tinggi gambar agar sesuai proporsinya */
+}
+
+
+
    */
 
   .listing .grid-list {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   /**
@@ -1228,3 +1247,5 @@ body.nav-active {
   color: white;
   line-height: 1.1;
 }
+
+
