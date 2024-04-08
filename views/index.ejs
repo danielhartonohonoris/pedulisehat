@@ -5,7 +5,10 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <!-- 
     - primary meta tags
   -->
@@ -24,6 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Rubik:wght@400;500;700&display=swap"
+  
+  
     rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel="stylesheet">
   
@@ -42,7 +47,7 @@
 
 </head>
 
-<body id="top">
+  <body id="top">
 
   <!-- 
     - #PRELOADER
@@ -137,9 +142,6 @@
         </ul>
 
       </nav>
-
-      
-
     </div>
   </header>
 
@@ -174,32 +176,62 @@
         </div>
 
       </section>
+      <h3 class="section-title headline-md text-center" data-reveal="bottom">Qoutes Of The days!</h3>
+<div class="carousel-container">
+    <div class="carousel-slide">
+        <div class="slide"><img src="./images/qoutes1.png" alt="Slide 1"></div>
+        <div class="slide"><img src="./images/qoutes1.jpg" alt="Slide 2"></div>
+        <div class="slide"><img src="./images/qoutes2.jpg" alt="Slide 3"></div>
+        <!-- Add more slides as needed -->
+    </div>
 
-
-
-
-
-      <!-- 
-        - #SERVICE
-      -->
-
-      <section class="service" aria-label="service">
-        <div class="container">
-
-          <ul class="service-list">
-
-            <li>
-              <div class="service-card" data-reveal="bottom">
-            </li>
-
-          </ul>
-
-        </div>
-      </section>
-
-
-
-
+    <div class="carousel-controls">
+        <button onclick="prevSlide()">Previous</button>
+        <button onclick="nextSlide()">Next</button>
+    </div>
+</div>
+    <script>
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+    
+        function showSlides() {
+            slides.forEach(slide => {
+                slide.style.display = 'none';
+            });
+    
+            slideIndex++;
+    
+            if (slideIndex > totalSlides) {
+                slideIndex = 1;
+            }
+    
+            slides[slideIndex - 1].style.display = 'block';
+            setTimeout(showSlides, 7000); // Change image every 3 seconds
+        }
+    
+        function nextSlide() {
+            slideIndex++;
+            if (slideIndex > totalSlides) {
+                slideIndex = 1;
+            }
+            showSlides();
+        }
+    
+        function prevSlide() {
+            slideIndex--;
+            if (slideIndex < 1) {
+                slideIndex = totalSlides;
+            }
+            showSlides();
+        }
+    
+        showSlides();
+    </script>
+</body>
+</html>
+        
+      </div>
 
       <!-- 
         - #ABOUT
@@ -329,7 +361,7 @@
         <div class="container">
 
           <p class="section-subtitle title-lg text-center" id="blog-label" data-reveal="bottom">
-            PeduliSehat
+            News & Article
           </p>
 
           <h2 class="section-title headline-md text-center" data-reveal="bottom">Latest Articles</h2>
@@ -440,12 +472,62 @@
         </div>
       </section>
 
+
     </article>
   </main>
 
+  <header>
+    <h1 id="article-section" >Berita Kesehatan Terkini</h1>
+</header>
+<section class="article">
+  <div class="image">
+      <img src="./images/flu1.jpeg" alt="Ilustrasi Berita">
+  </div>
+  <div class="content" id="article-section">
+      <h2>LEBARAN TIBA, WASPADA TERPAAN FLU SINGAPURA</h2>
+      <p id="teksAwal">Menjelang libur panjang, penyebaran flu Singapura mengalami kenaikan di Indonesia. Bagaimana mencegah penularannya?
+      "Lumayan cepat penyebarannya, Mas. Jadi kayak pagi-pagi itu kan baru titik, baru dua titik warna merah. Pas saya ke dokter, itu kan jam agak siangan, itu udah nyebar ke seluruh tangan. Pas masuk ke ruangan dokter, itu udah sampe tenggorokan. Jadi memang secepat itu penyebaran virusnya ke badan," ucap Ana kepada detikX pada Rabu, 3 April 2024.
+      </p>
+      <p id="teksLengkap" style="display: none;">Ana mengaku merasakan rasa gatal yang luar biasa, terutama di telapak kaki, telapak tangan, hingga bagian siku. Namun bagian yang terasa gatal akan terasa perih saat disentuh atau digaruk. 
+      "Gatal-gatalnya itu benar-benar gatal banget. Terus kalau misalnya kita garuk, kan, misalnya nggak tahan banget, itu bakal perih banget. Jadi memang semengganggu itu," ucap Ana.
+      Untuk kondisi itu, oleh dokter ia diberi obat oles. Selain itu, ia memperoleh semacam obat tetes yang digunakan untuk luka di tenggorokan dan lidah. Setelahnya, Ana dapat membaik setelah dua minggu perawatan.
+      "Saya juga disuruh karantina. Jadi nggak boleh keluar. Saya tuh kayak COVID ya, jadi kayak menjaga jarak sama orang sekitar, terus untuk tempat makan semuanya itu harus dipisah, jadi waktu itu sempat dipisah sama keluarga," ucapnya.
+      </p>
+      <a href="#article-section" class="toggleBtn" onclick="toggleText()">Baca Selengkapnya</a>
+  </div>
+</section>
 
+<section class="article">
+  <div class="image">
+      <img src="./images/makan.jpg" alt="Ilustrasi Berita">
+  </div>
+  <div class="content">
+      <h2> Tak Disarankan Makan Gorengan Saat Buka Puasa, Kenapa? </h2>
+      <p id="teksAwal">“Berlebihan makan gorengan saat buka puasa bisa memicu berbagai masalah kesehatan. Termasuk peningkatan risiko penyakit jantung dan diabetes.”
+        Kandungan lemak dalam minyak pada gorengan cenderung sulit dicerna. Hal ini membuat tubuh lebih lama mencerna gorengan, sehingga bisa mengganggu dan menghambat saluran pencernaan untuk mencerna zat gizi lain.
+      </p>
+      <p id="teksLengkap" style="display: none;"id="article-section1">3. Meningkatkan Risiko Diabetes Tipe 2
 
+        Jika kamu mengira bahwa diabetes hanya bisa terjadi akibat makan makanan manis, anggapan tersebut keliru. Nyatanya, makan gorengan berlebihan saat buka puasa juga bisa meningkatkan risiko penyakit ini.
+        
+        Sebuah studi pada 2014 yang dilakukan oleh para peneliti di Harvard School of Public Health menemukan, bahwa konsumsi gorengan yang sering secara signifikan dikaitkan dengan risiko pengembangan diabetes tipe 2.
+        
+        Kesimpulan ini didapat setelah memeriksa data dari lebih dari 100.000 pria dan wanita selama 25 tahun. Mereka menemukan bahwa peserta yang makan gorengan antara empat dan enam kali per minggu, memiliki 39 persen peningkatan risiko terkena diabetes tipe 2. Hal ini jika dibandingkan dengan mereka yang makan gorengan kurang dari sekali seminggu. 
+        
+        Bahkan, peserta yang makan gorengan 7 kali atau lebih per minggu memiliki 55 persen peningkatan risiko mengembangkan kondisi ini, lo. Cukup menghawatirkan, bukan?
+        
+        *Gorengan Berpotensi Mengandung Akrilamida Penyebab Kanker
+        
+        Alasan lain mengapa kamu perlu membatasi makan gorengan saat buka puasa adalah karena berpotensi mengandung akrilamida. Ini adalah zat beracun yang dapat terbentuk dalam makanan selama memasak suhu tinggi, seperti menggoreng atau memanggang.
+      
+      </p>
+      <a href="#article-section" class="toggleBtn" onclick="toggleText()">Baca Selengkapnya</a>
+  </div>
+</section>
 
+<footer>
+    <p>&copy; 2024 Berita Kesehatan. All Rights Reserved.</p>
+</footer>
 
   <!-- 
     - #FOOTER
@@ -586,11 +668,6 @@
           </li>
 
         </ul>
-
-       
-
-        </div>
-
       </div>
 
       <div class="footer-bottom">
@@ -658,6 +735,7 @@
     - custom js link
   -->
   <script src="./js/script.js"></script>
+  <script src="./js/app.js"></script>
 
   <!-- 
     - ionicon link
@@ -665,6 +743,6 @@
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-</body>
+  </body>
 
 </html>
