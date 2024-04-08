@@ -1228,3 +1228,75 @@ body.nav-active {
   color: white;
   line-height: 1.1;
 }
+
+ * {
+        box-sizing: border-box;
+    }
+
+    body, html {
+        height: 100%;
+        margin: 0;
+    }
+
+    .carousel-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .carousel-slide {
+        display: flex;
+        transition: all 2.5s ease;
+    }
+
+    .slide {
+        width: 740px; /* Mengubah lebar gambar menjadi 740px */
+    }
+
+    .carousel-controls {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .carousel-controls button {
+        background: #333;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+    .carousel-slide .slide img {
+    width: 100%;
+    height: auto; /* Untuk menjaga aspek rasio gambar */
+}
+
+header h1 {
+  background-color: var(--rich-black-fogra-29);
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.article {
+  display: flex;
+  margin: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.content {
+  flex: 2;
+  padding: 20px;
+}
