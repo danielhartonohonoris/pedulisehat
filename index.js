@@ -49,6 +49,8 @@ app.post("/medicine", upload.single("image"), async (req, res) => {
     }
 });
 
+
+
 // EJS
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
