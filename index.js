@@ -118,12 +118,12 @@ app.get("/medicine", async (req, res) => {
 app.post("/information", upload.single("image"), async (req, res) => {
   try {
     const { title, description } = req.body;
-    const newMedicine = new TodoListItems({
+    const newSickness = new DaftarPenyakit({
       title,
       description,
       image: req.file.filename, // Menyimpan nama file gambar ke basis data
     });
-    await newMedicine.save();
+    await newSickness.save();
     res.redirect("/information"); // Redirect kembali ke halaman medicine setelah menyimpan data
   } catch (error) {
     console.error(error);
@@ -133,13 +133,13 @@ app.post("/information", upload.single("image"), async (req, res) => {
 app.get("/information", async (req, res) => {
   try {
     // Ambil data todoListItems dari basis data MongoDB
-    const todoListItems = await TodoListItems.find(); // Sesuaikan dengan model dan nama koleksi Anda
+    const todoListItems = await DaftarPenyakit.find(); // Sesuaikan dengan model dan nama koleksi Anda
 
     // Render halaman medicine.ejs dan lewati data todoListItems
     res.render("information.ejs", { todoListItems });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Terjadi kesalahan saat memuat halaman medicine");
+    res.status(500).send("Terjadi kesalahan saat memuat halaman penyakit");
   }
 });
 
@@ -158,6 +158,7 @@ app.listen(port, () => {
 });
 
 const path = require("path");
+const DaftarPenyakit = require("./models/DaftarPenyakit");
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
