@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+   <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="">
+      <link rel="stylesheet" href="./css/loginpage.css">
+
+      <title>PEDULISEHAT LOGIN</title>
+   </head>
+   <body>
+      <div class="login">
+         <img src="./images/loginpage2.png" alt="image" class="login__bg">
+
+         <form action="/process-login" class="login__form" id="loginForm">
+            <h1 class="login__title">Login</h1>
+            <div class="login__inputs">
+                <div class="login__box">
+                    <input type="email" id="email" name="email" placeholder="Email ID" required class="login__input">
+                    <i class="ri-mail-fill"></i>
+                </div>
+                <div class="login__box">
+                    <input type="password" id="password" name="password" placeholder="Password" required class="login__input">
+                    <i class="ri-lock-2-fill"></i>
+                </div>
+            </div>
+            <button type="submit" class="login__button">Login</button>
+            <div class="login__check">
+               <div class="login__check-box">
+                  <input type="checkbox" class="login__check-input" id="user-check">
+                  <label for="user-check" class="login__check-label">Remember me</label>
+               </div>
+      
+               <a href="#" class="login__forgot">Forgot Password?</a>
+            </div>
+      
+            
+      
+            <div class="login__register">
+               Don't have an account? <a href="#">Register</a>
+            </div>
+         </form>
+      </div>
+        </form>
+        <script>
+         document.getElementById("loginForm").addEventListener("submit", function(event) {
+             event.preventDefault(); // Menghentikan form dari pengiriman langsung
+     
+             // Mengambil nilai email dan password dari input
+             var email = document.getElementById("email").value;
+             var password = document.getElementById("password").value;
+     
+             // Disini Anda bisa menambahkan kode untuk memproses login, seperti mengirim data ke server dan memvalidasi
+     
+             // Contoh: Kirim data login ke server menggunakan fetch API
+             fetch("/process-login", {
+                 method: "POST",
+                 body: JSON.stringify({ email: email, password: password }),
+                 headers: {
+                     "Content-Type": "application/json"
+                 }
+             })
+             .then(response => {
+                 if (response.ok) {
+                     // Jika respon dari server adalah OK, redirect ke halaman utama
+                     window.location.href = "/index.ejs";
+                 } else {
+                     // Jika ada masalah dengan login, tampilkan pesan kesalahan
+                     alert("Login failed. Please check your email and password.");
+                 }
+             })
+             .catch(error => {
+                 console.error("Error:", error);
+             });
+         });
+     </script>
+   </body>
+</html>
