@@ -427,6 +427,12 @@ body.nav-active {
   padding: 10px 24px;
 }
 
+.navbar-link:hover,
+.navbar-link:focus {
+  color: var(--verdigris); /* Mengubah warna teks menjadi biru */
+}
+
+
 .social-list {
   justify-content: center;
   gap: 20px;
@@ -1315,4 +1321,35 @@ header h1 {
 .content {
   flex: 2;
   padding: 20px;
+}
+
+.box-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Membuat 4 kolom dengan lebar yang sama */
+  gap: 20px; /* Jarak antara setiap kotak */
+}
+
+.box {
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan */
+}
+
+.box img {
+  max-width: 100%;
+  border-radius: 5px;
+  max-height: 100%;
+  display: block;
+  object-fit: contain;
+} 
+
+.box h3 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+h3 {
+  align-items: center;
+  justify-content: center;
 }
