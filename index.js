@@ -147,8 +147,32 @@ app.get("/information", async (req, res) => {
 
 ////////OWNER///////////////////////////
 
-app.get("/owner", (req, res) => {
-  res.render("owner.ejs");
+app.post("/doctors", upload.single("image"), async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const newDoctors = new DaftarDokter({
+      title,
+      description,
+      image: req.file.filename, // Menyimpan nama file gambar ke basis data
+    });
+    await newDoctors.save();
+    res.redirect("/doctors"); // Redirect kembali ke halaman medicine setelah menyimpan data
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menambahkan dokter");
+  }
+});
+app.get("/doctors", async (req, res) => {
+  try {
+    // Ambil data todoListItems dari basis data MongoDB
+    const todoListItems = await DaftarDokter.find(); // Sesuaikan dengan model dan nama koleksi Anda
+
+    // Render halaman medicine.ejs dan lewati data todoListItems
+    res.render("doctor.ejs", { todoListItems });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat memuat halaman Dokter");
+  }
 });
 
 ////////////////////////////////////////
@@ -162,4 +186,6 @@ const DaftarPenyakit = require("./models/DaftarPenyakit");
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
+const DaftarDokter = require("./models/DaftarDokter");
 
