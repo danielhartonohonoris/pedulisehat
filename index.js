@@ -89,7 +89,7 @@ app.post("/login", (req, res) => {
   // Contoh: Validasi sederhana
   if (email === "danielhartono@gmail.com" && password === "1234567") {
     // Jika kredensial valid, arahkan pengguna ke halaman index
-    res.redirect("/index");
+    res.redirect("/home");
   } else {
     // Jika kredensial tidak valid, tampilkan kembali halaman login dengan pesan error
     res.render("loginform.ejs", { error: "Email atau password salah." });
@@ -97,7 +97,7 @@ app.post("/login", (req, res) => {
 });
 
 // Halaman index
-app.get("/index.ejs", (req, res) => {
+app.get("/home", (req, res) => {
   res.render("index.ejs");
 });
 
@@ -114,10 +114,51 @@ app.get("/medicine", async (req, res) => {
   }
 });
 
+///////////INFORMATION//////////////
+app.post("/information", upload.single("image"), async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const newMedicine = new TodoListItems({
+      title,
+      description,
+      image: req.file.filename, // Menyimpan nama file gambar ke basis data
+    });
+    await newMedicine.save();
+    res.redirect("/information"); // Redirect kembali ke halaman medicine setelah menyimpan data
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
+  }
+});
+app.get("/information", async (req, res) => {
+  try {
+    // Ambil data todoListItems dari basis data MongoDB
+    const todoListItems = await TodoListItems.find(); // Sesuaikan dengan model dan nama koleksi Anda
+
+    // Render halaman medicine.ejs dan lewati data todoListItems
+    res.render("information.ejs", { todoListItems });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat memuat halaman medicine");
+  }
+});
+
+////////////////////////////////////////
+
+////////OWNER///////////////////////////
+
 app.get("/owner", (req, res) => {
   res.render("owner.ejs");
 });
 
+////////////////////////////////////////
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+const path = require("path");
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+

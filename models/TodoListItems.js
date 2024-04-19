@@ -25,3 +25,7 @@ const TodoListItemsSchema = new Schema({
 
 module.exports = model('TodoListItemsKelasH', TodoListItemsSchema);
 
+module.exports = model('DaftarPenyakit', TodoListItemsSchema);
+
+
+
