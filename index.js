@@ -55,23 +55,6 @@ app.post("/process-login", (req, res) => {
   }
 });
 
-// Endpoint untuk menambahkan obat baru ke database
-app.post("/medicine", upload.single("image"), async (req, res) => {
-  try {
-    const { title, description } = req.body;
-    const newMedicine = new TodoListItems({
-      title,
-      description,
-      image: req.file.filename, // Menyimpan nama file gambar ke basis data
-    });
-    await newMedicine.save();
-    res.redirect("/medicine"); // Redirect kembali ke halaman medicine setelah menyimpan data
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan obat");
-  }
-});
-
 // EJS
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -96,25 +79,64 @@ app.post("/login", (req, res) => {
   }
 });
 
-// Halaman index
+//////HOME////////////
 app.get("/home", (req, res) => {
-  res.render("index.ejs");
+  res.render("index.ejs",{title: "Home",});
 });
+//////////////////////
 
+
+////////ABOUT////////////
+app.get("/about", (req, res) => {
+  res.render("about.ejs",{title: "About",});
+});
+//////////////////////////
+
+
+///////MEDICINE//////////// 
 app.get("/medicine", async (req, res) => {
   try {
     // Ambil data todoListItems dari basis data MongoDB
     const todoListItems = await TodoListItems.find(); // Sesuaikan dengan model dan nama koleksi Anda
 
     // Render halaman medicine.ejs dan lewati data todoListItems
-    res.render("medicine.ejs", { todoListItems });
+    res.render("medicine.ejs", { todoListItems , title: "Medicine"});
   } catch (error) {
     console.error(error);
     res.status(500).send("Terjadi kesalahan saat memuat halaman medicine");
   }
 });
+app.post("/medicine", upload.single("image"), async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const newMedicine = new TodoListItems({
+      title,
+      description,
+      image: req.file.filename, // Menyimpan nama file gambar ke basis data
+    });
+    await newSickness.save();
+    res.redirect("/medicine"); // Redirect kembali ke halaman medicine setelah menyimpan data
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
+  }
+});
+//////////////////////////////////////
+
 
 ///////////INFORMATION//////////////
+app.get("/information", async (req, res) => {
+  try {
+    // Ambil data todoListItems dari basis data MongoDB
+    const todoListItems = await DaftarPenyakit.find(); // Sesuaikan dengan model dan nama koleksi Anda
+
+    // Render halaman medicine.ejs dan lewati data todoListItems
+    res.render("information.ejs", { todoListItems , title : "Information"});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat memuat halaman penyakit");
+  }
+});
 app.post("/information", upload.single("image"), async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -130,23 +152,22 @@ app.post("/information", upload.single("image"), async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
   }
 });
-app.get("/information", async (req, res) => {
-  try {
-    // Ambil data todoListItems dari basis data MongoDB
-    const todoListItems = await DaftarPenyakit.find(); // Sesuaikan dengan model dan nama koleksi Anda
-
-    // Render halaman medicine.ejs dan lewati data todoListItems
-    res.render("information.ejs", { todoListItems });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat memuat halaman penyakit");
-  }
-});
-
 ////////////////////////////////////////
 
-////////OWNER///////////////////////////
 
+////////DOCTOR///////////////////////////
+app.get("/doctors", async (req, res) => {
+  try {
+    // Ambil data todoListItems dari basis data MongoDB
+    const todoListItems = await DaftarDokter.find(); // Sesuaikan dengan model dan nama koleksi Anda
+
+    // Render halaman medicine.ejs dan lewati data todoListItems
+    res.render("doctor.ejs", { todoListItems , title : "Doctor"});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat memuat halaman Dokter");
+  }
+});
 app.post("/doctors", upload.single("image"), async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -162,19 +183,6 @@ app.post("/doctors", upload.single("image"), async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat menambahkan dokter");
   }
 });
-app.get("/doctors", async (req, res) => {
-  try {
-    // Ambil data todoListItems dari basis data MongoDB
-    const todoListItems = await DaftarDokter.find(); // Sesuaikan dengan model dan nama koleksi Anda
-
-    // Render halaman medicine.ejs dan lewati data todoListItems
-    res.render("doctor.ejs", { todoListItems });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat memuat halaman Dokter");
-  }
-});
-
 ////////////////////////////////////////
 
 app.listen(port, () => {
@@ -188,4 +196,5 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 const DaftarDokter = require("./models/DaftarDokter");
+const { title } = require("process");
 
