@@ -17,4 +17,4 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('userAkun', userSchema);
+module.exports = mongoose.model('TodoListUserAccount', userSchema);
