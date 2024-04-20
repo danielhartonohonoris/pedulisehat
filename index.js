@@ -3,6 +3,12 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const TodoListItems = require("./models/TodoListItems");
+const jwt = require("jsonwebtoken")
+const bcrypt = require('bcrypt');
+const flash = require('express-flash');
+const session = require('express-session');
+
+const passport = require('passport');
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -22,6 +28,27 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const initializePassport = require('./passport-config');
+initializePassport(
+    passport,
+    email => users.find(user => user.email === email),
+    id => users.find(user => user.id === id)
+   
+);
+
+const users = [];
+
+app.use(express.urlencoded({ extended: false }));
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 // Inisialisasi storage untuk multer
 const storage = multer.diskStorage({
@@ -59,10 +86,69 @@ app.post("/process-login", (req, res) => {
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
-// Menampilkan halaman login terlebih dahulu
-app.get("/", (req, res) => {
-  res.render("loginform.ejs");
+app.get('/',checkAuthenticated, (req, res) => {
+  res.render('index', { nama: req.user.name });
 });
+
+//login
+app.get('/login', checkNotAuthenticated, (req, res) => {
+  res.render('login.ejs')
+})
+
+//register
+app.get('/register', checkNotAuthenticated,(req, res) => {
+  res.render('register');
+});
+
+//post login
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/index',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
+
+//post register
+app.post('/register', async (req, res) => {
+ try   {
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+  users.push({
+      id: Date.now().toString(),
+      name: req.body.name,
+      email: req.body.email,
+      password: hashedPassword
+  });
+  res.redirect('/login');
+ }    catch    {
+  res.redirect('/register');
+ }
+ console.log(users);
+});
+
+function checkAuthenticated(req,res,next){
+  if(req.isAuthenticated()){
+      return next();
+  }
+  res.redirect('/login');
+}
+
+function checkNotAuthenticated(req,res,next){
+  if(req.isAuthenticated()){
+      return res.redirect('/');
+  }
+  next();
+}
+
+app.delete('/logout', (req, res, next) => {
+  req.logOut(function
+  (err) {
+      if (err) {
+          return next(err);
+      }
+      res.redirect('/login');
+  });
+});
+  
+
 
 // Menangani proses login
 app.post("/login", (req, res) => {
@@ -80,7 +166,7 @@ app.post("/login", (req, res) => {
 });
 
 //////HOME////////////
-app.get("/home", (req, res) => {
+app.get("/index", (req, res) => {
   res.render("index.ejs",{title: "Home",});
 });
 //////////////////////
