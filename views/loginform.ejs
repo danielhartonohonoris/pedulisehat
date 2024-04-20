@@ -6,7 +6,7 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="">
       <link rel="stylesheet" href="./css/loginpage.css">
 
-      <title>PEDULISEHAT LOGIN</title>
+      <title>PeduliSehat - Login</title>
    </head>
    <body>
       <div class="login">
@@ -63,7 +63,7 @@
              .then(response => {
                  if (response.ok) {
                      // Jika respon dari server adalah OK, redirect ke halaman utama
-                     window.location.href = "/index.ejs";
+                     window.location.href = "/home";
                  } else {
                      // Jika ada masalah dengan login, tampilkan pesan kesalahan
                      alert("Login failed. Please check your email and password.");

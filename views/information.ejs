@@ -5,12 +5,12 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PeduliSehat - Medicine</title></title>
+  <title>PeduliSehat - Information</title></title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./css/medicine.css">
+  <link rel="stylesheet" href="./css/information.css">
 </head>
 
 <body id="top">
@@ -109,11 +109,11 @@
   </main>
 
 
-  <form action="/medicine" method="POST" enctype="multipart/form-data">
+  <form action="/information" method="POST" enctype="multipart/form-data">
     <input type="file" name="image">
     <input type="text" name="title" placeholder="Title">
     <textarea name="description" placeholder="Description"></textarea>
-    <button type="submit">Add Medicine</button>
+    <button type="submit">Add Penyakit</button>
   </form>
   <div class="box-container">
     <% todoListItems.forEach(item => { %>
