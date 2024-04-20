@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require('bcrypt');
 const flash = require('express-flash');
 const session = require('express-session');
+const User = require('./models/userakun');
 
 const passport = require('passport');
 
@@ -63,25 +64,6 @@ const storage = multer.diskStorage({
 // Inisialisasi upload multer
 const upload = multer({ storage: storage });
 
-// Handler untuk permintaan POST /process-login
-app.post("/process-login", (req, res) => {
-  // Mendapatkan data email dan password dari body permintaan
-  const email = req.body.email;
-  const password = req.body.password;
-
-  // Di sini, Anda bisa melakukan validasi login, misalnya dengan memeriksa apakah email dan password valid
-  // Anda juga bisa melakukan pengecekan pada database untuk mencocokkan email dan password
-
-  // Contoh sederhana: Cek jika email dan password adalah "danielhartono@gmai.com" dan "1234567"
-  if (email === "danielhartono@gmail.com" && password === "1234567") {
-    // Jika login berhasil, Anda bisa mengirimkan respon OK (status code 200)
-    res.status(200).send("Login successful!");
-  } else {
-    // Jika login gagal, Anda bisa mengirimkan respon Unauthorized (status code 401)
-    res.status(401).send("Invalid email or password");
-  }
-});
-
 // EJS
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -102,10 +84,27 @@ app.get('/register', checkNotAuthenticated,(req, res) => {
 
 //post login
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/index',
+  successRedirect: '/home',
   failureRedirect: '/login',
   failureFlash: true
 }))
+
+app.post('/login', async (req, res) => {
+  try {
+      const user = await User.findOne({ email: req.body.email });
+      if (!user) {
+          return res.status(404).send('User not found');
+      }
+      if (await bcrypt.compare(req.body.password, user.password)) {
+          res.status(200).send('Login successful');
+      } else {
+          res.status(401).send('Invalid password');
+      }
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal server error');
+  }
+});
 
 //post register
 app.post('/register', async (req, res) => {
@@ -117,12 +116,20 @@ app.post('/register', async (req, res) => {
       email: req.body.email,
       password: hashedPassword
   });
+  const newUser = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: hashedPassword
+  });
+  await newUser.save();
+
   res.redirect('/login');
  }    catch    {
   res.redirect('/register');
  }
  console.log(users);
 });
+
 
 function checkAuthenticated(req,res,next){
   if(req.isAuthenticated()){
@@ -150,23 +157,23 @@ app.delete('/logout', (req, res, next) => {
   
 
 
-// Menangani proses login
-app.post("/login", (req, res) => {
-  // Anda bisa menambahkan logika validasi email dan password di sini
-  const { email, password } = req.body;
+// // Menangani proses login
+// app.post("/login", (req, res) => {
+//   // Anda bisa menambahkan logika validasi email dan password di sini
+//   const { email, password } = req.body;
 
-  // Contoh: Validasi sederhana
-  if (email === "danielhartono@gmail.com" && password === "1234567") {
-    // Jika kredensial valid, arahkan pengguna ke halaman index
-    res.redirect("/home");
-  } else {
-    // Jika kredensial tidak valid, tampilkan kembali halaman login dengan pesan error
-    res.render("loginform.ejs", { error: "Email atau password salah." });
-  }
-});
+//   // Contoh: Validasi sederhana
+//   if (email === "danielhartono@gmail.com" && password === "1234567") {
+//     // Jika kredensial valid, arahkan pengguna ke halaman index
+//     res.redirect("/home");
+//   } else {
+//     // Jika kredensial tidak valid, tampilkan kembali halaman login dengan pesan error
+//     res.render("loginform.ejs", { error: "Email atau password salah." });
+//   }
+// });
 
 //////HOME////////////
-app.get("/index", (req, res) => {
+app.get("/home", (req, res) => {
   res.render("index.ejs",{title: "Home",});
 });
 //////////////////////
