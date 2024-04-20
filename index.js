@@ -3,16 +3,19 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const TodoListItems = require("./models/TodoListItems");
-const jwt = require("jsonwebtoken")
 const bcrypt = require('bcrypt');
 const flash = require('express-flash');
 const session = require('express-session');
-const User = require('./models/userakun');
-
+const UserAcc = require('./models/DaftarUser');
+const DaftarDokter = require("./models/DaftarDokter");
 const passport = require('passport');
+const initializePassport = require('./passport-config');
+const path = require("path");
+const DaftarPenyakit = require("./models/DaftarPenyakit");
 
-const dotenv = require("dotenv");
-dotenv.config();
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').config();
+}
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -30,20 +33,10 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const initializePassport = require('./passport-config');
-initializePassport(
-    passport,
-    email => users.find(user => user.email === email),
-    id => users.find(user => user.id === id)
-   
-);
-
-const users = [];
-
 app.use(express.urlencoded({ extended: false }));
 
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: 'secret',
     resave: false,
     saveUninitialized: false
 }));
@@ -68,68 +61,51 @@ const upload = multer({ storage: storage });
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
-app.get('/',checkAuthenticated, (req, res) => {
-  res.render('index', { nama: req.user.name });
+app.get("/", checkAuthenticated, (req, res) => {
+  res.render('index', { nama: req.user.name, title: "Home" });
 });
 
-//login
 app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login.ejs')
-})
+});
 
-//register
 app.get('/register', checkNotAuthenticated,(req, res) => {
   res.render('register');
 });
 
-//post login
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/home',
+  successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true
-}))
+}));
 
-app.post('/login', async (req, res) => {
-  try {
-      const user = await User.findOne({ email: req.body.email });
-      if (!user) {
-          return res.status(404).send('User not found');
-      }
-      if (await bcrypt.compare(req.body.password, user.password)) {
-          res.status(200).send('Login successful');
-      } else {
-          res.status(401).send('Invalid password');
-      }
-  } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal server error');
-  }
-});
-
-//post register
 app.post('/register', async (req, res) => {
- try   {
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
-  users.push({
-      id: Date.now().toString(),
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const newUser = new UserAcc({
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword
-  });
-  const newUser = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: hashedPassword
-  });
-  await newUser.save();
-
-  res.redirect('/login');
- }    catch    {
-  res.redirect('/register');
- }
- console.log(users);
+    });
+    await newUser.save();
+    res.redirect('/login');
+  } catch (error) {
+    console.error(error);
+    res.redirect('/register');
+  }
 });
 
+const getUserByEmail = async (email) => {
+  try {
+    const user = await UserAcc.findOne({ email: email });
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+initializePassport(passport, getUserByEmail, id => UserAcc.findById(id));
 
 function checkAuthenticated(req,res,next){
   if(req.isAuthenticated()){
@@ -146,148 +122,100 @@ function checkNotAuthenticated(req,res,next){
 }
 
 app.delete('/logout', (req, res, next) => {
-  req.logOut(function
-  (err) {
+  req.logOut(function(err) {
       if (err) {
           return next(err);
       }
       res.redirect('/login');
   });
 });
-  
 
-
-// // Menangani proses login
-// app.post("/login", (req, res) => {
-//   // Anda bisa menambahkan logika validasi email dan password di sini
-//   const { email, password } = req.body;
-
-//   // Contoh: Validasi sederhana
-//   if (email === "danielhartono@gmail.com" && password === "1234567") {
-//     // Jika kredensial valid, arahkan pengguna ke halaman index
-//     res.redirect("/home");
-//   } else {
-//     // Jika kredensial tidak valid, tampilkan kembali halaman login dengan pesan error
-//     res.render("loginform.ejs", { error: "Email atau password salah." });
-//   }
-// });
-
-//////HOME////////////
-app.get("/home", (req, res) => {
-  res.render("index.ejs",{title: "Home",});
+app.get("/about", checkAuthenticated, (req, res) => {
+  res.render('about', { nama: req.user.name, title: "About" });
 });
-//////////////////////
 
-
-////////ABOUT////////////
-app.get("/about", (req, res) => {
-  res.render("about.ejs",{title: "About",});
-});
-//////////////////////////
-
-
-///////MEDICINE//////////// 
-app.get("/medicine", async (req, res) => {
+app.get("/medicine", checkAuthenticated, async (req, res) => {
   try {
-    // Ambil data todoListItems dari basis data MongoDB
-    const todoListItems = await TodoListItems.find(); // Sesuaikan dengan model dan nama koleksi Anda
-
-    // Render halaman medicine.ejs dan lewati data todoListItems
-    res.render("medicine.ejs", { todoListItems , title: "Medicine"});
+    const todoListItems = await TodoListItems.find();
+    res.render("medicine.ejs", { todoListItems , nama: req.user.name, title: "Medicine"});
   } catch (error) {
     console.error(error);
     res.status(500).send("Terjadi kesalahan saat memuat halaman medicine");
   }
 });
+
 app.post("/medicine", upload.single("image"), async (req, res) => {
   try {
     const { title, description } = req.body;
     const newMedicine = new TodoListItems({
       title,
       description,
-      image: req.file.filename, // Menyimpan nama file gambar ke basis data
+      image: req.file.filename,
     });
-    await newSickness.save();
-    res.redirect("/medicine"); // Redirect kembali ke halaman medicine setelah menyimpan data
+    await newMedicine.save();
+    res.redirect("/medicine");
   } catch (error) {
     console.error(error);
     res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
   }
 });
-//////////////////////////////////////
 
-
-///////////INFORMATION//////////////
-app.get("/information", async (req, res) => {
+app.get("/information", checkAuthenticated, async (req, res) => {
   try {
-    // Ambil data todoListItems dari basis data MongoDB
-    const todoListItems = await DaftarPenyakit.find(); // Sesuaikan dengan model dan nama koleksi Anda
-
-    // Render halaman medicine.ejs dan lewati data todoListItems
-    res.render("information.ejs", { todoListItems , title : "Information"});
+    const todoListItems = await DaftarPenyakit.find();
+    res.render("information.ejs", { todoListItems ,  nama: req.user.name, title : "Information"});
   } catch (error) {
     console.error(error);
     res.status(500).send("Terjadi kesalahan saat memuat halaman penyakit");
   }
 });
+
 app.post("/information", upload.single("image"), async (req, res) => {
   try {
     const { title, description } = req.body;
     const newSickness = new DaftarPenyakit({
       title,
       description,
-      image: req.file.filename, // Menyimpan nama file gambar ke basis data
+      image: req.file.filename,
     });
     await newSickness.save();
-    res.redirect("/information"); // Redirect kembali ke halaman medicine setelah menyimpan data
+    res.redirect("/information");
   } catch (error) {
     console.error(error);
     res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
   }
 });
-////////////////////////////////////////
 
-
-////////DOCTOR///////////////////////////
-app.get("/doctors", async (req, res) => {
+app.get("/doctors", checkAuthenticated, async (req, res) => {
   try {
-    // Ambil data todoListItems dari basis data MongoDB
-    const todoListItems = await DaftarDokter.find(); // Sesuaikan dengan model dan nama koleksi Anda
-
-    // Render halaman medicine.ejs dan lewati data todoListItems
-    res.render("doctor.ejs", { todoListItems , title : "Doctor"});
+    const todoListItems = await DaftarDokter.find();
+    res.render("doctor.ejs", { todoListItems ,  nama: req.user.name, title : "Doctor"});
   } catch (error) {
     console.error(error);
     res.status(500).send("Terjadi kesalahan saat memuat halaman Dokter");
   }
 });
+
 app.post("/doctors", upload.single("image"), async (req, res) => {
   try {
     const { title, description } = req.body;
     const newDoctors = new DaftarDokter({
       title,
       description,
-      image: req.file.filename, // Menyimpan nama file gambar ke basis data
+      image: req.file.filename,
     });
     await newDoctors.save();
-    res.redirect("/doctors"); // Redirect kembali ke halaman medicine setelah menyimpan data
+    res.redirect("/doctors");
   } catch (error) {
     console.error(error);
     res.status(500).send("Terjadi kesalahan saat menambahkan dokter");
   }
 });
-////////////////////////////////////////
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-const path = require("path");
-const DaftarPenyakit = require("./models/DaftarPenyakit");
-
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
-const DaftarDokter = require("./models/DaftarDokter");
-const { title } = require("process");
 
