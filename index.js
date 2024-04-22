@@ -90,12 +90,12 @@ app.post('/login', passport.authenticate('local', {
 }), (req, res) => {
   // Jika pengguna berhasil login dan memiliki peran admin
   if (req.user.role === 'admin') {
+    req.session.isAdmin = true; // Tambahkan properti isAdmin ke sesi
     return res.redirect('/admindashboard');
   }
   // Jika pengguna berhasil login tetapi bukan admin
   res.redirect('/');
 });
-
 app.post('/register', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -139,7 +139,15 @@ app.get("/about", checkAuthenticated, (req, res) => {
   res.render('about', { nama: req.user.name, title: "About" });
 });
 
-app.get("/admindashboard", checkAuthenticated, (req, res) => {
+function checkAdmin(req, res, next) {
+  // Periksa apakah properti isAdmin telah diatur di sesi
+  if (req.isAuthenticated() && req.session.isAdmin) {
+    return next();
+  }
+  res.redirect('/');
+}
+
+app.get("/admindashboard", checkAuthenticated, checkAdmin, (req, res) => {
   res.render('admindash', { nama: req.user.name, title: "Dashboard" });
 });
 
