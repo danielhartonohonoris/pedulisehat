@@ -26,15 +26,26 @@ mongoose
     console.log(err.message);
   });
 
+// Fungsi untuk mendapatkan pengguna berdasarkan email
+const getUserByEmail = async (email) => {
+  try {
+    const user = await UserAcc.findOne({ email: email });
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+initializePassport(passport, getUserByEmail, id => UserAcc.findById(id));
+
 const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(express.urlencoded({ extended: false }));
-
 app.use(session({
     secret: 'secret',
     resave: false,
@@ -74,10 +85,16 @@ app.get('/register', checkNotAuthenticated,(req, res) => {
 });
 
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
   failureRedirect: '/login',
-  failureFlash: true
-}));
+  failureFlash: true,
+}), (req, res) => {
+  // Jika pengguna berhasil login dan memiliki peran admin
+  if (req.user.role === 'admin') {
+    return res.redirect('/admindashboard');
+  }
+  // Jika pengguna berhasil login tetapi bukan admin
+  res.redirect('/');
+});
 
 app.post('/register', async (req, res) => {
   try {
@@ -94,18 +111,6 @@ app.post('/register', async (req, res) => {
     res.redirect('/register');
   }
 });
-
-const getUserByEmail = async (email) => {
-  try {
-    const user = await UserAcc.findOne({ email: email });
-    return user;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
-initializePassport(passport, getUserByEmail, id => UserAcc.findById(id));
 
 function checkAuthenticated(req,res,next){
   if(req.isAuthenticated()){
@@ -132,6 +137,10 @@ app.delete('/logout', (req, res, next) => {
 
 app.get("/about", checkAuthenticated, (req, res) => {
   res.render('about', { nama: req.user.name, title: "About" });
+});
+
+app.get("/admindashboard", checkAuthenticated, (req, res) => {
+  res.render('admindash', { nama: req.user.name, title: "Dashboard" });
 });
 
 app.get("/medicine", checkAuthenticated, async (req, res) => {
@@ -217,5 +226,3 @@ app.listen(port, () => {
 });
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-
