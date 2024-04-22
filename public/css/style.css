@@ -427,6 +427,13 @@ body.nav-active {
   padding: 10px 24px;
 }
 
+.navbar-link:hover,
+.navbar-link:focus {
+  text-decoration: none;
+  color: var(--verdigris); /* Mengubah warna teks menjadi biru */
+}
+
+
 .social-list {
   justify-content: center;
   gap: 20px;

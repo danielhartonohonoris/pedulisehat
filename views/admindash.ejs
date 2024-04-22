@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Selamat Datang Di Admin Dashboard</h1>
+    </div>
+    <h2>CRUD DOKTER</h2>
+    <form id="doctorForm" action="/doctors" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="text" name="title" placeholder="Title">
+        <textarea name="description" placeholder="Description"></textarea>
+        <button type="button" onclick="submitFormDoctor()">Add Doctor</button>
+    </form>
+    <h2>CRUD OBAT</h2>
+    <form id="medicineForm" action="/medicine" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="text" name="title" placeholder="Title">
+        <textarea name="description" placeholder="Description"></textarea>
+        <button type="button" onclick="submitFormMedicine()">Add Medicine</button>
+    </form>
+    <h2>CRUD PENYAKIT</h2>
+    <form id="sicknessForm" action="/information" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="text" name="title" placeholder="Title">
+        <textarea name="description" placeholder="Description"></textarea>
+        <button type="button" onclick="submitFormSickness()">Add Sickness</button>
+    </form>
+    <script>
+          function submitFormDoctor() {
+          var form = document.getElementById("doctorForm");
+          var formData = new FormData(form);
+    
+          // Mengirimkan data ke '/doctors' menggunakan AJAX
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", form.action, true);
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+              console.log("Formulir berhasil dikirim!");
+              // Handle response jika diperlukan
+            } else {
+              console.error("Terjadi kesalahan saat mengirimkan formulir.");
+              // Handle error jika diperlukan
+            }
+          };
+          xhr.onerror = function() {
+            console.error("Terjadi kesalahan koneksi.");
+            // Handle error jika diperlukan
+          };
+          xhr.send(formData);
+        }
+        function submitFormMedicine() {
+  var form = document.getElementById("medicineForm");
+  var formData = new FormData(form);
+
+  // Mengirimkan data ke '/medicine' menggunakan AJAX
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", form.action, true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      console.log("Formulir medicine berhasil dikirim!");
+      // Handle response jika diperlukan
+    } else {
+      console.error("Terjadi kesalahan saat mengirimkan formulir medicine.");
+      // Handle error jika diperlukan
+    }
+  };
+  xhr.onerror = function() {
+    console.error("Terjadi kesalahan koneksi.");
+    // Handle error jika diperlukan
+  };
+  xhr.send(formData);
+}
+
+function submitFormSickness() {
+  var form = document.getElementById("sicknessForm");
+  var formData = new FormData(form);
+
+  // Mengirimkan data ke '/information' menggunakan AJAX
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", form.action, true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      console.log("Formulir information berhasil dikirim!");
+      // Handle response jika diperlukan
+    } else {
+      console.error("Terjadi kesalahan saat mengirimkan formulir information.");
+      // Handle error jika diperlukan
+    }
+  };
+  xhr.onerror = function() {
+    console.error("Terjadi kesalahan koneksi.");
+    // Handle error jika diperlukan
+  };
+  xhr.send(formData);
+}
+
+      </script>
+</body>
+</html>
