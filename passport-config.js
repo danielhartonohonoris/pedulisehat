@@ -8,12 +8,12 @@ function initialize(passport,getUserByEmail,getUserById){
         try {
             const user = await getUserByEmail(email);
             if (!user) {
-                return done(null, false, { message: 'No user with that email' });
+                return done(null, false, { message: 'Emai tidak terdaftar' });
             }
             if (await bcrypt.compare(password, user.password)) {
                 return done(null, user);
             } else {
-                return done(null, false, { message: 'Password incorrect' });
+                return done(null, false, { message: 'Password Salah' });
             }
         } catch (error) {
             return done(error);

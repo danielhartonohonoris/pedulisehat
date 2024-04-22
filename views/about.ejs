@@ -1,8 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
   <%- include('layouts/header.ejs') %>
+</head>
 <body id="top">
-    <%- include('layouts/navbar.ejs') %>
-    <script src="./js/script.js"></script>
+  <%- include('layouts/navbar.ejs') %>
+  <%- include('layouts/footer.ejs') %>
+  <form id="medicineForm" action="/doctors" method="POST" enctype="multipart/form-data">
+    <input type="file" name="image">
+    <input type="text" name="title" placeholder="Title">
+    <textarea name="description" placeholder="Description"></textarea>
+    <button type="button" onclick="submitForm()">Add Doctor</button>
+  </form>
+  <script>
+    function submitForm() {
+      var form = document.getElementById("medicineForm");
+      var formData = new FormData(form);
+
+      // Mengirimkan data ke '/doctors' menggunakan AJAX
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", form.action, true);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          console.log("Formulir berhasil dikirim!");
+          // Handle response jika diperlukan
+        } else {
+          console.error("Terjadi kesalahan saat mengirimkan formulir.");
+          // Handle error jika diperlukan
+        }
+      };
+      xhr.onerror = function() {
+        console.error("Terjadi kesalahan koneksi.");
+        // Handle error jika diperlukan
+      };
+      xhr.send(formData);
+    }
+  </script>
+  <script src="./js/script.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
