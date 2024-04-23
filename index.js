@@ -12,6 +12,7 @@ const passport = require('passport');
 const initializePassport = require('./passport-config');
 const path = require("path");
 const DaftarPenyakit = require("./models/DaftarPenyakit");
+const DaftarMakanan = require("./models/DaftarMakanan");
 
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config();
@@ -26,15 +27,26 @@ mongoose
     console.log(err.message);
   });
 
+// Fungsi untuk mendapatkan pengguna berdasarkan email
+const getUserByEmail = async (email) => {
+  try {
+    const user = await UserAcc.findOne({ email: email });
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+initializePassport(passport, getUserByEmail, id => UserAcc.findById(id));
+
 const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(express.urlencoded({ extended: false }));
-
 app.use(session({
     secret: 'secret',
     resave: false,
@@ -74,11 +86,17 @@ app.get('/register', checkNotAuthenticated,(req, res) => {
 });
 
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
   failureRedirect: '/login',
-  failureFlash: true
-}));
-
+  failureFlash: true,
+}), (req, res) => {
+  // Jika pengguna berhasil login dan memiliki peran admin
+  if (req.user.role === 'admin') {
+    req.session.isAdmin = true; // Tambahkan properti isAdmin ke sesi
+    return res.redirect('/admindashboard');
+  }
+  // Jika pengguna berhasil login tetapi bukan admin
+  res.redirect('/');
+});
 app.post('/register', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -95,18 +113,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-const getUserByEmail = async (email) => {
-  try {
-    const user = await UserAcc.findOne({ email: email });
-    return user;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
-initializePassport(passport, getUserByEmail, id => UserAcc.findById(id));
-
 function checkAuthenticated(req,res,next){
   if(req.isAuthenticated()){
       return next();
@@ -116,7 +122,7 @@ function checkAuthenticated(req,res,next){
 
 function checkNotAuthenticated(req,res,next){
   if(req.isAuthenticated()){
-      return res.redirect('/');
+    return res.redirect('/');
   }
   next();
 }
@@ -130,8 +136,43 @@ app.delete('/logout', (req, res, next) => {
   });
 });
 
-app.get("/about", checkAuthenticated, (req, res) => {
-  res.render('about', { nama: req.user.name, title: "About" });
+
+function checkAdmin(req, res, next) {
+  // Periksa apakah properti isAdmin telah diatur di sesi
+  if (req.isAuthenticated() && req.session.isAdmin) {
+    return next();
+  }
+  res.redirect('/');
+}
+
+app.get("/admindashboard", checkAuthenticated, checkAdmin, (req, res) => {
+  res.render('admindash', { nama: req.user.name, title: "Dashboard" });
+});
+
+app.get("/food", checkAuthenticated, async (req, res) => {
+  try {
+    const todoListItems = await DaftarMakanan.find();
+    res.render("food.ejs", { todoListItems , nama: req.user.name, title: "Food"});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat memuat halaman makanan");
+  }
+});
+app.post("/food", upload.single("image"), async (req, res) => {
+  try {
+    const { title, description, role } = req.body; // Ambil nilai role dari formulir
+    const newFood = new DaftarMakanan({
+      title,
+      description,
+      role, // Masukkan nilai role ke objek DaftarMakanan
+      image: req.file.filename,
+    });
+    await newFood.save();
+    res.redirect("/food");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menyimpan makanan");
+  }
 });
 
 app.get("/medicine", checkAuthenticated, async (req, res) => {
@@ -217,5 +258,3 @@ app.listen(port, () => {
 });
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-
