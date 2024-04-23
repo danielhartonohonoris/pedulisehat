@@ -10,13 +10,27 @@ function initialize(passport, getUserByEmail, getUserById) {
                 return done(null, false, { message: 'Email tidak terdaftar' });
             }
             if (user.role === 'admin') {
-                // Pengguna memiliki peran admin, alihkan ke dashboard admin
-                return done(null, user);
-            }
-            if (await bcrypt.compare(password, user.password)) {
-                return done(null, user);
+                // Periksa apakah pengguna memiliki peran admin
+                if (!password) {
+                    // Jika tidak ada kata sandi yang dimasukkan, kembalikan pesan kesalahan
+                    return done(null, false, { message: 'Silakan masukkan kata sandi' });
+                } else {
+                    // Jika ada kata sandi yang dimasukkan, periksa kecocokannya
+                    if (await bcrypt.compare(password, user.password)) {
+                        // Kata sandi benar, alihkan ke dashboard admin
+                        return done(null, user);
+                    } else {
+                        // Kata sandi salah
+                        return done(null, false, { message: 'Password Salah' });
+                    }
+                }
             } else {
-                return done(null, false, { message: 'Password Salah' });
+                // Jika bukan admin, periksa kata sandi seperti biasa
+                if (await bcrypt.compare(password, user.password)) {
+                    return done(null, user);
+                } else {
+                    return done(null, false, { message: 'Password Salah' });
+                }
             }
         } catch (error) {
             return done(error);
