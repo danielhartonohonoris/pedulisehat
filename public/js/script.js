@@ -51,6 +51,11 @@ addEventOnElements(navTogglers, "click", toggleNav);
 const header = document.querySelector("[data-header]");
 const backTopBtn = document.querySelector("[data-back-top-btn]");
 
+backTopBtn.addEventListener("click", function(event) {
+  event.preventDefault(); // Hindari penambahan #top pada URL
+  window.scrollTo({ top: 0, behavior: "smooth" }); // Gulir ke atas dengan efek smooth
+});
+
 const activeElementOnScroll = function () {
   if (window.scrollY > 100) {
     header.classList.add("active");

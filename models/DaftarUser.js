@@ -1,4 +1,3 @@
-// user.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -8,13 +7,17 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     password: {
         type: String,
         required: true
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'], // Hanya boleh 'user' atau 'admin'
+        default: 'user' // Secara default, pengguna akan memiliki peran 'user'
     }
 });
+module.exports = mongoose.model('Account', userSchema);
 
-module.exports = mongoose.model('TodoListUserAccount', userSchema);

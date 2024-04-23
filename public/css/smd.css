@@ -1325,7 +1325,7 @@ header h1 {
 
 .box-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Membuat 4 kolom dengan lebar yang sama */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px; /* Jarak antara setiap kotak */
 }
 
@@ -1339,9 +1339,9 @@ header h1 {
 .box img {
   max-width: 100%;
   border-radius: 5px;
-  max-height: 100%;
   display: block;
   object-fit: contain;
+  height: auto;
 } 
 
 .box h3 {
@@ -1352,4 +1352,18 @@ header h1 {
 h3 {
   align-items: center;
   justify-content: center;
+}
+
+/* Atur lebar kotak di perangkat seluler dengan lebar layar lebih kecil */
+@media screen and (max-width: 576px) {
+  .box {
+    width: calc(100% - 20px); /* Setiap kotak mengambil 100% dari lebar container dengan jarak 20px */
+  }
+}
+
+/* Atur ukuran teks di perangkat seluler */
+@media screen and (max-width: 576px) {
+  .box h3 {
+    font-size: 16px; /* Atur ukuran teks menjadi lebih kecil */
+  }
 }
