@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/admin.css">
+    <title><%= title %></title></title>
 </head>
 <body>
     <div class="container">
@@ -31,6 +31,20 @@
         <textarea name="description" placeholder="Description"></textarea>
         <button type="button" onclick="submitFormSickness()">Add Sickness</button>
     </form>
+    <h2>CRUD MAKANAN</h2>
+    <form id="foodForm" action="/food" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="text" name="title" placeholder="Title">
+        <textarea name="description" placeholder="Description"></textarea>
+        <select name="role" id="role">
+          <option value="sayuran">Sayuran</option>
+          <option value="ikan">Ikan</option>
+          <option value="buah">Buah</option>
+        </select>
+        <button type="button" onclick="submitFormFood()">Add Food</button>
+    </form>
+
+
     <script>
           function submitFormDoctor() {
           var form = document.getElementById("doctorForm");
@@ -99,6 +113,28 @@ function submitFormSickness() {
   };
   xhr.send(formData);
 }
+
+function submitFormFood() {
+          var form = document.getElementById("foodForm");
+          var formData = new FormData(form);
+    
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", form.action, true);
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+              console.log("Formulir berhasil dikirim!");
+              // Handle response jika diperlukan
+            } else {
+              console.error("Terjadi kesalahan saat mengirimkan formulir.");
+              // Handle error jika diperlukan
+            }
+          };
+          xhr.onerror = function() {
+            console.error("Terjadi kesalahan koneksi.");
+            // Handle error jika diperlukan
+          };
+          xhr.send(formData);
+        }
 
       </script>
 </body>

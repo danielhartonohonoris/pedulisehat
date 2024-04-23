@@ -12,6 +12,7 @@ const passport = require('passport');
 const initializePassport = require('./passport-config');
 const path = require("path");
 const DaftarPenyakit = require("./models/DaftarPenyakit");
+const DaftarMakanan = require("./models/DaftarMakanan");
 
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config();
@@ -135,9 +136,6 @@ app.delete('/logout', (req, res, next) => {
   });
 });
 
-app.get("/about", checkAuthenticated, (req, res) => {
-  res.render('about', { nama: req.user.name, title: "About" });
-});
 
 function checkAdmin(req, res, next) {
   // Periksa apakah properti isAdmin telah diatur di sesi
@@ -149,6 +147,32 @@ function checkAdmin(req, res, next) {
 
 app.get("/admindashboard", checkAuthenticated, checkAdmin, (req, res) => {
   res.render('admindash', { nama: req.user.name, title: "Dashboard" });
+});
+
+app.get("/food", checkAuthenticated, async (req, res) => {
+  try {
+    const todoListItems = await DaftarMakanan.find();
+    res.render("food.ejs", { todoListItems , nama: req.user.name, title: "Food"});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat memuat halaman makanan");
+  }
+});
+app.post("/food", upload.single("image"), async (req, res) => {
+  try {
+    const { title, description, role } = req.body; // Ambil nilai role dari formulir
+    const newFood = new DaftarMakanan({
+      title,
+      description,
+      role, // Masukkan nilai role ke objek DaftarMakanan
+      image: req.file.filename,
+    });
+    await newFood.save();
+    res.redirect("/food");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menyimpan makanan");
+  }
 });
 
 app.get("/medicine", checkAuthenticated, async (req, res) => {
