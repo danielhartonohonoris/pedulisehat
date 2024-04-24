@@ -13,6 +13,17 @@
           <div class="hero-content">
     
             <p class="hero-subtitle has-before" data-reveal="left">Pusat Makanan</p>
+            <div class="filter-container">
+              <select id="roleFilter">
+                <option value="">Semua</option>
+                <option value="sayuran">Sayuran</option>
+                <option value="ikan">Ikan</option>
+                <option value="buah">Buah</option>
+              </select>
+            </div>
+            <div class="search-container">
+              <input type="text" id="searchInput" placeholder="Nama Makanan">
+            </div>
     
             <h1 class="headline-lg hero-title" data-reveal="left">
               Layanan Informasi 
@@ -23,14 +34,7 @@
       </section>
     </article>
   </main>
-  <div class="filter-container">
-    <select id="roleFilter">
-      <option value="">Semua</option>
-      <option value="sayuran">Sayuran</option>
-      <option value="ikan">Ikan</option>
-      <option value="buah">Buah</option>
-    </select>
-  </div>
+  
   <div class="box-container">
     <% todoListItems.forEach(item => { %>
       <div class="box <%= item.role %>">
@@ -40,23 +44,39 @@
       </div>
     <% }) %>
   </div>
+  
   <%- include('layouts/footer.ejs') %>
   <script src="./js/script.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-  <script>
-    document.getElementById('roleFilter').addEventListener('change', function() {
-      const selectedRole = this.value;
-      const boxes = document.querySelectorAll('.box');
 
-      boxes.forEach(box => {
-        if (selectedRole && !box.classList.contains(selectedRole)) {
-          box.style.display = 'none';
-        } else {
-          box.style.display = 'block';
-        }
-      });
+<script>
+  document.getElementById('roleFilter').addEventListener('change', function() {
+    filterBoxes();
+  });
+
+  document.getElementById('searchInput').addEventListener('input', function() {
+    filterBoxes();
+  });
+
+  function filterBoxes() {
+    const selectedRole = document.getElementById('roleFilter').value;
+    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+    const boxes = document.querySelectorAll('.box');
+
+    boxes.forEach(box => {
+      const role = box.classList.contains(selectedRole) || selectedRole === '';
+      const title = box.querySelector('h3').textContent.toLowerCase();
+      const matchSearch = title.includes(searchQuery);
+
+      if (role && matchSearch) {
+        box.style.display = 'block';
+      } else {
+        box.style.display = 'none';
+      }
     });
-  </script>
+  }
+</script>
+
 </body>
 </html>
