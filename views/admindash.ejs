@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/admin.css">
-    <title><%= title %></title></title>
-</head>
-<body>
+  <%- include('layouts/header.ejs') %>
+<body id="top">
+  <%- include('layouts/navdash.ejs') %>
+
+  <main>
+    <article>
+      <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
+        <div class="container">
+  
+          <div class="hero-content">
+    
+            <p class="hero-subtitle has-before" data-reveal="left">Pusat Penyakit</p>
+    
+            <h1 class="headline-lg hero-title" data-reveal="left">
+              Layanan Informasi 
+              Cepat Dan Tepat. <br>
+            </h1>
+          </div>
+        </div>
+      </section>
+    </article>
+  </main>
+  
     <div class="container">
         <h1>Selamat Datang Di Admin Dashboard</h1>
     </div>
@@ -43,6 +59,11 @@
         </select>
         <button type="button" onclick="submitFormFood()">Add Food</button>
     </form>
+
+    <%- include('layouts/footer.ejs') %>
+    <script src="./js/script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 
     <script>
@@ -136,5 +157,6 @@ function submitFormFood() {
           xhr.send(formData);
         }
       </script>
+     
 </body>
 </html>
