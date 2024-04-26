@@ -1412,4 +1412,46 @@ h3 {
 #searchInput:focus {
   border-color: #999;
 }
+/* CSS untuk judul form */
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* CSS untuk form */
+#foodForm {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* CSS untuk input, textarea, dan select */
+input[type="file"],
+input[type="text"],
+textarea,
+select {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* CSS untuk tombol */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* CSS tambahan jika diperlukan */
 
