@@ -197,7 +197,7 @@ app.post("/food/:id", checkAuthenticated, checkAdmin, upload.single("image"), as
     if (!updatedFood) {
       return res.status(404).send("Makanan tidak ditemukan");
     }
-    window.location.reload();
+    res.redirect("/admindashboard/crudFood");
   } catch (error) {
     // Tangani kesalahan
     console.error(error);
