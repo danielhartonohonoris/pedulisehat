@@ -1,0 +1,79 @@
+body {
+    background-color: #f8f9fa; /* Light Gray */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url("../images/loginpage2.png") ; 
+    background-size: cover;
+    }
+  
+  
+  /* Container Styles */
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Form Styles */
+  form {
+    background-color: #fff; /* White */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  /* Input Styles */
+  .form-control {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ced4da; /* Gray */
+    padding: 12px;
+    transition: border-color 0.3s ease;
+  }
+  
+  /* Input Focus Styles */
+  .form-control:focus {
+    border-color: #80bdff; /* Light Blue */
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25); /* Light Blue Shadow */
+  }
+  
+  /* Label Styles */
+  .form-label {
+    font-weight: bold;
+  }
+  
+  /* Button Styles */
+  .btn-primary {
+    width: 100%;
+    background-color: #007bff; /* Blue */
+    border-color: #007bff; /* Blue */
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    padding: 12px;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3; /* Darker Blue */
+    border-color: #0056b3; /* Darker Blue */
+  }
+  
+  /* Link Styles */
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center; /* Teks menjadi tengah */
+    color: #007bff; /* Blue */
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  a:hover {
+    color: #0056b3; /* Darker Blue */
+    text-decoration: underline;
+  }
+  
