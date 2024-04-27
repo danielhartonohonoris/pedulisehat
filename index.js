@@ -248,7 +248,7 @@ app.post("/food", upload.single("image"), async (req, res) => {
   }
 });
 
-////////
+////////////////////////////////////////////////////////////////////////////
 
 
 app.get("/medicine", checkAuthenticated, async (req, res) => {
