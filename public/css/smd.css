@@ -107,7 +107,6 @@ img {
 
 input,
 button {
-  background: none;
   border: none;
   font: inherit;
 }
@@ -1331,9 +1330,15 @@ header h1 {
 
 .box {
   background-color: #f0f0f0;
+  height: 380px;
   padding: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan */
+  overflow: hidden;
+  flex-direction: column;
 }
 
 .box img {
@@ -1352,6 +1357,24 @@ header h1 {
 h3 {
   align-items: center;
   justify-content: center;
+}
+p {
+  overflow-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4; /* Tampilkan maksimal 5 baris */
+  line-height: 1.5; /* Sesuaikan line-height dengan kebutuhan */
+  flex-grow: 1;
+}
+pc {
+  overflow-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Tampilkan maksimal 5 baris */
+  line-height: 1.5; /* Sesuaikan line-height dengan kebutuhan */
+  flex-grow: 1;
 }
 
 /* Atur lebar kotak di perangkat seluler dengan lebar layar lebih kecil */
@@ -1412,4 +1435,91 @@ h3 {
 #searchInput:focus {
   border-color: #999;
 }
+/* CSS untuk judul form */
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* CSS untuk form */
+#foodForm {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* CSS untuk input, textarea, dan select */
+input[type="file"],
+input[type="text"],
+textarea,
+select {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* CSS untuk tombol */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+
+/* CSS tambahan jika diperlukan */
+
+.button-edit-group {
+  display: flex; /* Membuat button berada dalam satu baris */
+  margin-top: 10px;
+  align-self: flex-start;
+}
+
+.save-button, .cancel-button {
+  flex: 1; /* Memastikan tombol memiliki ukuran yang sama */
+  margin-right: 5px; /* Memberikan sedikit ruang di antara tombol */
+}
+
+/* Optional: Memberi gaya tambahan */
+.save-button, .cancel-button {
+  background-color: #4CAF50; /* Warna latar belakang */
+  border: none; /* Menghapus border */
+  color: white; /* Warna teks */
+  text-align: center; /* Menyusun teks ke tengah */
+  text-decoration: none; /* Menghapus underline */
+  display: inline-block; /* Memastikan tombol tampil sebagai blok */
+  font-size: 16px; /* Ukuran teks */
+  cursor: pointer; /* Mengubah kursor menjadi tangan saat dihover */
+  padding: 10px 20px; /* Ruang di dalam tombol */
+}
+
+.delete-button, .edit-button {
+  flex: 1; /* Memastikan tombol memiliki ukuran yang sama */
+  margin-right: 5px; /* Memberikan sedikit ruang di antara tombol */
+}
+
+/* Optional: Memberi gaya tambahan */
+.delete-button, .edit-button {
+  border: none; /* Menghapus border */
+  color: white; /* Warna teks */
+  text-align: center; /* Menyusun teks ke tengah */
+  text-decoration: none; /* Menghapus underline */
+  display: inline-block; /* Memastikan tombol tampil sebagai blok */
+  font-size: 16px; /* Ukuran teks */
+  cursor: pointer; /* Mengubah kursor menjadi tangan saat dihover */
+  padding: 10px 20px; /* Ruang di dalam tombol */
+}
+.delete-button {
+  background-color: red;
+}
+.edit-button {
+  background-color: rgb(0, 98, 255);
+}
+
+
 
