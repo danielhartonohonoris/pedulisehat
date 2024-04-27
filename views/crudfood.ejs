@@ -33,36 +33,43 @@
       </section>
     </article>
   </main>
-  <div class="box-container">
+<div class="box-container">
     <% todoListItems.forEach(item => { %>
-      <div class="box <%= item.role %>">
-        <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
-        <h3><%= item.title %></h3>
-        <p><%= item.description %></p>
-        <form id="deleteForm_<%= item._id %>" action="/food/<%= item._id %>" method="POST">
-            <input type="hidden" name="_method" value="DELETE">
-            <button type="button" onclick="deleteFood('<%= item._id %>')">Hapus</button>
-        </form>
-        <form id="editForm_<%= item._id %>" style="display: none;" method="POST" action="/food/<%= item._id %>?_method=PUT" enctype="multipart/form-data">
-            <input type="hidden" name="_method" value="PUT">
-            <input type="text" name="title" class="editTitle" placeholder="Title" value="<%= item.title %>">
-            <textarea name="description" class="editDescription" placeholder="Description"><%= item.description %></textarea>
-            <select name="role" class="editRole"> <!-- Add select field for role -->
-                <option value="sayuran" <%= item.role === 'sayuran' ? 'selected' : '' %>>Sayuran</option>
-                <option value="ikan" <%= item.role === 'ikan' ? 'selected' : '' %>>Ikan</option>
-                <option value="buah" <%= item.role === 'buah' ? 'selected' : '' %>>Buah</option>
-            </select>
-            <input type="file" name="image" class="editImage">
-            <button type="submit">Simpan</button>
-        </form>
-        
-        
 
-        
-        <button type="button" onclick="showEditForm('<%= item._id %>')">Edit</button>
-      </div>
+        <div class="box <%= item.role %>">
+            <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
+            <h3><%= item.title %></h3>
+            <pc class="description"><%= item.description %></pc>
+            <form id="deleteForm_<%= item._id %>" action="/food/<%= item._id %>" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+            </form>
+            <div class="button-edit-group">
+                <button type="button" class="delete-button" onclick="deleteFood('<%= item._id %>')">Hapus</button>
+                <button type="button" class="edit-button" onclick="showEditForm('<%= item._id %>')">Edit</button>
+            </div>
+        </div>
+
+        <div id="editFormContainer_<%= item._id %>" class="box" style="display: none;">
+
+            <form id="editForm_<%= item._id %>" method="POST" action="/food/<%= item._id %>?_method=PUT" enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="PUT">
+                <input type="text" name="title" class="editTitle" placeholder="Title" value="<%= item.title %>">
+                <textarea name="description" class="editDescription" placeholder="Description"><%= item.description %></textarea>
+                <select name="role" class="editRole"> <!-- Add select field for role -->
+                    <option value="sayuran" <%= item.role === 'sayuran' ? 'selected' : '' %>>Sayuran</option>
+                    <option value="ikan" <%= item.role === 'ikan' ? 'selected' : '' %>>Ikan</option>
+                    <option value="buah" <%= item.role === 'buah' ? 'selected' : '' %>>Buah</option>
+                </select>
+                <input type="file" name="image" class="editImage">
+                <div class="button-edit-group">
+                    <button type="submit" class="save-button">Update</button>
+                    <button type="button" class="cancel-button" onclick="cancelEditForm('<%= item._id %>')">Batal</button>
+                </div>
+            </form>
+        </div>
     <% }) %>
-  </div>
+</div>
+
   <form id="updateForm" style="display: none;" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="PUT">
     <input type="text" name="title" id="updateTitle" placeholder="Title">
@@ -77,11 +84,27 @@
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-  ...
   <script>
       function showEditForm(foodId) {
-          document.getElementById('editForm_' + foodId).style.display = 'block';
-      }
+        var editFormContainer = document.getElementById('editFormContainer_' + foodId);
+    if (editFormContainer.style.display === 'none') {
+      // Sembunyikan semua form edit terlebih dahulu
+      var allEditFormContainers = document.querySelectorAll('[id^="editFormContainer_"]');
+      allEditFormContainers.forEach(container => {
+        container.style.display = 'none';
+      });
+
+      // Tampilkan form edit yang sesuai
+      editFormContainer.style.display = 'block';
+    } else {
+      // Sembunyikan form edit
+      editFormContainer.style.display = 'none';
+        }
+    }
+    function cancelEditForm(foodId) {
+    var editFormContainer = document.getElementById('editFormContainer_' + foodId);
+    editFormContainer.style.display = 'none';
+  }
   
       function submitEditForm(foodId) {
           var form = document.getElementById("editForm_" + foodId);
