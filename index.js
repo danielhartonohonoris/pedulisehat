@@ -27,7 +27,7 @@ mongoose
     console.log(err.message);
   });
 
-// Fungsi untuk mendapatkan pengguna berdasarkan email
+
 const getUserByEmail = async (email) => {
   try {
     const user = await UserAcc.findOne({ email: email });
@@ -43,7 +43,7 @@ initializePassport(passport, getUserByEmail, id => UserAcc.findById(id));
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Middleware
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: false }));
@@ -72,6 +72,7 @@ const upload = multer({ storage: storage });
 // EJS
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get("/", checkAuthenticated, (req, res) => {
   res.render('index', { nama: req.user.name, title: "Home" });
@@ -128,13 +129,15 @@ function checkNotAuthenticated(req,res,next){
 }
 
 app.delete('/logout', (req, res, next) => {
+  // Menghapus sesi pengguna
   req.logOut(function(err) {
-      if (err) {
-          return next(err);
-      }
-      res.redirect('/login');
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/login'); // Mengarahkan kembali ke halaman login setelah logout
   });
 });
+
 
 
 function checkAdmin(req, res, next) {
@@ -147,6 +150,76 @@ function checkAdmin(req, res, next) {
 
 app.get("/admindashboard", checkAuthenticated, checkAdmin, (req, res) => {
   res.render('admindash', { nama: req.user.name, title: "Dashboard" });
+});
+
+
+app.get("/admindashboard/crudFood", checkAuthenticated, checkAdmin, async (req, res) => {
+  try {
+    const todoListItems = await DaftarMakanan.find();
+    res.render('crudfood', { todoListItems , nama: req.user.name, title: "Crud Food"});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat memuat halaman makanan");
+  }
+});
+app.post("/admindashboard/crudFood", upload.single("image"), async (req, res) => {
+  try {
+    const { title, description, role } = req.body; // Ambil nilai role dari formulir
+    const newFood = new DaftarMakanan({
+      title,
+      description,
+      role, // Masukkan nilai role ke objek DaftarMakanan
+      image:  req.file ? `../uploads/${req.file.filename}` : null
+    });
+    await newFood.save();
+    res.redirect("/food");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menyimpan makanan");
+  }
+});
+
+app.post("/food/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
+  try {
+    const { title, description, role } = req.body;
+    const foodId = req.params.id;
+
+    // Temukan makanan berdasarkan ID dan perbarui datanya
+    const updatedFood = await DaftarMakanan.findByIdAndUpdate(foodId, {
+      title,
+      description,
+      role,
+      // Gunakan req.file.filename jika ada, atau gunakan nilai yang ada jika tidak
+      image: req.file ? `../uploads/${req.file.filename}` : null
+    });
+
+    // Periksa apakah makanan ditemukan
+    if (!updatedFood) {
+      return res.status(404).send("Makanan tidak ditemukan");
+    }
+    res.redirect("/admindashboard/crudFood");
+  } catch (error) {
+    // Tangani kesalahan
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
+  }
+});
+
+
+
+
+
+app.delete("/food/:id", checkAuthenticated, checkAdmin, async (req, res) => {
+  try {
+    const deletedFood = await DaftarMakanan.findByIdAndDelete(req.params.id);
+    if (!deletedFood) {
+      return res.status(404).send("Makanan tidak ditemukan");
+    }
+    res.status(200).send("Makanan berhasil dihapus");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menghapus makanan");
+  }
 });
 
 app.get("/food", checkAuthenticated, async (req, res) => {
@@ -165,7 +238,7 @@ app.post("/food", upload.single("image"), async (req, res) => {
       title,
       description,
       role, // Masukkan nilai role ke objek DaftarMakanan
-      image: req.file.filename,
+      image:  req.file ? `../uploads/${req.file.filename}` : null
     });
     await newFood.save();
     res.redirect("/food");
@@ -174,6 +247,9 @@ app.post("/food", upload.single("image"), async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat menyimpan makanan");
   }
 });
+
+////////
+
 
 app.get("/medicine", checkAuthenticated, async (req, res) => {
   try {
@@ -257,4 +333,4 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
