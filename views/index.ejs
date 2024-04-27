@@ -17,7 +17,7 @@
 
           <div class="hero-content">
 
-            <p class="hero-subtitle has-before" data-reveal="left">Selamat Datang PeduliSehat</p>
+            <p class="hero-subtitle has-before" data-reveal="left">Selamat Datang Di PeduliSehat</p>
 
             <h1 class="headline-lg hero-title" data-reveal="left">
               Layanan Informasi 
@@ -113,11 +113,11 @@
               </li>
 
               <li>
-                <button class="tab-btn">Mission</button>
+                <button class="tab-btn" onclick="showTab('mission')">Mission</button>
               </li>
-
+              
               <li>
-                <button class="tab-btn">Strategy</button>
+                <button class="tab-btn" onclick="showTab('strategy')">Strategy</button>
               </li>
 
             </ul>
@@ -154,6 +154,65 @@
                   <span class="span">Mudah dimengerti </span>
                 </li>
 
+                <p class="tab-text mission" data-reveal="left" style="display: none;">
+                  MISSION:
+                </p>
+                
+                <div class="wrapper mission" style="display: none;">
+                  <ul class="about-list">
+                    <li class="about-item" data-reveal="left">
+                      <ion-icon name="checkmark-circle-outline"></ion-icon>
+                      <span class="span">Memberikan akses yang mudah terhadap informasi kesehatan</span>
+                    </li>
+                    <li class="about-item" data-reveal="left">
+                      <ion-icon name="checkmark-circle-outline"></ion-icon>
+                      <span class="span">Mendorong kesadaran akan pentingnya perawatan diri</span>
+                    </li>
+                    <li class="about-item" data-reveal="left">
+                      <ion-icon name="checkmark-circle-outline"></ion-icon>
+                      <span class="span">Menyediakan layanan obat yang aman dan berkualitas</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <p class="tab-text strategy" data-reveal="left" style="display: none;">
+                  STRATEGY:
+                </p>
+                
+                <div class="wrapper strategy" style="display: none;">
+                  <ul class="about-list">
+                    <li class="about-item" data-reveal="left">
+                      <ion-icon name="checkmark-circle-outline"></ion-icon>
+                      <span class="span">Berfokus pada pelayanan pelanggan yang unggul</span>
+                    </li>
+                    <li class="about-item" data-reveal="left">
+                      <ion-icon name="checkmark-circle-outline"></ion-icon>
+                      <span class="span">Menggunakan teknologi terbaru untuk menyediakan informasi yang akurat dan relevan</span>
+                    </li>
+                    <li class="about-item" data-reveal="left">
+                      <ion-icon name="checkmark-circle-outline"></ion-icon>
+                      <span class="span">Bekerja sama dengan profesional kesehatan untuk memastikan kualitas layanan</span>
+                    </li>
+                  </ul>
+                </div>
+                <script>
+                  function showTab(tabName) {
+                    var tabs = document.querySelectorAll('.tab-text');
+                    var wrappers = document.querySelectorAll('.wrapper');
+                
+                    tabs.forEach(function(tab) {
+                      tab.style.display = 'none';
+                    });
+                
+                    wrappers.forEach(function(wrapper) {
+                      wrapper.style.display = 'none';
+                    });
+                
+                    document.querySelector('.' + tabName).style.display = 'block';
+                  }
+                </script>
+              </div>
+            </div>  
               </ul>
 
             </div>
