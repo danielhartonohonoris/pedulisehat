@@ -151,7 +151,9 @@ function checkAdmin(req, res, next) {
 app.get("/admindashboard", checkAuthenticated, checkAdmin, (req, res) => {
   res.render('admindash', { nama: req.user.name, title: "Dashboard" });
 });
-
+app.get("/bmi", checkAuthenticated,  (req, res) => {
+  res.render('bmi', { nama: req.user.name, title: "BMI" });
+});
 
 app.get("/admindashboard/crudFood", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
