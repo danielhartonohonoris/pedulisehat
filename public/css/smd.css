@@ -1574,5 +1574,13 @@ button {
   margin-top: 20px;
   font-size: 18px;
 }
+.rating {
+  display: flex;
+  color: gold; /* Warna emas */
+  font-size: 20px; /* Ukuran font */
+}
 
+.rating ion-icon {
+  margin-right: 5px; /* Jarak antara ikon bintang */
+}
 
