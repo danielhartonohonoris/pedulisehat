@@ -125,4 +125,58 @@ document.querySelectorAll('.toggleBtn').forEach(item => {
 item.addEventListener('click', toggleText)
 })
 
+document.getElementById('searchInput').addEventListener('input', function() {
+  filterBoxes();
+});
 
+function filterBoxes() {
+  const selectedRole = document.getElementById('roleFilter').value;
+  const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+  const boxes = document.querySelectorAll('.box');
+
+  boxes.forEach(box => {
+    const role = box.classList.contains(selectedRole) || selectedRole === '';
+    const title = box.querySelector('h3').textContent.toLowerCase();
+    const matchSearch = title.includes(searchQuery);
+
+    if (role && matchSearch) {
+      box.style.display = 'block';
+    } else {
+      box.style.display = 'none';
+    }
+  });
+}
+
+function calculateBMI() {
+  const height = parseFloat(document.getElementById('height').value);
+  const weight = parseFloat(document.getElementById('weight').value);
+  const gender = document.getElementById('gender').value;
+
+  if (!height || !weight || height <= 0 || weight <= 0) {
+    document.getElementById('result').innerHTML = "Silahkan masukkan tinggi dan berat badan";
+    return;
+  }
+
+  const bmi = weight / ((height / 100) ** 2);
+  const bmiCategory = getBMICategory(bmi);
+
+  document.getElementById('result').innerHTML = `BMI Kamu: ${bmi.toFixed(2)} (${bmiCategory})`;
+}
+
+function getBMICategory(bmi) {
+  if (bmi < 18.5) {
+    return "Berat Rendah, perbanyak makan daging dan tidur yang cukup";
+  } else if (bmi >= 18.5 && bmi < 25) {
+    return "Ideal, Selalu jaga kesehatanmu";
+  } else if (bmi >= 25 && bmi < 30) {
+    return "Berat Berlebih, perbanyak olahraga";
+  } else {
+    return "Obesitas, perbanyak olahraga dan jaga kesehatan";
+  }
+}
+
+function resetForm() {
+  document.getElementById('height').value = '';
+  document.getElementById('weight').value = '';
+  document.getElementById('result').innerHTML = '';
+}

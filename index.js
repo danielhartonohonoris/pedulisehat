@@ -151,7 +151,9 @@ function checkAdmin(req, res, next) {
 app.get("/admindashboard", checkAuthenticated, checkAdmin, (req, res) => {
   res.render('admindash', { nama: req.user.name, title: "Dashboard" });
 });
-
+app.get("/bmi", checkAuthenticated,  (req, res) => {
+  res.render('bmi', { nama: req.user.name, title: "BMI" });
+});
 
 app.get("/admindashboard/crudFood", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
@@ -179,6 +181,7 @@ app.post("/admindashboard/crudFood", upload.single("image"), async (req, res) =>
   }
 });
 
+
 app.post("/food/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
   try {
     const { title, description, role } = req.body;
@@ -204,10 +207,6 @@ app.post("/food/:id", checkAuthenticated, checkAdmin, upload.single("image"), as
     res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
   }
 });
-
-
-
-
 
 app.delete("/food/:id", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
@@ -248,9 +247,6 @@ app.post("/food", upload.single("image"), async (req, res) => {
   }
 });
 
-////////////////////////////////////////////////////////////////////////////
-
-
 app.get("/medicine", checkAuthenticated, async (req, res) => {
   try {
     const todoListItems = await TodoListItems.find();
@@ -276,6 +272,8 @@ app.post("/medicine", upload.single("image"), async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
   }
 });
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////// crud sickness //////////////////////////////////////////////////////////
 
 app.get("/information", checkAuthenticated, async (req, res) => {
   try {
