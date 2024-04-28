@@ -385,11 +385,12 @@ app.get("/admindashboard/crudDoctor", checkAuthenticated, checkAdmin, async (req
 });
 app.post("/admindashboard/crudDoctor", upload.single("image"), async (req, res) => {
   try {
-    const { title, description,} = req.body; // Ambil nilai role dari formulir
+    const { title, description, rating, specialization} = req.body; // Ambil nilai role dari formulir
     const newdoctor = new DaftarDokter({
       title,
       description,
-      // Masukkan nilai role ke objek DaftarMakanan
+      rating,
+      specialization,
       image:  req.file ? `../uploads/${req.file.filename}` : null
     });
     await newdoctor.save();
@@ -415,15 +416,15 @@ app.delete("/doctors/:id", checkAuthenticated, checkAdmin, async (req, res) => {
 
 app.post("/doctors/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
   try {
-    const { title, description, } = req.body;
+    const { title, description, rating, specialization} = req.body;
     const doctorId = req.params.id;
 
     // Temukan makanan berdasarkan ID dan perbarui datanya
     const updatedDoctor = await DaftarDokter.findByIdAndUpdate(doctorId, {
       title,
       description,
-    
-      // Gunakan req.file.filename jika ada, atau gunakan nilai yang ada jika tidak
+      rating,
+      specialization,
       image: req.file ? `../uploads/${req.file.filename}` : null
     });
 
@@ -450,11 +451,13 @@ app.get("/doctors", checkAuthenticated, async (req, res) => {
 
 app.post("/doctors", upload.single("image"), async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, rating, specialization } = req.body;
     const newDoctors = new DaftarDokter({
       title,
       description,
-      image: req.file.filename,
+      rating,
+      specialization,
+      image: req.file ? `../uploads/${req.file.filename}` : null,
     });
     await newDoctors.save();
     res.redirect("/doctors");

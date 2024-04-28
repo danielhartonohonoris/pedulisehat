@@ -1450,6 +1450,7 @@ h2 {
 /* CSS untuk input, textarea, dan select */
 input[type="file"],
 input[type="text"],
+input[type="number"],
 textarea,
 select {
   display: block;

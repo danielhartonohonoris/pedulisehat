@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <%- include('layouts/header.ejs') %>
-
 </head>
 <body id="top">
   <%- include('layouts/navdash.ejs') %>
@@ -16,6 +15,14 @@
                 <input type="file" name="image">
                 <input type="text" name="title" placeholder="Title">
                 <textarea name="description" placeholder="Description"></textarea>
+                <select name="specialization" id="specialization">
+                    <option value="Kulit">Spesialis Kulit</option>
+                    <option value="Anak">Spesialis Anak</option>
+                    <option value="Saraf">Spesialis Saraf</option>
+                    <option value="Mata">Spesialis Mata</option>
+                    <option value="Jantung">Spesialis Jantung</option>
+                </select>
+                <input type="number" name="rating" id="rating" placeholder="Rating">
                 <button type="button" onclick="submitFormDoctor()">Add Doctor</button>
             </form>
             <p class="hero-subtitle has-before" data-reveal="left">Crud Doctor</p>
@@ -34,7 +41,9 @@
         <div class="box <%= item.role %>">
             <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
             <h3><%= item.title %></h3>
-            <pc class="description"><%= item.description %></pc>
+            <p class="description"><%= item.description %></p>
+            <p class="specialization"><%= item.specialization %></p>
+            <p class="rating">Rating: <%= item.rating %></p>
             <form id="deleteForm_<%= item._id %>" action="/doctors/<%= item._id %>" method="POST">
                 <input type="hidden" name="_method" value="DELETE">
             </form>
@@ -50,7 +59,14 @@
                 <input type="hidden" name="_method" value="PUT">
                 <input type="text" name="title" class="editTitle" placeholder="Title" value="<%= item.title %>">
                 <textarea name="description" class="editDescription" placeholder="Description"><%= item.description %></textarea>
-         
+                <select name="specialization" class="editSpecialization">
+                    <option value="Kulit" <%= item.specialization === 'Kulit' ? 'selected' : '' %>>Spesialis Kulit</option>
+                    <option value="Anak"  <%= item.specialization === 'Anak' ? 'selected' : '' %>>Spesialis Anak</option>
+                    <option value="Saraf"  <%= item.specialization === 'Saraf' ? 'selected' : '' %>>Spesialis Saraf</option>
+                    <option value="Mata"  <%= item.specialization === 'Mata' ? 'selected' : '' %>>Spesialis Mata</option>
+                    <option value="Jantung"  <%= item.specialization === 'Jantung' ? 'selected' : '' %>>Spesialis Jantung</option>
+                </select>
+                <input type="number" name="rating" class="editRating" placeholder="Rating" value="<%= item.rating %>">
                 <input type="file" name="image" class="editImage">
                 <div class="button-edit-group">
                     <button type="submit" class="save-button">Update</button>
@@ -65,7 +81,7 @@
     <input type="hidden" name="_method" value="PUT">
     <input type="text" name="title" id="updateTitle" placeholder="Title">
     <textarea name="description" id="updateDescription" placeholder="Description"></textarea>
- 
+    <input type="number" name="rating" id="updateRating" placeholder="Rating">
     <input type="file" name="image" id="updateImage">
     <button type="button" onclick="submitUpdateForm()">Simpan</button>
 </form>
