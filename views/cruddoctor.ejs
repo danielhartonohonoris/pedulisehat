@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('layouts/header.ejs') %>
+</head>
+<body id="top">
+  <%- include('layouts/navdash.ejs') %>
+  <main>
+    <article>
+      <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
+        <div class="container">
+          <div class="hero-content">
+            <h2>CRUD DOCTOR</h2>
+            <form id="doctorForm" action="/doctors" method="POST" enctype="multipart/form-data">
+                <input type="file" name="image">
+                <input type="text" name="title" placeholder="Title">
+                <textarea name="description" placeholder="Description"></textarea>
+                <select name="specialization" id="specialization">
+                    <option value="Kulit">Spesialis Kulit</option>
+                    <option value="Anak">Spesialis Anak</option>
+                    <option value="Saraf">Spesialis Saraf</option>
+                    <option value="Mata">Spesialis Mata</option>
+                    <option value="Jantung">Spesialis Jantung</option>
+                </select>
+                <input type="number" name="rating" id="rating" placeholder="Rating">
+                <button type="button" onclick="submitFormDoctor()">Add Doctor</button>
+            </form>
+            <p class="hero-subtitle has-before" data-reveal="left">Crud Doctor</p>
+            <h1 class="headline-lg hero-title" data-reveal="left">
+              Layanan Informasi 
+              Cepat Dan Tepat. <br>
+            </h1>
+          </div>
+        </div>
+      </section>
+    </article>
+  </main>
+  <div class="box-container">
+    <% todoListItems.forEach(item => { %>
+
+        <div class="box <%= item.role %>">
+            <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
+            <h3><%= item.title %></h3>
+            <p class="description"><%= item.description %></p>
+            <p class="specialization"><%= item.specialization %></p>
+            <p class="rating">Rating: <%= item.rating %></p>
+            <form id="deleteForm_<%= item._id %>" action="/doctors/<%= item._id %>" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+            </form>
+            <div class="button-edit-group">
+                <button type="button" class="delete-button" onclick="deletedoctors('<%= item._id %>')">Hapus</button>
+                <button type="button" class="edit-button" onclick="showEditForm('<%= item._id %>')">Edit</button>
+            </div>
+        </div>
+
+        <div id="editFormContainer_<%= item._id %>" class="box" style="display: none;">
+
+            <form id="editForm_<%= item._id %>" method="POST" action="/doctors/<%= item._id %>?_method=PUT" enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="PUT">
+                <input type="text" name="title" class="editTitle" placeholder="Title" value="<%= item.title %>">
+                <textarea name="description" class="editDescription" placeholder="Description"><%= item.description %></textarea>
+                <select name="specialization" class="editSpecialization">
+                    <option value="Kulit" <%= item.specialization === 'Kulit' ? 'selected' : '' %>>Spesialis Kulit</option>
+                    <option value="Anak"  <%= item.specialization === 'Anak' ? 'selected' : '' %>>Spesialis Anak</option>
+                    <option value="Saraf"  <%= item.specialization === 'Saraf' ? 'selected' : '' %>>Spesialis Saraf</option>
+                    <option value="Mata"  <%= item.specialization === 'Mata' ? 'selected' : '' %>>Spesialis Mata</option>
+                    <option value="Jantung"  <%= item.specialization === 'Jantung' ? 'selected' : '' %>>Spesialis Jantung</option>
+                </select>
+                <input type="number" name="rating" class="editRating" placeholder="Rating" value="<%= item.rating %>">
+                <input type="file" name="image" class="editImage">
+                <div class="button-edit-group">
+                    <button type="submit" class="save-button">Update</button>
+                    <button type="button" class="cancel-button" onclick="cancelEditForm('<%= item._id %>')">Batal</button>
+                </div>
+            </form>
+        </div>
+    <% }) %>
+</div>
+
+  <form id="updateForm" style="display: none;" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PUT">
+    <input type="text" name="title" id="updateTitle" placeholder="Title">
+    <textarea name="description" id="updateDescription" placeholder="Description"></textarea>
+    <input type="number" name="rating" id="updateRating" placeholder="Rating">
+    <input type="file" name="image" id="updateImage">
+    <button type="button" onclick="submitUpdateForm()">Simpan</button>
+</form>
+
+
+  <script src="/js/script.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script>
+      function showEditForm(doctorId) {
+        var editFormContainer = document.getElementById('editFormContainer_' + doctorId);
+    if (editFormContainer.style.display === 'none') {
+      // Sembunyikan semua form edit terlebih dahulu
+      var allEditFormContainers = document.querySelectorAll('[id^="editFormContainer_"]');
+      allEditFormContainers.forEach(container => {
+        container.style.display = 'none';
+      });
+
+      // Tampilkan form edit yang sesuai
+      editFormContainer.style.display = 'block';
+    } else {
+      // Sembunyikan form edit
+      editFormContainer.style.display = 'none';
+        }
+    }
+    function cancelEditForm(doctorId) {
+    var editFormContainer = document.getElementById('editFormContainer_' + doctorId);
+    editFormContainer.style.display = 'none';
+  }
+  
+      function submitEditForm(doctorId) {
+          var form = document.getElementById("editForm_" + doctorId);
+          var formData = new FormData(form);
+  
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", form.action, true);
+          xhr.onload = function() {
+              if (xhr.status === 200) {
+                  console.log("Perubahan berhasil disimpan!");
+                  window.location.reload();
+              } else {
+                  console.error("Terjadi kesalahan saat menyimpan perubahan.");
+              }
+          };
+          xhr.onerror = function() {
+              console.error("Terjadi kesalahan koneksi.");
+          };
+          xhr.send(formData);
+      }
+  
+      function submitFormDoctor() {
+          var form = document.getElementById("doctorForm");
+          var formData = new FormData(form);
+  
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", form.action, true);
+          xhr.onload = function() {
+              if (xhr.status === 200) {
+                  console.log("Makanan berhasil ditambahkan!");
+                  window.location.reload();
+              } else {
+                  console.error("Terjadi kesalahan saat menambahkan makanan.");
+              }
+          };
+          xhr.onerror = function() {
+              console.error("Terjadi kesalahan koneksi.");
+          };
+          xhr.send(formData);
+      }
+  
+      function submitUpdateForm() {
+          var form = document.getElementById("updateForm");
+          var formData = new FormData(form);
+  
+          var xhr = new XMLHttpRequest();
+          xhr.open("PUT", form.action, true);
+          xhr.onload = function() {
+              if (xhr.status === 200) {
+                  console.log("Perubahan berhasil disimpan crudDoctor!");
+                  window.location.reload();
+              } else {
+                  console.error("Terjadi kesalahan saat menyimpan perubahan.");
+              }
+          };
+          xhr.onerror = function() {
+              console.error("Terjadi kesalahan koneksi.");
+          };
+          xhr.send(formData);
+      }
+  
+      function deletedoctors(doctorid) {
+          if (confirm("Apakah Anda yakin ingin menghapus obat ini?")) {
+              var xhr = new XMLHttpRequest();
+              xhr.open("DELETE", "/doctors/" + doctorid, true);
+              xhr.onload = function() {
+                  if (xhr.status === 200) {
+                      console.log("Makanan berhasil dihapus!");
+                      window.location.reload();
+                  } else {
+                      console.error("Terjadi kesalahan saat menghapus makanan.");
+                  }
+              };
+              xhr.send();
+          }
+      }
+  </script>
+
+</body>
+</html>
