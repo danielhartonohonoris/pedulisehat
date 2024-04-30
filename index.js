@@ -155,6 +155,10 @@ app.get("/bmi", checkAuthenticated,  (req, res) => {
   res.render('bmi', { nama: req.user.name, title: "BMI" });
 });
 
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
 app.get("/admindashboard/crudFood", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const todoListItems = await DaftarMakanan.find();
