@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <%- include('layouts/header.ejs') %>
+
 </head>
 <body id="top">
   <%- include('layouts/navdash.ejs') %>
@@ -15,6 +16,7 @@
                 <input type="file" name="image">
                 <input type="text" name="title" placeholder="Title">
                 <textarea name="description" placeholder="Description"></textarea>
+
                 <select name="specialization" id="specialization">
                     <option value="Kulit">Spesialis Kulit</option>
                     <option value="Anak">Spesialis Anak</option>
@@ -23,6 +25,7 @@
                     <option value="Jantung">Spesialis Jantung</option>
                 </select>
                 <input type="number" name="rating" id="rating" placeholder="Rating">
+
                 <button type="button" onclick="submitFormDoctor()">Add Doctor</button>
             </form>
             <p class="hero-subtitle has-before" data-reveal="left">Crud Doctor</p>
@@ -41,9 +44,13 @@
         <div class="box <%= item.role %>">
             <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
             <h3><%= item.title %></h3>
+
             <p class="description"><%= item.description %></p>
             <p class="specialization"><%= item.specialization %></p>
             <p class="rating">Rating: <%= item.rating %></p>
+
+            <pc class="description"><%= item.description %></pc>
+
             <form id="deleteForm_<%= item._id %>" action="/doctors/<%= item._id %>" method="POST">
                 <input type="hidden" name="_method" value="DELETE">
             </form>
@@ -59,6 +66,7 @@
                 <input type="hidden" name="_method" value="PUT">
                 <input type="text" name="title" class="editTitle" placeholder="Title" value="<%= item.title %>">
                 <textarea name="description" class="editDescription" placeholder="Description"><%= item.description %></textarea>
+
                 <select name="specialization" class="editSpecialization">
                     <option value="Kulit" <%= item.specialization === 'Kulit' ? 'selected' : '' %>>Spesialis Kulit</option>
                     <option value="Anak"  <%= item.specialization === 'Anak' ? 'selected' : '' %>>Spesialis Anak</option>
@@ -192,3 +200,6 @@
 
 </body>
 </html>
+
+
+
