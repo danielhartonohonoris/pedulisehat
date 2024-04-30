@@ -156,7 +156,6 @@ app.get("/bmi", checkAuthenticated,  (req, res) => {
 });
 
 
-
 app.get("/admindashboard/crudFood", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const todoListItems = await DaftarMakanan.find();
