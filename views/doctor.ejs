@@ -1,42 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
   <%- include('layouts/header.ejs') %>
+</head>
 <body id="top">
   <%- include('layouts/navbar.ejs') %>
   <main>
     <article>
       <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
         <div class="container">
-    
           <div class="hero-content">
-    
             <p class="hero-subtitle has-before" data-reveal="left">Pusat Dokter</p>
-    
+            <div class="filter-container">
+              <select id="roleFilter">
+                <option value="">Semua</option>
+                <option value="Kulit">Spesialis Kulit</option>
+                <option value="Anak">Spesialis Anak</option>
+                <option value="Saraf">Spesialis Saraf</option>
+                <option value="Jantung">Spesialis Jantung</option>
+                <option value="Mata">Spesialis Mata</option>
+              </select>
+            </div>
+            <div class="sorting-section">
+              <select id="sort">
+                <option value="desc">Rating Tertinggi ke Terendah</option>
+                <option value="asc">Rating Terendah ke Tertinggi</option>
+              </select>
+            </div>
             <h1 class="headline-lg hero-title" data-reveal="left">
-              Layanan Informasi 
-              Cepat Dan Tepat. <br>
+              Layanan Informasi Cepat Dan Tepat. <br>
             </h1>
           </div>
         </div>
       </section>
     </article>
   </main>
-  <div class="box-container">
+  <div class="box-container" id="boxContainer">
     <% todoListItems.forEach(item => { %>
-        <div class="box">
-          <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
-          <h3><%= item.title %></h3>
-          <p><%= item.description %></p>
-        </div>
+      <div class="box" data-specialization="<%= item.specialization %>" data-rating="<%= item.rating %>">
+        <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
+        <h3><%= item.title %></h3>
+        <p><%= item.description %></p>
+        <p class="rating">
+          <% for (let i = 0; i < item.rating; i++) { %>
+            <ion-icon name="star"></ion-icon> <!-- Menggunakan ikon bintang dari Ionicons -->
+          <% } %>
+        </p>
+      </div>
     <% }) %>
   </div>
   <%- include('layouts/footer.ejs') %>
-  
-
   <script src="./js/script.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script>
+    function filterBoxes() {
+      const selectedRole = document.getElementById('roleFilter').value;
+      const boxes = document.querySelectorAll('.box');
 
+      boxes.forEach(box => {
+        const role = selectedRole === '' || box.dataset.specialization === selectedRole;
+        const display = role ? 'block' : 'none';
+
+        box.style.display = display;
+      });
+    }
+
+    function sortBoxes() {
+      const sortDirection = document.getElementById('sort').value;
+      const boxes = document.querySelectorAll('.box');
+
+      const sortedBoxes = Array.from(boxes).sort((a, b) => {
+        const ratingA = parseInt(a.dataset.rating);
+        const ratingB = parseInt(b.dataset.rating);
+        return sortDirection === 'asc' ? ratingA - ratingB : ratingB - ratingA;
+      });
+
+      const boxContainer = document.getElementById('boxContainer');
+      boxContainer.innerHTML = '';
+
+      sortedBoxes.forEach(box => {
+        boxContainer.appendChild(box);
+      });
+    }
+
+    document.getElementById('roleFilter').addEventListener('change', filterBoxes);
+    document.getElementById('sort').addEventListener('change', sortBoxes);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      filterBoxes();
+      sortBoxes();
+    });
+  </script>
 </body>
-
 </html>

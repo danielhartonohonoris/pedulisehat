@@ -20,6 +20,15 @@ const TodoListItemsSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    rating: {
+        type: Number,
+        default: 0
+    },
+    specialization: {
+        type: String,
+        enum: ['Kulit', 'Anak', 'Saraf', 'Jantung', 'Mata'],
+        required: true
     }
 });
 
