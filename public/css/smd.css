@@ -1499,6 +1499,24 @@ button {
   padding: 10px 20px; /* Ruang di dalam tombol */
 }
 
+.calculate-button, .reset-button {
+  flex: 1; /* Memastikan tombol memiliki ukuran yang sama */
+  margin-right: 5px; /* Memberikan sedikit ruang di antara tombol */
+}
+
+/* Optional: Memberi gaya tambahan */
+.calculate-button, .reset-button {
+  background-color: #4CAF50; /* Warna latar belakang */
+  border: none; /* Menghapus border */
+  color: white; /* Warna teks */
+  text-align: center; /* Menyusun teks ke tengah */
+  text-decoration: none; /* Menghapus underline */
+  display: inline-block; /* Memastikan tombol tampil sebagai blok */
+  font-size: 16px; /* Ukuran teks */
+  cursor: pointer; /* Mengubah kursor menjadi tangan saat dihover */
+  padding: 10px 20px; /* Ruang di dalam tombol */
+}
+
 .delete-button, .edit-button {
   flex: 1; /* Memastikan tombol memiliki ukuran yang sama */
   margin-right: 5px; /* Memberikan sedikit ruang di antara tombol */

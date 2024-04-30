@@ -11,11 +11,20 @@
       <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
         <div class="container">
           <div class="hero-content">
-            <h2>CRUD MEDICINE</h2>
+            <h2>CRUD SICKNESS</h2>
             <form id="sicknessForm" action="/information" method="POST" enctype="multipart/form-data">
                 <input type="file" name="image">
                 <input type="text" name="title" placeholder="Title">
                 <textarea name="description" placeholder="Description"></textarea>
+                <select name="jenis" id="jenis">
+                    <option value="Penyakit Jantung">Penyakit Jantung</option>
+                    <option value="Penyakit Saraf">Penyakit Saraf</option>
+                    <option value="Penyakit Kulit">Penyakit Kulit</option>
+                    <option value="Penyakit Pernapasan">Penyakit Pernapasan</option>
+                    <option value="Penyakit Pencernaan">Penyakit Pencernaan</option>
+                    <option value="Penyakit Mental">Penyakit Mental</option>
+                  </select>
+                  
                 
                 <button type="button" onclick="submitFormSickness()">Add Sickness</button>
             </form>
@@ -51,6 +60,14 @@
                 <input type="hidden" name="_method" value="PUT">
                 <input type="text" name="title" class="editTitle" placeholder="Title" value="<%= item.title %>">
                 <textarea name="description" class="editDescription" placeholder="Description"><%= item.description %></textarea>
+                <select name="jenis" class="editRole"> <!-- Add select field for role -->
+                    <option value="Penyakit Jantung" <%= item.role === 'Penyakit Jantung' ? 'selected' : '' %>>Penyakit Jantung</option>
+                    <option value="Penyakit Saraf" <%= item.role === 'Penyakit Saraf' ? 'selected' : '' %>>Penyakit Saraf</option>
+                    <option value="Penyakit Kulit" <%= item.role === 'Penyakit Kulit' ? 'selected' : '' %>>Penyakit Kulit</option>
+                    <option value="Penyakit Pernapasan" <%= item.role === 'Penyakit Pernapasan' ? 'selected' : '' %>>Penyakit Pernapasan</option>
+                    <option value="Penyakitn Pencernaan" <%= item.role === 'Penyakit Pencernaan' ? 'selected' : '' %>>Penyakit Pencernaan</option>
+                    <option value="Penyakit Mental" <%= item.role === 'Penyakit Mental' ? 'selected' : '' %>>Penyakit Mental</option>
+                </select>
          
                 <input type="file" name="image" class="editImage">
                 <div class="button-edit-group">
@@ -78,7 +95,7 @@
 
   <script>
       function showEditForm(sickness) {
-        var editFormContainer = document.getElementById('editFormContainer_' + sicknessId);
+        var editFormContainer = document.getElementById('editFormContainer_' + sickness);
     if (editFormContainer.style.display === 'none') {
       // Sembunyikan semua form edit terlebih dahulu
       var allEditFormContainers = document.querySelectorAll('[id^="editFormContainer_"]');
@@ -94,12 +111,12 @@
         }
     }
     function cancelEditForm(sickness) {
-    var editFormContainer = document.getElementById('editFormContainer_' + sicknessId);
+    var editFormContainer = document.getElementById('editFormContainer_' + sickness);
     editFormContainer.style.display = 'none';
   }
   
       function submitEditForm(sickness) {
-          var form = document.getElementById("editForm_" + sicknessId);
+          var form = document.getElementById("editForm_" + sickness);
           var formData = new FormData(form);
   
           var xhr = new XMLHttpRequest();
@@ -161,7 +178,7 @@
       function deleteSickness(sickness) {
           if (confirm("Apakah Anda yakin ingin menghapus obat ini?")) {
               var xhr = new XMLHttpRequest();
-              xhr.open("DELETE", "/sickness/" + sicknessId, true);
+              xhr.open("DELETE", "/information/" + sickness, true);
               xhr.onload = function() {
                   if (xhr.status === 200) {
                       console.log("Daftar penyakit berhasil dihapus!");

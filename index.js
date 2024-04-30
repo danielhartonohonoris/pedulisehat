@@ -346,6 +346,71 @@ app.post("/medicine", upload.single("image"), async (req, res) => {
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////// crud sickness //////////////////////////////////////////////////////////
 
+// Route untuk halaman CRUD Penyakit
+app.get("/admindashboard/crudSickness", checkAuthenticated, checkAdmin, async (req, res) => {
+  try {
+    const todoListItems = await DaftarPenyakit.find();
+    res.render('crudsickness', { todoListItems , nama: req.user.name, title: "Crud Sickness"});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat memuat halaman penyakit");
+  }
+});
+
+// Route untuk menambahkan penyakit baru
+app.post("/admindashboard/crudSickness", upload.single("image"), async (req, res) => {
+  try {
+    const { title, description, jenis } = req.body;
+    const newSickness = new DaftarPenyakit({
+      title,
+      description,
+      jenis,
+      image: req.file ? `../uploads/${req.file.filename}` : null
+    });
+    await newSickness.save();
+    res.redirect("/information");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
+  }
+});
+
+// Route untuk mengedit penyakit
+app.post("/information/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
+  try {
+    const { title, description, jenis } = req.body;
+    const sicknessId = req.params.id;
+
+    const updatedSickness = await DaftarPenyakit.findByIdAndUpdate(sicknessId, {
+      title,
+      description,
+      jenis,
+      image: req.file ? `../uploads/${req.file.filename}` : null
+    });
+
+    if (!updatedSickness) {
+      return res.status(404).send("Penyakit tidak ditemukan");
+    }
+    res.redirect("/admindashboard/crudSickness");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
+  }
+});
+
+// Route untuk menghapus penyakit
+app.delete("/information/:id", checkAuthenticated, checkAdmin, async (req, res) => {
+  try {
+    const deletedSickness = await DaftarPenyakit.findByIdAndDelete(req.params.id);
+    if (!deletedSickness) {
+      return res.status(404).send("Penyakit tidak ditemukan");
+    }
+    res.status(200).send("Penyakit berhasil dihapus");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menghapus penyakit");
+  }
+});
 app.get("/information", checkAuthenticated, async (req, res) => {
   try {
     const todoListItems = await DaftarPenyakit.find();
@@ -358,10 +423,11 @@ app.get("/information", checkAuthenticated, async (req, res) => {
 
 app.post("/information", upload.single("image"), async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, jenis } = req.body;
     const newSickness = new DaftarPenyakit({
       title,
       description,
+      jenis,
       image: req.file.filename,
     });
     await newSickness.save();
@@ -371,70 +437,7 @@ app.post("/information", upload.single("image"), async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
   }
 });
-app.get("/admindashboard/crudSickness", checkAuthenticated, checkAdmin, async (req, res) => {
-  try {
-    const todoListItems = await DaftarPenyakit.find();
-    res.render('crudsickness', { todoListItems , nama: req.user.name, title: "Crud Sickness"});
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat memuat halaman makanan");
-  }
-});
-app.post("/admindashboard/crudSickness", upload.single("image"), async (req, res) => {
-  try {
-    const { title, description,} = req.body; // Ambil nilai role dari formulir
-    const newSickness = new DaftarPenyakit({
-      title,
-      description,
-      // Masukkan nilai role ke objek DaftarMakanan
-      image:  req.file ? `../uploads/${req.file.filename}` : null
-    });
-    await newSickness.save();
-    res.redirect("/information");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan makanan");
-  }
-});
 
-app.post("/information/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
-  try {
-    const { title, description, } = req.body;
-    const sicknessId = req.params.id;
-
-    // Temukan makanan berdasarkan ID dan perbarui datanya
-    const updatedSickness = await DaftarPenyakit.findByIdAndUpdate(sicknessId, {
-      title,
-      description,
-    
-      // Gunakan req.file.filename jika ada, atau gunakan nilai yang ada jika tidak
-      image: req.file ? `../uploads/${req.file.filename}` : null
-    });
-
-    // Periksa apakah makanan ditemukan
-    if (!updatedSickness) {
-      return res.status(404).send("Penyakit tidak ditemukan");
-    }
-    res.redirect("/admindashboard/crudSickness");
-  } catch (error) {
-    // Tangani kesalahan
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
-  }
-});
-
-app.delete("/information/:id", checkAuthenticated, checkAdmin, async (req, res) => {
-  try {
-    const deletedSickness = await DaftarPenyakit.findByIdAndDelete(req.params.id);
-    if (!deletedSickness) {
-      return res.status(404).send("Makanan tidak ditemukan");
-    }
-    res.status(200).send("Makanan berhasil dihapus");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menghapus makanan");
-  }
-});
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////// crud doctor///////////////////////////////////////////////////////
@@ -538,5 +541,3 @@ app.listen(port, () => {
 });
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////crud sickness////////////////////////////////////////////////////////////////
