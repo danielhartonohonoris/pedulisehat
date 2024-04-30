@@ -40,8 +40,11 @@
         <option value="female">Female</option>
       </select>
     </div>
-    <button onclick="calculateBMI()">Calculate BMI</button>
-    <button onclick="resetForm()">Refresh</button>
+    <div class="button-edit-group">
+      <button type="button" class="calculate-button" onclick="calculateBMI()">Calculate BMI</button>
+    <button type="button" class="reset-button" onclick="resetForm()">Reset</button>
+    </div>
+    
     <div id="result"></div>
   </div>
   <%- include('layouts/footer.ejs') %>
