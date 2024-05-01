@@ -1,156 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('layouts/header.ejs') %>
-<body id="top">
-  <%- include('layouts/navdash.ejs') %>
+<%- include('layouts/header.ejs') %>
 
-  <main>
-    <article>
-      <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
+  <body id="top">
+    <%- include('layouts/navdash.ejs') %>
+
+      <main>
+        <article>
+          <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
+            <div class="container">
+              <div class="hero-content">
+                <p class="hero-subtitle has-before" data-reveal="left">Selamat Datang di Admin Dashboard</p>
+                <h1 class="headline-lg hero-title" data-reveal="left">
+                  Adang Irawan <br>
+                  Amos Valentino <br>
+                  Daniel Hartono
+                </h1>
+              </div>
+            </div>
+          </section>
+        </article>
+      </main>
+
+      <section class="user-list">
         <div class="container">
-  
-          <div class="hero-content">
-    
-            <p class="hero-subtitle has-before" data-reveal="left">Selamat Datang di Admin Dashboard</p>
-    
-            <h1 class="headline-lg hero-title" data-reveal="left">
-              Adang Irawan <br>
-              Amos Valentino <br>
-              Daniel Hartono
-            </h1>
-          </div>
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Login Terakhir</th> <!-- Tambah kolom baru -->
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% todoListItems.forEach(user=> { %>
+                <% if (user.role==='user' ) { %>
+                  <tr>
+                    <td>
+                      <%= user.name %>
+                    </td>
+                    <td>
+                      <%= user.email %>
+                    </td>
+                    <td>
+                      <%= user.lastLogin %>
+                    </td> <!-- Tampilkan waktu terakhir login -->
+                    <td>
+                      <div class="button-edit-group">
+                        <button type="button" class="delete-button"
+                          onclick="deleteUser('<%= user.email %>')">Hapus</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <% } %>
+                    <% }); %>
+            </tbody>
+          </table>
         </div>
       </section>
-    </article>
-  </main>
-  
-    <div class="container">
-        <h1>Selamat Datang Di Admin Dashboard</h1>
-    </div>
-    <h2>CRUD DOKTER</h2>
-    <form id="doctorForm" action="/doctors" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image">
-        <input type="text" name="title" placeholder="Title">
-        <textarea name="description" placeholder="Description"></textarea>
-        <button type="button" onclick="submitFormDoctor()">Add Doctor</button>
-    </form>
-    <h2>CRUD OBAT</h2>
-    <form id="medicineForm" action="/medicine" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image">
-        <input type="text" name="title" placeholder="Title">
-        <textarea name="description" placeholder="Description"></textarea>
-        <button type="button" onclick="submitFormMedicine()">Add Medicine</button>
-    </form>
-    <h2>CRUD PENYAKIT</h2>
-    <form id="sicknessForm" action="/sickness" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image">
-        <input type="text" name="title" placeholder="Title">
-        <textarea name="description" placeholder="Description"></textarea>
-        <button type="button" onclick="submitFormSickness()">Add Sickness</button>
-    </form>
 
-    
-    <form action="/logout" method="post">
-      <button type="submit">Logout</button>
-    </form>
+      <%- include('layouts/footer.ejs') %>
+        <script src="./js/script.js"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script>
+          // adminDashboard.js
 
-    <%- include('layouts/footer.ejs') %>
-    <script src="./js/script.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
-
-    <script>
-          function submitFormDoctor() {
-          var form = document.getElementById("doctorForm");
-          var formData = new FormData(form);
-    
-          // Mengirimkan data ke '/doctors' menggunakan AJAX
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", form.action, true);
-          xhr.onload = function() {
-            if (xhr.status === 200) {
-              console.log("Formulir berhasil dikirim!");
-              // Handle response jika diperlukan
-            } else {
-              console.error("Terjadi kesalahan saat mengirimkan formulir.");
-              // Handle error jika diperlukan
+          function deleteUser(email) {
+            if (confirm(`Apakah Anda yakin ingin menghapus akun ${email}?`)) {
+              fetch(`/delete-user/${email}`, {
+                method: 'DELETE'
+              })
+                .then(response => {
+                  if (response.ok) {
+                    alert('Akun pengguna berhasil dihapus.');
+                    location.reload(); // Refresh halaman setelah penghapusan berhasil
+                  } else {
+                    alert('Terjadi kesalahan saat menghapus akun pengguna.');
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                  alert('Terjadi kesalahan koneksi.');
+                });
             }
-          };
-          xhr.onerror = function() {
-            console.error("Terjadi kesalahan koneksi.");
-            // Handle error jika diperlukan
-          };
-          xhr.send(formData);
-        }
-        function submitFormMedicine() {
-  var form = document.getElementById("medicineForm");
-  var formData = new FormData(form);
+          }
+        </script>
+  </body>
 
-  // Mengirimkan data ke '/medicine' menggunakan AJAX
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", form.action, true);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      console.log("Formulir medicine berhasil dikirim!");
-      // Handle response jika diperlukan
-    } else {
-      console.error("Terjadi kesalahan saat mengirimkan formulir medicine.");
-      // Handle error jika diperlukan
-    }
-  };
-  xhr.onerror = function() {
-    console.error("Terjadi kesalahan koneksi.");
-    // Handle error jika diperlukan
-  };
-  xhr.send(formData);
-}
-
-function submitFormSickness() {
-  var form = document.getElementById("sicknessForm");
-  var formData = new FormData(form);
-
-  // Mengirimkan data ke '/information' menggunakan AJAX
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", form.action, true);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      console.log("Formulir information berhasil dikirim!");
-      // Handle response jika diperlukan
-    } else {
-      console.error("Terjadi kesalahan saat mengirimkan formulir information.");
-      // Handle error jika diperlukan
-    }
-  };
-  xhr.onerror = function() {
-    console.error("Terjadi kesalahan koneksi.");
-    // Handle error jika diperlukan
-  };
-  xhr.send(formData);
-}
-
-function submitFormFood() {
-          var form = document.getElementById("foodForm");
-          var formData = new FormData(form);
-    
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", form.action, true);
-          xhr.onload = function() {
-            if (xhr.status === 200) {
-              console.log("Formulir berhasil dikirim!");
-              // Handle response jika diperlukan
-            } else {
-              console.error("Terjadi kesalahan saat mengirimkan formulir.");
-              // Handle error jika diperlukan
-            }
-          };
-          xhr.onerror = function() {
-            console.error("Terjadi kesalahan koneksi.");
-            // Handle error jika diperlukan
-          };
-          xhr.send(formData);
-        }
-      </script>
-     
-</body>
 </html>

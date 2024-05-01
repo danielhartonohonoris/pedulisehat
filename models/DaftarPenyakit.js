@@ -20,6 +20,12 @@ const TodoListItemsSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+
+    jenis: {
+        type: String,
+        enum: ['Penyakit Jantung', 'Penyakit Saraf', 'Penyakit Kulit', 'Penyakit Pernapasan', 'Penyakit Pencernaan', 'Penyakit Mental'],
+        required: true
     }
 });
 

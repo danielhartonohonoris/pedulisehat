@@ -1,41 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('layouts/header.ejs') %>
-<body id="top">
-  <%- include('layouts/navbar.ejs') %>
-  <main>
-    <article>
-      <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
-        <div class="container">
-    
-          <div class="hero-content">
-    
-            <p class="hero-subtitle has-before" data-reveal="left">Pusat Penyakit</p>
-    
-            <h1 class="headline-lg hero-title" data-reveal="left">
-              Layanan Informasi 
-              Cepat Dan Tepat. <br>
-            </h1>
+<%- include('layouts/header.ejs') %>
+
+  <body id="top">
+    <%- include('layouts/navbar.ejs') %>
+      <main>
+        <article>
+          <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
+            <div class="container">
+
+              <div class="hero-content">
+
+                <p class="hero-subtitle has-before" data-reveal="left">Pusat Penyakit</p>
+                <div class="search-container">
+                  <input type="text" id="searchInput" placeholder="Nama Penyakit">
+                </div>
+                <div class="filter-container">
+                  <select id="roleFilter">
+                    <option value="">Semua</option>
+                    <option value="Penyakit Jantung">Penyakit Jantung</option>
+                    <option value="Penyakit Saraf">Penyakit Saraf</option>
+                    <option value="Penyakit Kulit">Penyakit Kulit</option>
+                    <option value="Penyakit Pernapasan">Penyakit Pernapasan</option>
+                    <option value="Penyakit Pencernaan">Penyakit Pencernaan</option>
+                    <option value="Penyakit Mental">Penyakit Mental</option>
+                  </select>
+                </div>
+
+                <h1 class="headline-lg hero-title" data-reveal="left">
+                  Layanan Informasi
+                  Cepat Dan Tepat. <br>
+                </h1>
+              </div>
+            </div>
+          </section>
+        </article>
+      </main>
+      <div class="box-container">
+        <% todoListItems.forEach(item=> { %>
+          <div class="box" data-jenis="<%= item.jenis %>">
+            <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
+            <h3>
+              <%= item.title %>
+            </h3>
+            <p>
+              <%= item.description %>
+            </p>
           </div>
-        </div>
-      </section>
-    </article>
-  </main>
-  <div class="box-container">
-    <% todoListItems.forEach(item => { %>
-        <div class="box">
-          <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
-          <h3><%= item.title %></h3>
-          <p><%= item.description %></p>
-        </div>
-    <% }) %>
-  </div>
-  <%- include('layouts/footer.ejs') %>
+          <% }) %>
+      </div>
+      <%- include('layouts/footer.ejs') %>
 
-  <script src="./js/script.js"></script>
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script src="./js/script.js"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script>
+          document.getElementById('searchInput').addEventListener('input', function () {
+            filterBoxes();
+          });
+          document.getElementById('roleFilter').addEventListener('change', filterBoxes);
+          document.addEventListener('DOMContentLoaded', () => {
+            filterBoxes();
+          });
 
-</body>
+          function filterBoxes() {
+            const selectedRole = document.getElementById('roleFilter').value;
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const boxes = document.querySelectorAll('.box');
+
+            boxes.forEach(box => {
+              const role = selectedRole === '' || box.dataset.jenis === selectedRole;
+              const title = box.querySelector('h3').textContent.toLowerCase();
+              const matchSearch = title.includes(searchQuery);
+              const display = role && matchSearch ? 'block' : 'none';
+              box.style.display = display;
+            });
+          }
+        </script>
+  </body>
 
 </html>

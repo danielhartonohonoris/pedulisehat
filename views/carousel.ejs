@@ -27,27 +27,28 @@
       font-family: var(--ff-rubik);
       scroll-behavior: smooth;
     }
+
     @media (min-width: 1440px) {
-  html {
-    zoom: 1;
-  }
-}
+      html {
+        zoom: 1;
+      }
+    }
 
 
-::-webkit-scrollbar-thumb {
-  border-radius: 1rem;
-  background: #797979;
-  transition: all 0.5s ease-in-out;
-}
+    ::-webkit-scrollbar-thumb {
+      border-radius: 1rem;
+      background: #797979;
+      transition: all 0.5s ease-in-out;
+    }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #222224;
-}
+    ::-webkit-scrollbar-thumb:hover {
+      background: #222224;
+    }
 
-::-webkit-scrollbar-track {
-  background: #f9f9f9;
-}
-   
+    ::-webkit-scrollbar-track {
+      background: #f9f9f9;
+    }
+
 
     .container {
       padding-inline: 16px;
@@ -66,38 +67,43 @@
     #tranding {
       padding: 4rem 0;
     }
+
     @media (max-width:1440px) {
-  #tranding {
-    padding: 7rem 0;
-  }
-}
+      #tranding {
+        padding: 7rem 0;
+      }
+    }
 
     #tranding .tranding-slider {
       height: 52rem;
       padding: 2rem 0;
       position: relative;
     }
+
     @media (max-width:500px) {
-  #tranding .tranding-slider {
-    height: 45rem;
-  }
-}
+      #tranding .tranding-slider {
+        height: 45rem;
+      }
+    }
 
     .tranding-slide {
       width: 37rem;
       height: 42rem;
       position: relative;
     }
+
     @media (max-width:500px) {
-  .tranding-slide {
-    width: 28rem !important;
-    height: 36rem !important;
-  }
-  .tranding-slide .tranding-slide-img img {
-    width: 28rem !important;
-    height: 36rem !important;
-  }
-}
+      .tranding-slide {
+        width: 28rem !important;
+        height: 36rem !important;
+      }
+
+      .tranding-slide .tranding-slide-img img {
+        width: 28rem !important;
+        height: 36rem !important;
+      }
+    }
+
     .tranding-slide .tranding-slide-img img {
       width: 37rem;
       height: 42rem;
@@ -133,9 +139,11 @@
       align-items: center;
       gap: 1rem;
     }
+
     .rating {
       display: flex;
     }
+
     .rating ion-icon {
       color: var(--primary);
       font-size: 1.5rem;
@@ -160,32 +168,32 @@
     }
 
     @media (max-width:990px) {
-  .tranding-slider-control .swiper-button-next {
-    left: 70% !important;
-    transform: translateX(-70%) !important;
-  }
-}
+      .tranding-slider-control .swiper-button-next {
+        left: 70% !important;
+        transform: translateX(-70%) !important;
+      }
+    }
 
-@media (max-width:450px) {
-  .tranding-slider-control .swiper-button-next {
-    left: 80% !important;
-    transform: translateX(-80%) !important;
-  }
-}
+    @media (max-width:450px) {
+      .tranding-slider-control .swiper-button-next {
+        left: 80% !important;
+        transform: translateX(-80%) !important;
+      }
+    }
 
-@media (max-width:990px) {
-  .tranding-slider-control .swiper-button-prev {
-    left: 30% !important;
-    transform: translateX(-30%) !important;
-  }
-}
+    @media (max-width:990px) {
+      .tranding-slider-control .swiper-button-prev {
+        left: 30% !important;
+        transform: translateX(-30%) !important;
+      }
+    }
 
-@media (max-width:450px) {
-  .tranding-slider-control .swiper-button-prev {
-    left: 20% !important;
-    transform: translateX(-20%) !important;
-  }
-}
+    @media (max-width:450px) {
+      .tranding-slider-control .swiper-button-prev {
+        left: 20% !important;
+        transform: translateX(-20%) !important;
+      }
+    }
 
     .tranding-slider-control .slider-arrow {
       background: var(--white);
@@ -222,167 +230,167 @@
   </style>
 </head>
 
-  <section id="tranding">
-    <div class="container">
-      <h1 class="text-center section-heading">Tranding food</h1>
-    </div>
-    <div class="container">
-      <div class="swiper tranding-slider">
-        <div class="swiper-wrapper">
-          <!-- Slide-start -->
-          <div class="swiper-slide tranding-slide">
-            <div class="tranding-slide-img">
-              <img src="images/mangga2.jpeg" alt="Tranding">
-            </div>
-            <div class="tranding-slide-content">
-              <div class="tranding-slide-content-bottom">
-                <h2 class="food-name">
-                  Mangga Daniel
-                </h2>
-                <h3 class="food-rating">
-                  <span>5</span>
-                  <div class="rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                  </div>
-                </h3>
-              </div>
-            </div>
+<section id="tranding">
+  <div class="container">
+    <h1 class="text-center section-heading">Tranding food</h1>
+  </div>
+  <div class="container">
+    <div class="swiper tranding-slider">
+      <div class="swiper-wrapper">
+        <!-- Slide-start -->
+        <div class="swiper-slide tranding-slide">
+          <div class="tranding-slide-img">
+            <img src="images/mangga2.jpeg" alt="Tranding">
           </div>
-          <div class="swiper-slide tranding-slide">
-            <div class="tranding-slide-img">
-              <img src="images/pisang2.jpeg" alt="Tranding">
-            </div>
-            <div class="tranding-slide-content">
-              <div class="tranding-slide-content-bottom">
-                <h2 class="food-name">
-                  pisang gepok
-                </h2>
-                <h3 class="food-rating">
-                  <span>4.5</span>
-                  <div class="rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-half"></ion-icon>
-                  </div>
-                </h3>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide tranding-slide">
-            <div class="tranding-slide-img">
-              <img src="images/nanas2.jpeg" alt="Tranding">
-            </div>
-            <div class="tranding-slide-content">
-              <div class="tranding-slide-content-bottom">
-                <h2 class="food-name">
-                  nanas manis
-                </h2>
-                <h3 class="food-rating">
-                  <span>1</span>
-                  <div class="rating">
-                    <ion-icon name="star"></ion-icon>
-                  </div>
-                </h3>
-              </div>
-            </div>
-          </div>
-            <!-- Slide-start -->
-            <div class="swiper-slide tranding-slide">
-              <div class="tranding-slide-img">
-                <img src="images/jambu2.jpeg" alt="Tranding">
-              </div>
-              <div class="tranding-slide-content">
-                <div class="tranding-slide-content-bottom">
-                  <h2 class="food-name">
-                    Jambu Biji
-                  </h2>
-                  <h3 class="food-rating">
-                    <span>5</span>
-                    <div class="rating">
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                    </div>
-                  </h3>
+          <div class="tranding-slide-content">
+            <div class="tranding-slide-content-bottom">
+              <h2 class="food-name">
+                Mangga Daniel
+              </h2>
+              <h3 class="food-rating">
+                <span>5</span>
+                <div class="rating">
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
                 </div>
-              </div>
+              </h3>
             </div>
-             <!-- Slide-start -->
-             <div class="swiper-slide tranding-slide">
-              <div class="tranding-slide-img">
-                <img src="images/Apel.jpg" alt="Tranding">
-              </div>
-              <div class="tranding-slide-content">
-                <div class="tranding-slide-content-bottom">
-                  <h2 class="food-name">
-                    Apel Merah
-                  </h2>
-                  <h3 class="food-rating">
-                    <span>5</span>
-                    <div class="rating">
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                    </div>
-                  </h3>
+          </div>
+        </div>
+        <div class="swiper-slide tranding-slide">
+          <div class="tranding-slide-img">
+            <img src="images/pisang2.jpeg" alt="Tranding">
+          </div>
+          <div class="tranding-slide-content">
+            <div class="tranding-slide-content-bottom">
+              <h2 class="food-name">
+                pisang gepok
+              </h2>
+              <h3 class="food-rating">
+                <span>4.5</span>
+                <div class="rating">
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star-half"></ion-icon>
                 </div>
-              </div>
+              </h3>
             </div>
-
-
-          <!-- Slide-end -->
-          <!-- Remaining slides here -->
+          </div>
+        </div>
+        <div class="swiper-slide tranding-slide">
+          <div class="tranding-slide-img">
+            <img src="images/nanas2.jpeg" alt="Tranding">
+          </div>
+          <div class="tranding-slide-content">
+            <div class="tranding-slide-content-bottom">
+              <h2 class="food-name">
+                nanas manis
+              </h2>
+              <h3 class="food-rating">
+                <span>1</span>
+                <div class="rating">
+                  <ion-icon name="star"></ion-icon>
+                </div>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <!-- Slide-start -->
+        <div class="swiper-slide tranding-slide">
+          <div class="tranding-slide-img">
+            <img src="images/jambu2.jpeg" alt="Tranding">
+          </div>
+          <div class="tranding-slide-content">
+            <div class="tranding-slide-content-bottom">
+              <h2 class="food-name">
+                Jambu Biji
+              </h2>
+              <h3 class="food-rating">
+                <span>5</span>
+                <div class="rating">
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                </div>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <!-- Slide-start -->
+        <div class="swiper-slide tranding-slide">
+          <div class="tranding-slide-img">
+            <img src="images/Apel.jpg" alt="Tranding">
+          </div>
+          <div class="tranding-slide-content">
+            <div class="tranding-slide-content-bottom">
+              <h2 class="food-name">
+                Apel Merah
+              </h2>
+              <h3 class="food-rating">
+                <span>5</span>
+                <div class="rating">
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                </div>
+              </h3>
+            </div>
+          </div>
         </div>
 
-        <div class="tranding-slider-control">
-          <div class="swiper-button-prev slider-arrow">
-            <ion-icon name="arrow-back-outline"></ion-icon>
-          </div>
-          <div class="swiper-button-next slider-arrow">
-            <ion-icon name="arrow-forward-outline"></ion-icon>
-          </div>
-          <div class="swiper-pagination"></div>
+
+        <!-- Slide-end -->
+        <!-- Remaining slides here -->
+      </div>
+
+      <div class="tranding-slider-control">
+        <div class="swiper-button-prev slider-arrow">
+          <ion-icon name="arrow-back-outline"></ion-icon>
         </div>
+        <div class="swiper-button-next slider-arrow">
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+        </div>
+        <div class="swiper-pagination"></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-  <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
-  <script>
-    // JavaScript code here
-    var TrandingSlider = new Swiper('.tranding-slider', {
-      effect: 'coverflow',
-      grabCursor: true,
-      centeredSlides: true,
-      loop: true,
-      slidesPerView: 'auto',
-      coverflowEffect: {
-        rotate: 0,
-        stretch: 0,
-        depth: 100,
-        modifier: 2.5,
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      }
-    });
-  </script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+<script>
+  // JavaScript code here
+  var TrandingSlider = new Swiper('.tranding-slider', {
+    effect: 'coverflow',
+    grabCursor: true,
+    centeredSlides: true,
+    loop: true,
+    slidesPerView: 'auto',
+    coverflowEffect: {
+      rotate: 0,
+      stretch: 0,
+      depth: 100,
+      modifier: 2.5,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    }
+  });
+</script>
 
 </html>

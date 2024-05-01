@@ -1,179 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <%- include('layouts/header.ejs') %>
+    <%- include('layouts/header.ejs') %>
 
 </head>
+
 <body id="top">
-  <%- include('layouts/navdash.ejs') %>
-  <main>
-    <article>
-      <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
-        <div class="container">
-          <div class="hero-content">
-            <h2>CRUD MEDICINE</h2>
-            <form id="sicknessForm" action="/information" method="POST" enctype="multipart/form-data">
-                <input type="file" name="image">
-                <input type="text" name="title" placeholder="Title">
-                <textarea name="description" placeholder="Description"></textarea>
-                
-                <button type="button" onclick="submitFormSickness()">Add Sickness</button>
-            </form>
-            <p class="hero-subtitle has-before" data-reveal="left">Crud Sickness</p>
-            <h1 class="headline-lg hero-title" data-reveal="left">
-              Layanan Informasi 
-              Cepat Dan Tepat. <br>
-            </h1>
-          </div>
-        </div>
-      </section>
-    </article>
-  </main>
-<div class="box-container">
-    <% todoListItems.forEach(item => { %>
+    <%- include('layouts/navdash.ejs') %>
+        <main>
+            <article>
+                <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')"
+                    aria-label="home">
+                    <div class="container">
+                        <div class="hero-content">
+                            <h2>CRUD SICKNESS</h2>
+                            <form id="sicknessForm" action="/information" method="POST" enctype="multipart/form-data">
+                                <input type="file" name="image">
+                                <input type="text" name="title" placeholder="Title">
+                                <textarea name="description" placeholder="Description"></textarea>
+                                <select name="jenis" id="jenis">
+                                    <option value="Penyakit Jantung">Penyakit Jantung</option>
+                                    <option value="Penyakit Saraf">Penyakit Saraf</option>
+                                    <option value="Penyakit Kulit">Penyakit Kulit</option>
+                                    <option value="Penyakit Pernapasan">Penyakit Pernapasan</option>
+                                    <option value="Penyakit Pencernaan">Penyakit Pencernaan</option>
+                                    <option value="Penyakit Mental">Penyakit Mental</option>
+                                </select>
 
-        <div class="box <%= item.role %>">
-            <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
-            <h3><%= item.title %></h3>
-            <pc class="description"><%= item.description %></pc>
-            <form id="deleteForm_<%= item._id %>" action="/information/<%= item._id %>" method="POST">
-                <input type="hidden" name="_method" value="DELETE">
-            </form>
-            <div class="button-edit-group">
-                <button type="button" class="delete-button" onclick="deleteSickness('<%= item._id %>')">Hapus</button>
-                <button type="button" class="edit-button" onclick="showEditForm('<%= item._id %>')">Edit</button>
-            </div>
-        </div>
 
-        <div id="editFormContainer_<%= item._id %>" class="box" style="display: none;">
+                                <button type="button" onclick="submitFormSickness()">Add Sickness</button>
+                            </form>
+                            <p class="hero-subtitle has-before" data-reveal="left">Crud Sickness</p>
+                            <h1 class="headline-lg hero-title" data-reveal="left">
+                                Layanan Informasi
+                                Cepat Dan Tepat. <br>
+                            </h1>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </main>
+        <div class="box-container">
+            <% todoListItems.forEach(item=> { %>
 
-            <form id="editForm_<%= item._id %>" method="POST" action="/information/<%= item._id %>?_method=PUT" enctype="multipart/form-data">
-                <input type="hidden" name="_method" value="PUT">
-                <input type="text" name="title" class="editTitle" placeholder="Title" value="<%= item.title %>">
-                <textarea name="description" class="editDescription" placeholder="Description"><%= item.description %></textarea>
-         
-                <input type="file" name="image" class="editImage">
-                <div class="button-edit-group">
-                    <button type="submit" class="save-button">Update</button>
-                    <button type="button" class="cancel-button" onclick="cancelEditForm('<%= item._id %>')">Batal</button>
+                <div class="box <%= item.role %>">
+                    <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
+                    <h3>
+                        <%= item.title %>
+                    </h3>
+                    <pc class="description">
+                        <%= item.description %>
+                    </pc>
+                    <form id="deleteForm_<%= item._id %>" action="/information/<%= item._id %>" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                    </form>
+                    <div class="button-edit-group">
+                        <button type="button" class="delete-button"
+                            onclick="deleteSickness('<%= item._id %>')">Hapus</button>
+                        <button type="button" class="edit-button"
+                            onclick="showEditForm('<%= item._id %>')">Edit</button>
+                    </div>
                 </div>
-            </form>
+
+                <div id="editFormContainer_<%= item._id %>" class="box" style="display: none;">
+
+                    <form id="editForm_<%= item._id %>" method="POST" action="/information/<%= item._id %>?_method=PUT"
+                        enctype="multipart/form-data">
+                        <input type="hidden" name="_method" value="PUT">
+                        <input type="text" name="title" class="editTitle" placeholder="Title" value="<%= item.title %>">
+                        <textarea name="description" class="editDescription"
+                            placeholder="Description"><%= item.description %></textarea>
+                        <select name="jenis" class="editRole"> <!-- Add select field for role -->
+                            <option value="Penyakit Jantung" <%=item.role==='Penyakit Jantung' ? 'selected' : '' %>
+                                >Penyakit Jantung</option>
+                            <option value="Penyakit Saraf" <%=item.role==='Penyakit Saraf' ? 'selected' : '' %>>Penyakit
+                                Saraf</option>
+                            <option value="Penyakit Kulit" <%=item.role==='Penyakit Kulit' ? 'selected' : '' %>>Penyakit
+                                Kulit</option>
+                            <option value="Penyakit Pernapasan" <%=item.role==='Penyakit Pernapasan' ? 'selected' : ''
+                                %>>Penyakit Pernapasan</option>
+                            <option value="Penyakitn Pencernaan" <%=item.role==='Penyakit Pencernaan' ? 'selected' : ''
+                                %>>Penyakit Pencernaan</option>
+                            <option value="Penyakit Mental" <%=item.role==='Penyakit Mental' ? 'selected' : '' %>
+                                >Penyakit Mental</option>
+                        </select>
+
+                        <input type="file" name="image" class="editImage">
+                        <div class="button-edit-group">
+                            <button type="submit" class="save-button">Update</button>
+                            <button type="button" class="cancel-button"
+                                onclick="cancelEditForm('<%= item._id %>')">Batal</button>
+                        </div>
+                    </form>
+                </div>
+                <% }) %>
         </div>
-    <% }) %>
-</div>
 
-  <form id="updateForm" style="display: none;" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="_method" value="PUT">
-    <input type="text" name="title" id="updateTitle" placeholder="Title">
-    <textarea name="description" id="updateDescription" placeholder="Description"></textarea>
- 
-    <input type="file" name="image" id="updateImage">
-    <button type="button" onclick="submitUpdateForm()">Simpan</button>
-</form>
+        <form id="updateForm" style="display: none;" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="text" name="title" id="updateTitle" placeholder="Title">
+            <textarea name="description" id="updateDescription" placeholder="Description"></textarea>
+
+            <input type="file" name="image" id="updateImage">
+            <button type="button" onclick="submitUpdateForm()">Simpan</button>
+        </form>
 
 
-  <script src="/js/script.js"></script>
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script src="/js/script.js"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-  <script>
-      function showEditForm(sickness) {
-        var editFormContainer = document.getElementById('editFormContainer_' + sicknessId);
-    if (editFormContainer.style.display === 'none') {
-      // Sembunyikan semua form edit terlebih dahulu
-      var allEditFormContainers = document.querySelectorAll('[id^="editFormContainer_"]');
-      allEditFormContainers.forEach(container => {
-        container.style.display = 'none';
-      });
+        <script>
+            function showEditForm(sickness) {
+                var editFormContainer = document.getElementById('editFormContainer_' + sickness);
+                if (editFormContainer.style.display === 'none') {
+                    // Sembunyikan semua form edit terlebih dahulu
+                    var allEditFormContainers = document.querySelectorAll('[id^="editFormContainer_"]');
+                    allEditFormContainers.forEach(container => {
+                        container.style.display = 'none';
+                    });
 
-      // Tampilkan form edit yang sesuai
-      editFormContainer.style.display = 'block';
-    } else {
-      // Sembunyikan form edit
-      editFormContainer.style.display = 'none';
-        }
-    }
-    function cancelEditForm(sickness) {
-    var editFormContainer = document.getElementById('editFormContainer_' + sicknessId);
-    editFormContainer.style.display = 'none';
-  }
-  
-      function submitEditForm(sickness) {
-          var form = document.getElementById("editForm_" + sicknessId);
-          var formData = new FormData(form);
-  
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", form.action, true);
-          xhr.onload = function() {
-              if (xhr.status === 200) {
-                  console.log("Perubahan berhasil disimpan!");
-                  window.location.reload();
-              } else {
-                  console.error("Terjadi kesalahan saat menyimpan perubahan.");
-              }
-          };
-          xhr.onerror = function() {
-              console.error("Terjadi kesalahan koneksi.");
-          };
-          xhr.send(formData);
-      }
-  
-      function submitFormSickness() {
-          var form = document.getElementById("sicknessForm");
-          var formData = new FormData(form);
-  
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", form.action, true);
-          xhr.onload = function() {
-              if (xhr.status === 200) {
-                  console.log("Makanan berhasil ditambahkan!");
-                  window.location.reload();
-              } else {
-                  console.error("Terjadi kesalahan saat menambahkan makanan.");
-              }
-          };
-          xhr.onerror = function() {
-              console.error("Terjadi kesalahan koneksi.");
-          };
-          xhr.send(formData);
-      }
-  
-      function submitUpdateForm() {
-          var form = document.getElementById("updateForm");
-          var formData = new FormData(form);
-  
-          var xhr = new XMLHttpRequest();
-          xhr.open("PUT", form.action, true);
-          xhr.onload = function() {
-              if (xhr.status === 200) {
-                  console.log("Perubahan berhasil disimpan crudFood!");
-                  window.location.reload();
-              } else {
-                  console.error("Terjadi kesalahan saat menyimpan perubahan.");
-              }
-          };
-          xhr.onerror = function() {
-              console.error("Terjadi kesalahan koneksi.");
-          };
-          xhr.send(formData);
-      }
-  
-      function deleteSickness(sickness) {
-          if (confirm("Apakah Anda yakin ingin menghapus obat ini?")) {
-              var xhr = new XMLHttpRequest();
-              xhr.open("DELETE", "/sickness/" + sicknessId, true);
-              xhr.onload = function() {
-                  if (xhr.status === 200) {
-                      console.log("Daftar penyakit berhasil dihapus!");
-                      window.location.reload();
-                  } else {
-                      console.error("Terjadi kesalahan saat menghapus penyakit.");
-                  }
-              };
-              xhr.send();
-          }
-      }
-  </script>
+                    // Tampilkan form edit yang sesuai
+                    editFormContainer.style.display = 'block';
+                } else {
+                    // Sembunyikan form edit
+                    editFormContainer.style.display = 'none';
+                }
+            }
+            function cancelEditForm(sickness) {
+                var editFormContainer = document.getElementById('editFormContainer_' + sickness);
+                editFormContainer.style.display = 'none';
+            }
+
+            function submitEditForm(sickness) {
+                var form = document.getElementById("editForm_" + sickness);
+                var formData = new FormData(form);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", form.action, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        console.log("Perubahan berhasil disimpan!");
+                        window.location.reload();
+                    } else {
+                        console.error("Terjadi kesalahan saat menyimpan perubahan.");
+                    }
+                };
+                xhr.onerror = function () {
+                    console.error("Terjadi kesalahan koneksi.");
+                };
+                xhr.send(formData);
+            }
+
+            function submitFormSickness() {
+                var form = document.getElementById("sicknessForm");
+                var formData = new FormData(form);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", form.action, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        console.log("Makanan berhasil ditambahkan!");
+                        window.location.reload();
+                    } else {
+                        console.error("Terjadi kesalahan saat menambahkan makanan.");
+                    }
+                };
+                xhr.onerror = function () {
+                    console.error("Terjadi kesalahan koneksi.");
+                };
+                xhr.send(formData);
+            }
+
+            function submitUpdateForm() {
+                var form = document.getElementById("updateForm");
+                var formData = new FormData(form);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("PUT", form.action, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        console.log("Perubahan berhasil disimpan crudFood!");
+                        window.location.reload();
+                    } else {
+                        console.error("Terjadi kesalahan saat menyimpan perubahan.");
+                    }
+                };
+                xhr.onerror = function () {
+                    console.error("Terjadi kesalahan koneksi.");
+                };
+                xhr.send(formData);
+            }
+
+            function deleteSickness(sickness) {
+                if (confirm("Apakah Anda yakin ingin menghapus obat ini?")) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("DELETE", "/information/" + sickness, true);
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            console.log("Daftar penyakit berhasil dihapus!");
+                            window.location.reload();
+                        } else {
+                            console.error("Terjadi kesalahan saat menghapus penyakit.");
+                        }
+                    };
+                    xhr.send();
+                }
+            }
+        </script>
 
 </body>
+
 </html>

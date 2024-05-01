@@ -27,7 +27,7 @@ const TodoListItemsSchema = new Schema({
     },
     specialization: {
         type: String,
-        enum: ['Kulit', 'Anak', 'Saraf', 'Jantung', 'Mata'],
+        enum: ['Kulit', 'Anak', 'Saraf', 'Jantung', 'Mata', 'Psikolog'],
         required: true
     }
 });
