@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['user', 'admin'], // Hanya boleh 'user' atau 'admin'
         default: 'user' // Secara default, pengguna akan memiliki peran 'user'
+    },
+    lastLogin: {
+        type: Date,
+        default: Date.now
     }
 });
 module.exports = mongoose.model('Account', userSchema);

@@ -13,6 +13,7 @@ const initializePassport = require('./passport-config');
 const path = require("path");
 const DaftarPenyakit = require("./models/DaftarPenyakit");
 const DaftarMakanan = require("./models/DaftarMakanan");
+const DaftarUser = require("./models/DaftarUser");
 
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config();
@@ -89,15 +90,23 @@ app.get('/register', checkNotAuthenticated,(req, res) => {
 app.post('/login', passport.authenticate('local', {
   failureRedirect: '/login',
   failureFlash: true,
-}), (req, res) => {
+}), async (req, res) => {
   // Jika pengguna berhasil login dan memiliki peran admin
   if (req.user.role === 'admin') {
     req.session.isAdmin = true; // Tambahkan properti isAdmin ke sesi
+    // Update waktu terakhir login
+    req.user.lastLogin = Date.now();
+    await req.user.save();
     return res.redirect('/admindashboard');
   }
   // Jika pengguna berhasil login tetapi bukan admin
+  // Update waktu terakhir login
+  req.user.lastLogin = Date.now();
+  await req.user.save();
   res.redirect('/');
 });
+
+
 app.post('/register', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -128,18 +137,6 @@ function checkNotAuthenticated(req,res,next){
   next();
 }
 
-app.delete('/logout', (req, res, next) => {
-  // Menghapus sesi pengguna
-  req.logOut(function(err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect('/login'); // Mengarahkan kembali ke halaman login setelah logout
-  });
-});
-
-
-
 function checkAdmin(req, res, next) {
   // Periksa apakah properti isAdmin telah diatur di sesi
   if (req.isAuthenticated() && req.session.isAdmin) {
@@ -148,9 +145,32 @@ function checkAdmin(req, res, next) {
   res.redirect('/');
 }
 
-app.get("/admindashboard", checkAuthenticated, checkAdmin, (req, res) => {
-  res.render('admindash', { nama: req.user.name, title: "Dashboard" });
+app.get("/admindashboard", checkAuthenticated, checkAdmin, async (req, res) => {
+  try {
+    const todoListItems = await DaftarUser.find();
+    res.render('admindash', { todoListItems , nama: req.user.name, title: "Dashboard" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat memuat halaman dashboard");
+  }
 });
+
+app.delete("/delete-user/:email", checkAuthenticated, checkAdmin, async (req, res) => {
+  try {
+    const email = req.params.email;
+    const deletedUser = await UserAcc.findOneAndDelete({ email: email });
+    if (!deletedUser) {
+      return res.status(404).send("Akun pengguna tidak ditemukan");
+    }
+    res.status(200).send("Akun pengguna berhasil dihapus");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan saat menghapus akun pengguna");
+  }
+});
+
+
+
 app.get("/bmi", checkAuthenticated,  (req, res) => {
   res.render('bmi', { nama: req.user.name, title: "BMI" });
 });

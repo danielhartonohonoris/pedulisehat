@@ -1602,3 +1602,21 @@ button {
   margin-right: 5px; /* Jarak antara ikon bintang */
 }
 
+.user-list {
+  text-align: center;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.user-table th {
+  background-color: #f2f2f2;
+}
