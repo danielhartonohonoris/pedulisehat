@@ -1,4 +1,3 @@
-
 body {
     margin: 0;
     padding: 0;
@@ -15,9 +14,10 @@ body {
 }
 
 .login-container {
-    width: 100%; /* Ubah width menjadi 100% */
-    max-width: 600px; /* Sesuaikan max-width sesuai kebutuhan Anda */
-    padding: 0 20px; /* Tambahkan padding ke kiri dan kanan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .login-box {
@@ -77,4 +77,3 @@ body {
 .register-link a:hover {
     text-decoration: underline;
 }
-
