@@ -2,18 +2,18 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const multer = require("multer");
-const TodoListItems = require("./models/TodoListItems");
 const bcrypt = require('bcrypt');
 const flash = require('express-flash');
 const session = require('express-session');
-const UserAcc = require('./models/DaftarUser');
-const DaftarDokter = require("./models/DaftarDokter");
 const passport = require('passport');
 const initializePassport = require('./passport-config');
 const path = require("path");
 const DaftarPenyakit = require("./models/DaftarPenyakit");
 const DaftarMakanan = require("./models/DaftarMakanan");
 const DaftarUser = require("./models/DaftarUser");
+const UserAcc = require('./models/DaftarUser');
+const DaftarDokter = require("./models/DaftarDokter");
+const TodoListItems = require("./models/TodoListItems");
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -27,7 +27,6 @@ mongoose
   .catch((err) => {
     console.log(err.message);
   });
-
 
 const getUserByEmail = async (email) => {
   try {
@@ -44,7 +43,6 @@ initializePassport(passport, getUserByEmail, id => UserAcc.findById(id));
 const app = express();
 const port = process.env.PORT || 5000;
 
-
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: false }));
@@ -57,20 +55,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-// Inisialisasi storage untuk multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Menentukan direktori penyimpanan gambar
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname); // Menentukan nama file
+    cb(null, file.originalname);
   },
 });
 
-// Inisialisasi upload multer
 const upload = multer({ storage: storage });
 
-// EJS
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -91,21 +86,16 @@ app.post('/login', passport.authenticate('local', {
   failureRedirect: '/login',
   failureFlash: true,
 }), async (req, res) => {
-  // Jika pengguna berhasil login dan memiliki peran admin
   if (req.user.role === 'admin') {
-    req.session.isAdmin = true; // Tambahkan properti isAdmin ke sesi
-    // Update waktu terakhir login
+    req.session.isAdmin = true;
     req.user.lastLogin = Date.now();
     await req.user.save();
     return res.redirect('/admindashboard');
   }
-  // Jika pengguna berhasil login tetapi bukan admin
-  // Update waktu terakhir login
   req.user.lastLogin = Date.now();
   await req.user.save();
   res.redirect('/');
 });
-
 
 app.post('/register', async (req, res) => {
   try {
@@ -138,12 +128,12 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 function checkAdmin(req, res, next) {
-  // Periksa apakah properti isAdmin telah diatur di sesi
   if (req.isAuthenticated() && req.session.isAdmin) {
     return next();
   }
   res.redirect('/');
 }
+
 
 app.get("/admindashboard", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
@@ -170,7 +160,6 @@ app.delete("/delete-user/:email", checkAuthenticated, checkAdmin, async (req, re
 });
 
 
-
 app.get("/bmi", checkAuthenticated, (req, res) => {
   res.render('bmi', { nama: req.user.name, title: "BMI" });
 });
@@ -187,11 +176,11 @@ app.get("/admindashboard/crudFood", checkAuthenticated, checkAdmin, async (req, 
 });
 app.post("/admindashboard/crudFood", upload.single("image"), async (req, res) => {
   try {
-    const { title, description, role } = req.body; // Ambil nilai role dari formulir
+    const { title, description, role } = req.body;
     const newFood = new DaftarMakanan({
       title,
       description,
-      role, // Masukkan nilai role ke objek DaftarMakanan
+      role,
       image: req.file ? `../uploads/${req.file.filename}` : null
     });
     await newFood.save();
@@ -202,28 +191,21 @@ app.post("/admindashboard/crudFood", upload.single("image"), async (req, res) =>
   }
 });
 
-
 app.post("/food/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
   try {
     const { title, description, role } = req.body;
     const foodId = req.params.id;
-
-    // Temukan makanan berdasarkan ID dan perbarui datanya
     const updatedFood = await DaftarMakanan.findByIdAndUpdate(foodId, {
       title,
       description,
       role,
-      // Gunakan req.file.filename jika ada, atau gunakan nilai yang ada jika tidak
       image: req.file ? `../uploads/${req.file.filename}` : null
     });
-
-    // Periksa apakah makanan ditemukan
     if (!updatedFood) {
       return res.status(404).send("Makanan tidak ditemukan");
     }
     res.redirect("/admindashboard/crudFood");
   } catch (error) {
-    // Tangani kesalahan
     console.error(error);
     res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
   }
@@ -253,11 +235,11 @@ app.get("/food", checkAuthenticated, async (req, res) => {
 });
 app.post("/food", upload.single("image"), async (req, res) => {
   try {
-    const { title, description, role } = req.body; // Ambil nilai role dari formulir
+    const { title, description, role } = req.body;
     const newFood = new DaftarMakanan({
       title,
       description,
-      role, // Masukkan nilai role ke objek DaftarMakanan
+      role,
       image: req.file ? `../uploads/${req.file.filename}` : null
     });
     await newFood.save();
@@ -268,8 +250,6 @@ app.post("/food", upload.single("image"), async (req, res) => {
   }
 });
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////// crud medicine///////////////////////////////////////////////////////
 
 app.get("/admindashboard/crudMedicine", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
@@ -277,23 +257,22 @@ app.get("/admindashboard/crudMedicine", checkAuthenticated, checkAdmin, async (r
     res.render('crudmedicine', { todoListItems, nama: req.user.name, title: "Crud Medicine" });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Terjadi kesalahan saat memuat halaman makanan");
+    res.status(500).send("Terjadi kesalahan saat memuat halaman obat");
   }
 });
 app.post("/admindashboard/crudMedicine", upload.single("image"), async (req, res) => {
   try {
-    const { title, description, } = req.body; // Ambil nilai role dari formulir
+    const { title, description, } = req.body;
     const newMedicine = new TodoListItems({
       title,
       description,
-      // Masukkan nilai role ke objek DaftarMakanan
       image: req.file ? `../uploads/${req.file.filename}` : null
     });
     await newMedicine.save();
     res.redirect("/medicine");
   } catch (error) {
     console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan makanan");
+    res.status(500).send("Terjadi kesalahan saat menyimpan obat");
   }
 });
 
@@ -301,12 +280,12 @@ app.delete("/medicine/:id", checkAuthenticated, checkAdmin, async (req, res) => 
   try {
     const deletedMedicine = await TodoListItems.findByIdAndDelete(req.params.id);
     if (!deletedMedicine) {
-      return res.status(404).send("Makanan tidak ditemukan");
+      return res.status(404).send("obat tidak ditemukan");
     }
-    res.status(200).send("Makanan berhasil dihapus");
+    res.status(200).send("obat berhasil dihapus");
   } catch (error) {
     console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menghapus makanan");
+    res.status(500).send("Terjadi kesalahan saat menghapus obat");
   }
 });
 
@@ -314,28 +293,20 @@ app.post("/medicine/:id", checkAuthenticated, checkAdmin, upload.single("image")
   try {
     const { title, description, } = req.body;
     const medicineId = req.params.id;
-
-    // Temukan makanan berdasarkan ID dan perbarui datanya
     const updatedMedicine = await TodoListItems.findByIdAndUpdate(medicineId, {
       title,
       description,
-
-      // Gunakan req.file.filename jika ada, atau gunakan nilai yang ada jika tidak
       image: req.file ? `../uploads/${req.file.filename}` : null
     });
-
-    // Periksa apakah makanan ditemukan
     if (!updatedMedicine) {
-      return res.status(404).send("Makanan tidak ditemukan");
+      return res.status(404).send("Obat tidak ditemukan");
     }
     res.redirect("/admindashboard/crudMedicine");
   } catch (error) {
-    // Tangani kesalahan
     console.error(error);
     res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
   }
 });
-
 
 app.get("/medicine", checkAuthenticated, async (req, res) => {
   try {
@@ -362,10 +333,8 @@ app.post("/medicine", upload.single("image"), async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
   }
 });
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////// crud sickness //////////////////////////////////////////////////////////
 
-// Route untuk halaman CRUD Penyakit
+
 app.get("/admindashboard/crudSickness", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const todoListItems = await DaftarPenyakit.find();
@@ -376,7 +345,6 @@ app.get("/admindashboard/crudSickness", checkAuthenticated, checkAdmin, async (r
   }
 });
 
-// Route untuk menambahkan penyakit baru
 app.post("/admindashboard/crudSickness", upload.single("image"), async (req, res) => {
   try {
     const { title, description, jenis } = req.body;
@@ -394,7 +362,6 @@ app.post("/admindashboard/crudSickness", upload.single("image"), async (req, res
   }
 });
 
-// Route untuk mengedit penyakit
 app.post("/information/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
   try {
     const { title, description, jenis } = req.body;
@@ -417,7 +384,6 @@ app.post("/information/:id", checkAuthenticated, checkAdmin, upload.single("imag
   }
 });
 
-// Route untuk menghapus penyakit
 app.delete("/information/:id", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const deletedSickness = await DaftarPenyakit.findByIdAndDelete(req.params.id);
@@ -458,21 +424,18 @@ app.post("/information", upload.single("image"), async (req, res) => {
 });
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////// crud doctor///////////////////////////////////////////////////////
-
 app.get("/admindashboard/crudDoctor", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const todoListItems = await DaftarDokter.find();
     res.render('cruddoctor', { todoListItems, nama: req.user.name, title: "Crud doctor" });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Terjadi kesalahan saat memuat halaman makanan");
+    res.status(500).send("Terjadi kesalahan saat memuat halaman dokter");
   }
 });
 app.post("/admindashboard/crudDoctor", upload.single("image"), async (req, res) => {
   try {
-    const { title, description, rating, specialization } = req.body; // Ambil nilai role dari formulir
+    const { title, description, rating, specialization } = req.body;
     const newdoctor = new DaftarDokter({
       title,
       description,
@@ -484,7 +447,7 @@ app.post("/admindashboard/crudDoctor", upload.single("image"), async (req, res) 
     res.redirect("/doctor");
   } catch (error) {
     console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan makanan");
+    res.status(500).send("Terjadi kesalahan saat menyimpan dokter");
   }
 });
 
@@ -492,12 +455,12 @@ app.delete("/doctors/:id", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const deletedDoctor = await DaftarDokter.findByIdAndDelete(req.params.id);
     if (!deletedDoctor) {
-      return res.status(404).send("Makanan tidak ditemukan");
+      return res.status(404).send("Dokter tidak ditemukan");
     }
-    res.status(200).send("Makanan berhasil dihapus");
+    res.status(200).send("Dokter berhasil dihapus");
   } catch (error) {
     console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menghapus makanan");
+    res.status(500).send("Terjadi kesalahan saat menghapus dokter");
   }
 });
 
@@ -505,8 +468,6 @@ app.post("/doctors/:id", checkAuthenticated, checkAdmin, upload.single("image"),
   try {
     const { title, description, rating, specialization } = req.body;
     const doctorId = req.params.id;
-
-    // Temukan makanan berdasarkan ID dan perbarui datanya
     const updatedDoctor = await DaftarDokter.findByIdAndUpdate(doctorId, {
       title,
       description,
@@ -514,14 +475,11 @@ app.post("/doctors/:id", checkAuthenticated, checkAdmin, upload.single("image"),
       specialization,
       image: req.file ? `../uploads/${req.file.filename}` : null
     });
-
-    // Periksa apakah makanan ditemukan
     if (!updatedDoctor) {
       return res.status(404).send("Makanan tidak ditemukan");
     }
     res.redirect("/admindashboard/cruddoctor");
   } catch (error) {
-    // Tangani kesalahan
     console.error(error);
     res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
   }
@@ -553,102 +511,6 @@ app.post("/doctors", upload.single("image"), async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat menambahkan dokter");
   }
 });
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////// crud doctor///////////////////////////////////////////////////////
-
-app.get("/admindashboard/cruddoctor", checkAuthenticated, checkAdmin, async (req, res) => {
-  try {
-    const todoListItems = await DaftarDokter.find();
-    res.render('cruddoctor', { todoListItems, nama: req.user.name, title: "Crud doctor" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat memuat halaman makanan");
-  }
-});
-app.post("/admindashboard/cruddoctor", upload.single("image"), async (req, res) => {
-  try {
-    const { title, description, } = req.body; // Ambil nilai role dari formulir
-    const newdoctor = new DaftarDokter({
-      title,
-      description,
-      // Masukkan nilai role ke objek DaftarMakanan
-      image: req.file ? `../uploads/${req.file.filename}` : null
-    });
-    await newdoctor.save();
-    res.redirect("/doctor");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan makanan");
-  }
-});
-
-app.delete("/doctors/:id", checkAuthenticated, checkAdmin, async (req, res) => {
-  try {
-    const deletedDoctor = await DaftarDokter.findByIdAndDelete(req.params.id);
-    if (!deletedDoctor) {
-      return res.status(404).send("Makanan tidak ditemukan");
-    }
-    res.status(200).send("Makanan berhasil dihapus");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menghapus makanan");
-  }
-});
-
-app.post("/doctors/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
-  try {
-    const { title, description, } = req.body;
-    const doctorId = req.params.id;
-
-    // Temukan makanan berdasarkan ID dan perbarui datanya
-    const updatedDoctor = await DaftarDokter.findByIdAndUpdate(medicineId, {
-      title,
-      description,
-
-      // Gunakan req.file.filename jika ada, atau gunakan nilai yang ada jika tidak
-      image: req.file ? `../uploads/${req.file.filename}` : null
-    });
-
-    // Periksa apakah makanan ditemukan
-    if (!updatedMedicine) {
-      return res.status(404).send("Makanan tidak ditemukan");
-    }
-    res.redirect("/admindashboard/cruddoctor");
-  } catch (error) {
-    // Tangani kesalahan
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
-  }
-});
-
-
-app.get("/doctor", checkAuthenticated, async (req, res) => {
-  try {
-    const todoListItems = await DaftarDokter.find();
-    res.render("doctor.ejs", { todoListItems, nama: req.user.name, title: "doctor" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat memuat halaman doctor");
-  }
-});
-
-app.post("/doctor", upload.single("image"), async (req, res) => {
-  try {
-    const { title, description } = req.body;
-    const newdoctor = new DaftarDokter({
-      title,
-      description,
-      image: req.file.filename,
-    });
-    await newdoctor.save();
-    res.redirect("/doctor");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
-  }
-});
-
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
