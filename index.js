@@ -99,19 +99,36 @@ app.post('/login', passport.authenticate('local', {
 
 app.post('/register', async (req, res) => {
   try {
+    const existingUsername = await UserAcc.findOne({ name: req.body.name });
+    if (existingUsername) {
+      req.flash('error', 'Username already exists. Please choose a different username.');
+      return res.redirect('/register');
+    }
+    // Cek apakah email sudah terdaftar
+    const existingUser = await UserAcc.findOne({ email: req.body.email });
+    if (existingUser) {
+      req.flash('error', 'Email already registered. Please use a different email.');
+      return res.redirect('/register');
+    }
+    // Hash password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    // Create new user
     const newUser = new UserAcc({
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword
     });
     await newUser.save();
+
+    // Redirect to login page
     res.redirect('/login');
   } catch (error) {
     console.error(error);
     res.redirect('/register');
   }
 });
+
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
