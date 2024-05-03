@@ -44,14 +44,14 @@
           <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
           <h3>
             <%= item.title %>
+            <p class="rating">
+              <% for (let i=0; i < item.rating; i++) { %>
+                <ion-icon name="star"></ion-icon>
+                <% } %>
+            </p>
           </h3>
           <p>
             <%= item.description %>
-          </p>
-          <p class="rating">
-            <% for (let i=0; i < item.rating; i++) { %>
-              <ion-icon name="star"></ion-icon>
-              <% } %>
           </p>
         </div>
         <% }) %>
