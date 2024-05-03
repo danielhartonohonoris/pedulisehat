@@ -29,7 +29,7 @@
               <tr>
                 <th>Nama</th>
                 <th>Email</th>
-                <th>Login Terakhir</th> <!-- Tambah kolom baru -->
+                <th>Login Terakhir</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -45,7 +45,7 @@
                     </td>
                     <td>
                       <%= user.lastLogin %>
-                    </td> <!-- Tampilkan waktu terakhir login -->
+                    </td>
                     <td>
                       <div class="button-edit-group">
                         <button type="button" class="delete-button"
@@ -61,32 +61,10 @@
       </section>
 
       <%- include('layouts/footer.ejs') %>
+        <script src="./js/dashboard.js"></script>
         <script src="./js/script.js"></script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-        <script>
-          // adminDashboard.js
-
-          function deleteUser(email) {
-            if (confirm(`Apakah Anda yakin ingin menghapus akun ${email}?`)) {
-              fetch(`/delete-user/${email}`, {
-                method: 'DELETE'
-              })
-                .then(response => {
-                  if (response.ok) {
-                    alert('Akun pengguna berhasil dihapus.');
-                    location.reload(); // Refresh halaman setelah penghapusan berhasil
-                  } else {
-                    alert('Terjadi kesalahan saat menghapus akun pengguna.');
-                  }
-                })
-                .catch(error => {
-                  console.error('Error:', error);
-                  alert('Terjadi kesalahan koneksi.');
-                });
-            }
-          }
-        </script>
   </body>
 
 </html>

@@ -1,401 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('layouts/header.ejs') %>
+<%- include('layouts/header.ejs') %>
+
   <body id="top">
 
     <%- include('layouts/navbar.ejs') %>
 
-    <link rel="stylesheet" href="../public/css/style.css">
+      <link rel="stylesheet" href="../public/css/style.css">
 
-  <main>
-    <article>
+      <main>
+        <article>
 
-      <!-- 
-        - #HERO
-      -->
+          <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
+            <div class="container">
 
-      <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
-        <div class="container">
+              <div class="hero-content">
 
-          <div class="hero-content">
+                <p class="hero-subtitle has-before" data-reveal="left">Selamat Datang Di PeduliSehat</p>
 
-            <p class="hero-subtitle has-before" data-reveal="left">Selamat Datang Di PeduliSehat</p>
+                <h1 class="headline-lg hero-title" data-reveal="left">
+                  Layanan Informasi
+                  Cepat Dan Tepat. <br>
+                </h1>
 
-            <h1 class="headline-lg hero-title" data-reveal="left">
-              Layanan Informasi 
-              Cepat Dan Tepat. <br>
-            </h1>
+                <figure class="hero-banner hero-banner-right" data-reveal="right">
+                  <img src="./images/dokteranimasi2.png" width="590" height="517" loading="eager" alt="hero banner"
+                    justify-content="" class="w-100">
+                </figure>
 
-            <figure class="hero-banner hero-banner-right" data-reveal="right">
-            <img src="./images/dokteranimasi2.png" width="590" height="517" loading="eager" alt="hero banner" justify-content=""
-              class="w-100">
-          </figure>
+              </div>
 
-        </div>
+          </section>
+          <h3 class="section-title headline-md text-center" data-reveal="bottom">Qoutes Of The days!</h3>
+          <div class="carousel-container">
+            <div class="carousel-slide">
+              <div class="slide"><img src="./images/qoutes1.png" alt="Slide 1"></div>
+              <div class="slide"><img src="./images/qoutes1.jpg" alt="Slide 2"></div>
+              <div class="slide"><img src="./images/qoutes2.jpg" alt="Slide 3"></div>
+            </div>
 
-      </section>
-      <h3 class="section-title headline-md text-center" data-reveal="bottom">Qoutes Of The days!</h3>
-<div class="carousel-container">
-    <div class="carousel-slide">
-        <div class="slide"><img src="./images/qoutes1.png" alt="Slide 1"></div>
-        <div class="slide"><img src="./images/qoutes1.jpg" alt="Slide 2"></div>
-        <div class="slide"><img src="./images/qoutes2.jpg" alt="Slide 3"></div>
-        <!-- Add more slides as needed -->
-    </div>
+            <div class="carousel-controls">
+              <button onclick="prevSlide()">Previous</button>
+              <button onclick="nextSlide()">Next</button>
+            </div>
+          </div>
+          <script>
+            let slideIndex = 0;
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
 
-    <div class="carousel-controls">
-        <button onclick="prevSlide()">Previous</button>
-        <button onclick="nextSlide()">Next</button>
-    </div>
-</div>
-    <script>
-        let slideIndex = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-    
-        function showSlides() {
-            slides.forEach(slide => {
+            function showSlides() {
+              slides.forEach(slide => {
                 slide.style.display = 'none';
-            });
-    
-            slideIndex++;
-    
-            if (slideIndex > totalSlides) {
+              });
+
+              slideIndex++;
+
+              if (slideIndex > totalSlides) {
                 slideIndex = 1;
+              }
+
+              slides[slideIndex - 1].style.display = 'block';
+              setTimeout(showSlides, 7000);
             }
-    
-            slides[slideIndex - 1].style.display = 'block';
-            setTimeout(showSlides, 7000); // Change image every 3 seconds
-        }
-    
-        function nextSlide() {
-            slideIndex++;
-            if (slideIndex > totalSlides) {
+
+            function nextSlide() {
+              slideIndex++;
+              if (slideIndex > totalSlides) {
                 slideIndex = 1;
+              }
+              showSlides();
             }
-            showSlides();
-        }
-    
-        function prevSlide() {
-            slideIndex--;
-            if (slideIndex < 1) {
+
+            function prevSlide() {
+              slideIndex--;
+              if (slideIndex < 1) {
                 slideIndex = totalSlides;
+              }
+              showSlides();
             }
+
             showSlides();
-        }
-    
-        showSlides();
-    </script>
-</body>
-</html>
-        
-      </div>
-
-      <!-- 
-        - #ABOUT
-      -->
-
-
-
-
-
-      <!-- 
-        - #CAROUSEL AMOS
-      -->
-      <%- include('carousel.ejs') %>
-      
-
-      <!-- 
-        - #BLOG
-      -->
-
-      <section class="section blog" aria-labelledby="blog-label" id="information-page">
-        <div class="container">
-
-          <p class="section-subtitle title-lg text-center" id="blog-label" data-reveal="bottom">
-            News & Article
-          </p>
-
-          <h2 class="section-title headline-md text-center" data-reveal="bottom">Latest Articles</h2>
-
-          <ul class="grid-list">
-
-            <li>
-              <div class="blog-card has-before has-after" data-reveal="bottom">
-
-                <div class="meta-wrapper">
-
-                  <div class="card-meta">
-                    <ion-icon name="person-outline"></ion-icon>
-
-                    <span class="span">Daniel</span>
-                  </div>
-
-                  <div class="card-meta">
-                    <ion-icon name="folder-outline"></ion-icon>
-
-                    <span class="span">Admin</span>
-                  </div>
-
-                </div>
-
-                <h3 class="headline-sm card-title">
-
-                  Baca artikel detikjabar, "Organ Tubuh pun Siap Dijual Demi Cinta" baca selengkapnya .
-                  
-                  </h3>
-
-                <time class="title-sm date" datetime="2022-01-28">27 April, 2024</time>
-
-                <p class="card-text">
-                  Cinta bisa membuat seseorang nekat melakukan apapun. Bahkan, ada orang yang rela menjual organ tubuhnya demi cinta.
-                  Namun, kenekatan ini tak berbuah manis. Hingga kini, orang yang ingin menjual organ tubuhnya ini masih berjuang mendapatkan cintanya.</p>
-      
-                <a href="https://www.detik.com/jabar/berita/d-7313019/organ-tubuh-pun-siap-dijual-demi-cinta" class="btn-text title-lg">Read More</a>
-
-              </div>
-            </li>
-
-            <li>
-              <div class="blog-card has-before has-after" data-reveal="bottom">
-
-                <div class="meta-wrapper">
-
-                  <div class="card-meta">
-                    <ion-icon name="person-outline"></ion-icon>
-
-                    <span class="span">Daniel</span>
-                  </div>
-
-                  <div class="card-meta">
-                    <ion-icon name="folder-outline"></ion-icon>
-
-                    <span class="span">Admin</span>
-                  </div>
-
-                </div>
-
-                <h3 class="headline-sm card-title">Efek Setelah 40 Hari hanya Minum Jus Jeruk</h3>
-
-                <time class="title-sm date" datetime="2022-01-28">27 April, 2024</time>
-
-                <p class="card-text">
-                  Ada berbagai cara untuk diet. Makanan atau minuman yang dipilih untuk dikonsumsi selama diet juga beragam.
-                  Contohnya dilakukan seorang Anne Osbourne, seorang influencer. Ia melakukan diet ekstrem dengan hanya mengonsumsi jus jeruk dalam 40 hari.
-                </p>
-
-                <a href="https://www.detik.com/jabar/berita/d-7313115/efek-setelah-40-hari-hanya-minum-jus-jeruk" class="btn-text title-lg">Read More</a>
-
-              </div>
-            </li>
-
-            <li>
-              <div class="blog-card has-before has-after" data-reveal="bottom">
-
-                <div class="meta-wrapper">
-
-                  <div class="card-meta">
-                    <ion-icon name="person-outline"></ion-icon>
-
-                    <span class="span">Daniel</span>
-                  </div>
-
-                  <div class="card-meta">
-                    <ion-icon name="folder-outline"></ion-icon>
-
-                    <span class="span">Admin</span>
-                  </div>
-
-                </div>
-
-                <h3 class="headline-sm card-title">Kelebihan Vitamin Berdampak Buruk Bagi Kesehatan, Ini Efeknya</h3>
-
-                <time class="title-sm date" datetime="2022-01-28">27 April, 2024</time>
-
-                <p class="card-text">
-                  Mengkonsumsi suplemen yang berlebih, seperti vitamin bisa berdampak buruk pada kesehatan. Meski mengkonsumsi vitamin adalah baik untuk daya tahan tubuh.
-                  Dilansir detikHealth, saat ini banyak produk makanan dan minuman yang ditambahkan sejumlah vitamin dan mineral. Namun perlu diketahui bahwa, konsumsi suplemen vitamin yang berlebihan bisa memicu gejala seperti mual, diare, kram perut hingga kerusakan saraf.
-                </p>
-
-                <a href="https://www.detik.com/sumut/berita/d-7312838/kelebihan-vitamin-berdampak-buruk-bagi-kesehatan-berikut-efeknya" class="btn-text title-lg">Read More</a>
-
-                
-              </div>
-
-              <li>
-                <div class="blog-card has-before has-after" data-reveal="bottom">
-  
-                  <div class="meta-wrapper">
-  
-                    <div class="card-meta">
-                      <ion-icon name="person-outline"></ion-icon>
-  
-                      <span class="span">Daniel</span>
-                    </div>
-  
-                    <div class="card-meta">
-                      <ion-icon name="folder-outline"></ion-icon>
-  
-                      <span class="span">Admin</span>
-                    </div>
-  
-                  </div>
-  
-                  <h3 class="headline-sm card-title">Manfaat Cuci Muka Tak Lebih dari Semenit</h3>
-  
-                  <time class="title-sm date" datetime="2024-04-27">27 April, 2024</time>
-  
-                  <p class="card-text">
-                    Mencuci muka setiap malam atau setelah beraktivitas di luar merupakan tahapan penting untuk memiliki kulit yang sehat. Selain memilih sabun yang sesuai dengan jenis kulit, durasi waktunya juga perlu diperhatikan. Menurut para ahli, idealnya mencuci muka dilakukan tak lebih dari 60 detik.
-
-                    Artikel ini telah tayang di Kompas.com dengan judul "Manfaat Cuci Muka Tak Lebih dari Semenit",
-
-                  </p>
-  
-                  <a href="https://health.kompas.com/read/24D27180000068/manfaat-cuci-muka-tak-lebih-dari-semenit" class="btn-text title-lg">Read More</a>
-  
-                  
-                </div>
-
-                <li>
-                  <div class="blog-card has-before has-after" data-reveal="bottom">
-    
-                    <div class="meta-wrapper">
-    
-                      <div class="card-meta">
-                        <ion-icon name="person-outline"></ion-icon>
-    
-                        <span class="span">Daniel</span>
-                      </div>
-    
-                      <div class="card-meta">
-                        <ion-icon name="folder-outline"></ion-icon>
-    
-                        <span class="span">Admin</span>
-                      </div>
-    
-                    </div>
-    
-                    <h3 class="headline-sm card-title"> "Alergi pada Anak Disebabkan Apa? Berikut 5 Daftarnya"</h3>
-    
-                    <time class="title-sm date" datetime="2024-04-27">27 April, 2024</time>
-    
-                    <p class="card-text">
-                      Ternyata, alergi pada anak bisa terjadi karena beberapa faktor, yaitu: Keturunan Ras Usia Jenis kelamin Faktor lingkungan, seperti paparan asap rokok, asap industri, dan makanan tertentu.
-                    </p>
-    
-                    <a href="https://health.kompas.com/read/24D27160000868/alergi-pada-anak-disebabkan-apa-berikut-5-daftarnya" class="btn-text title-lg">Read More</a>
-    
-                    
-                  </div>
-
-                  <li>
-                    <div class="blog-card has-before has-after" data-reveal="bottom">
-      
-                      <div class="meta-wrapper">
-      
-                        <div class="card-meta">
-                          <ion-icon name="person-outline"></ion-icon>
-      
-                          <span class="span">Daniel</span>
-                        </div>
-      
-                        <div class="card-meta">
-                          <ion-icon name="folder-outline"></ion-icon>
-      
-                          <span class="span">Admin</span>
-                        </div>
-      
-                      </div>
-      
-                      <h3 class="headline-sm card-title">Bagaimana Cara Mengelola Stres? Ini Penjelasan Psikolog...
-
-                       </h3>
-      
-                      <time class="title-sm date" datetime="2024-04-27">27 April, 2024</time>
-      
-                      <p class="card-text">
-                        sikolog klinis Nirmala Ika Kusumaningrum M.Psi mengatakan mengelola stres adalah cara redakan emosi yang harus terus dilatih setiap hari agar tidak mudah emosional saat menghadapi situasi yang tidak sesuai harapan. “Kalau kita nggak terbiasa untuk manage, kita pasti akan gampang banget untuk jadi meledak atau jadi breakdown dengan kondisi seperti itu kalau nggak biasa mengelola, maka itu perlu dilakukan setiap hari,”
-                      </p>
-      
-                      <a href="https://health.kompas.com/read/24D27140000768/bagaimana-cara-mengelola-stres-ini-penjelasan-psikolog-" class="btn-text title-lg">Read More</a>
-      
-                      
-                    </div>
-              
-            </li>
-
-          </ul>
-
-        </div>
-      </section>
-
-
-    </article>
-  </main>
-
-  <header>
-    <h1 id="article-section" >Berita Kesehatan Terkini</h1>
-</header>
-<section class="article">
-  <div class="image">
-      <img src="./images/flu1.jpeg" alt="Ilustrasi Berita">
-  </div>
-  <div class="content" id="article-section">
-      <h2>LEBARAN TIBA, WASPADA TERPAAN FLU SINGAPURA</h2>
-      <p id="teksAwal">Menjelang libur panjang, penyebaran flu Singapura mengalami kenaikan di Indonesia. Bagaimana mencegah penularannya?
-      "Lumayan cepat penyebarannya, Mas. Jadi kayak pagi-pagi itu kan baru titik, baru dua titik warna merah. Pas saya ke dokter, itu kan jam agak siangan, itu udah nyebar ke seluruh tangan. Pas masuk ke ruangan dokter, itu udah sampe tenggorokan. Jadi memang secepat itu penyebaran virusnya ke badan," ucap Ana kepada detikX pada Rabu, 3 April 2024.
-      </p>
-      <p id="teksLengkap" style="display: none;">Ana mengaku merasakan rasa gatal yang luar biasa, terutama di telapak kaki, telapak tangan, hingga bagian siku. Namun bagian yang terasa gatal akan terasa perih saat disentuh atau digaruk. 
-      "Gatal-gatalnya itu benar-benar gatal banget. Terus kalau misalnya kita garuk, kan, misalnya nggak tahan banget, itu bakal perih banget. Jadi memang semengganggu itu," ucap Ana.
-      Untuk kondisi itu, oleh dokter ia diberi obat oles. Selain itu, ia memperoleh semacam obat tetes yang digunakan untuk luka di tenggorokan dan lidah. Setelahnya, Ana dapat membaik setelah dua minggu perawatan.
-      "Saya juga disuruh karantina. Jadi nggak boleh keluar. Saya tuh kayak COVID ya, jadi kayak menjaga jarak sama orang sekitar, terus untuk tempat makan semuanya itu harus dipisah, jadi waktu itu sempat dipisah sama keluarga," ucapnya.
-      </p>
-      <a href="#article-section" class="toggleBtn" onclick="toggleText()">Baca Selengkapnya</a>
-  </div>
-</section>
-
-<section class="article">
-  <div class="image">
-      <img src="./images/makan.jpg" alt="Ilustrasi Berita">
-  </div>
-  <div class="content">
-      <h2> Tak Disarankan Makan Gorengan Saat Buka Puasa, Kenapa? </h2>
-      <p id="teksAwal">“Berlebihan makan gorengan saat buka puasa bisa memicu berbagai masalah kesehatan. Termasuk peningkatan risiko penyakit jantung dan diabetes.”
-        Kandungan lemak dalam minyak pada gorengan cenderung sulit dicerna. Hal ini membuat tubuh lebih lama mencerna gorengan, sehingga bisa mengganggu dan menghambat saluran pencernaan untuk mencerna zat gizi lain.
-      </p>
-      <p id="teksLengkap" style="display: none;"id="article-section1">3. Meningkatkan Risiko Diabetes Tipe 2
-
-        Jika kamu mengira bahwa diabetes hanya bisa terjadi akibat makan makanan manis, anggapan tersebut keliru. Nyatanya, makan gorengan berlebihan saat buka puasa juga bisa meningkatkan risiko penyakit ini.
-        
-        Sebuah studi pada 2014 yang dilakukan oleh para peneliti di Harvard School of Public Health menemukan, bahwa konsumsi gorengan yang sering secara signifikan dikaitkan dengan risiko pengembangan diabetes tipe 2.
-        
-        Kesimpulan ini didapat setelah memeriksa data dari lebih dari 100.000 pria dan wanita selama 25 tahun. Mereka menemukan bahwa peserta yang makan gorengan antara empat dan enam kali per minggu, memiliki 39 persen peningkatan risiko terkena diabetes tipe 2. Hal ini jika dibandingkan dengan mereka yang makan gorengan kurang dari sekali seminggu. 
-        
-        Bahkan, peserta yang makan gorengan 7 kali atau lebih per minggu memiliki 55 persen peningkatan risiko mengembangkan kondisi ini, lo. Cukup menghawatirkan, bukan?
-        
-        *Gorengan Berpotensi Mengandung Akrilamida Penyebab Kanker
-        
-        Alasan lain mengapa kamu perlu membatasi makan gorengan saat buka puasa adalah karena berpotensi mengandung akrilamida. Ini adalah zat beracun yang dapat terbentuk dalam makanan selama memasak suhu tinggi, seperti menggoreng atau memanggang.
-      
-      </p>
-      <a href="#article-section" class="toggleBtn" onclick="toggleText()">Baca Selengkapnya</a>
-  </div>
-</section>
-
-<%- include('layouts/footer.ejs') %>
-  <!-- 
-    - custom js link
-  -->
-  <script src="./js/script.js"></script>
-  <script src="./js/app.js"></script>
-
-  <!-- 
-    - ionicon link
-  -->
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
+          </script>
   </body>
 
 </html>
+
+</div>
+
+<%- include('carousel.ejs') %>
+
+  <section class="section blog" aria-labelledby="blog-label" id="information-page">
+    <div class="container">
+
+      <p class="section-subtitle title-lg text-center" id="blog-label" data-reveal="bottom">
+        News & Article
+      </p>
+
+      <h2 class="section-title headline-md text-center" data-reveal="bottom">Latest Articles</h2>
+
+      <ul class="grid-list">
+
+        <li>
+          <div class="blog-card has-before has-after" data-reveal="bottom">
+
+            <div class="meta-wrapper">
+
+              <div class="card-meta">
+                <ion-icon name="person-outline"></ion-icon>
+
+                <span class="span">Daniel</span>
+              </div>
+
+              <div class="card-meta">
+                <ion-icon name="folder-outline"></ion-icon>
+
+                <span class="span">Admin</span>
+              </div>
+
+            </div>
+
+            <h3 class="headline-sm card-title">
+
+              Baca artikel detikjabar, "Organ Tubuh pun Siap Dijual Demi Cinta" baca selengkapnya .
+
+            </h3>
+
+            <time class="title-sm date" datetime="2022-01-28">27 April, 2024</time>
+
+            <p class="card-text">
+              Cinta bisa membuat seseorang nekat melakukan apapun. Bahkan, ada orang yang rela menjual organ tubuhnya
+              demi cinta.
+              Namun, kenekatan ini tak berbuah manis. Hingga kini, orang yang ingin menjual organ tubuhnya ini masih
+              berjuang mendapatkan cintanya.</p>
+
+            <a href="https://www.detik.com/jabar/berita/d-7313019/organ-tubuh-pun-siap-dijual-demi-cinta"
+              class="btn-text title-lg">Read More</a>
+
+          </div>
+        </li>
+
+        <li>
+          <div class="blog-card has-before has-after" data-reveal="bottom">
+
+            <div class="meta-wrapper">
+
+              <div class="card-meta">
+                <ion-icon name="person-outline"></ion-icon>
+
+                <span class="span">Daniel</span>
+              </div>
+
+              <div class="card-meta">
+                <ion-icon name="folder-outline"></ion-icon>
+
+                <span class="span">Admin</span>
+              </div>
+
+            </div>
+
+            <h3 class="headline-sm card-title">Efek Setelah 40 Hari hanya Minum Jus Jeruk</h3>
+
+            <time class="title-sm date" datetime="2022-01-28">27 April, 2024</time>
+
+            <p class="card-text">
+              Ada berbagai cara untuk diet. Makanan atau minuman yang dipilih untuk dikonsumsi selama diet juga beragam.
+              Contohnya dilakukan seorang Anne Osbourne, seorang influencer. Ia melakukan diet ekstrem dengan hanya
+              mengonsumsi jus jeruk dalam 40 hari.
+            </p>
+
+            <a href="https://www.detik.com/jabar/berita/d-7313115/efek-setelah-40-hari-hanya-minum-jus-jeruk"
+              class="btn-text title-lg">Read More</a>
+
+          </div>
+        </li>
+
+        <li>
+          <div class="blog-card has-before has-after" data-reveal="bottom">
+
+            <div class="meta-wrapper">
+
+              <div class="card-meta">
+                <ion-icon name="person-outline"></ion-icon>
+
+                <span class="span">Daniel</span>
+              </div>
+
+              <div class="card-meta">
+                <ion-icon name="folder-outline"></ion-icon>
+
+                <span class="span">Admin</span>
+              </div>
+
+            </div>
+
+            <h3 class="headline-sm card-title">Kelebihan Vitamin Berdampak Buruk Bagi Kesehatan, Ini Efeknya</h3>
+
+            <time class="title-sm date" datetime="2022-01-28">27 April, 2024</time>
+
+            <p class="card-text">
+              Mengkonsumsi suplemen yang berlebih, seperti vitamin bisa berdampak buruk pada kesehatan. Meski
+              mengkonsumsi vitamin adalah baik untuk daya tahan tubuh.
+              Dilansir detikHealth, saat ini banyak produk makanan dan minuman yang ditambahkan sejumlah vitamin dan
+              mineral. Namun perlu diketahui bahwa, konsumsi suplemen vitamin yang berlebihan bisa memicu gejala seperti
+              mual, diare, kram perut hingga kerusakan saraf.
+            </p>
+
+            <a href="https://www.detik.com/sumut/berita/d-7312838/kelebihan-vitamin-berdampak-buruk-bagi-kesehatan-berikut-efeknya"
+              class="btn-text title-lg">Read More</a>
+
+
+          </div>
+
+        <li>
+          <div class="blog-card has-before has-after" data-reveal="bottom">
+
+            <div class="meta-wrapper">
+
+              <div class="card-meta">
+                <ion-icon name="person-outline"></ion-icon>
+
+                <span class="span">Daniel</span>
+              </div>
+
+              <div class="card-meta">
+                <ion-icon name="folder-outline"></ion-icon>
+
+                <span class="span">Admin</span>
+              </div>
+
+            </div>
+
+            <h3 class="headline-sm card-title">Manfaat Cuci Muka Tak Lebih dari Semenit</h3>
+
+            <time class="title-sm date" datetime="2024-04-27">27 April, 2024</time>
+
+            <p class="card-text">
+              Mencuci muka setiap malam atau setelah beraktivitas di luar merupakan tahapan penting untuk memiliki kulit
+              yang sehat. Selain memilih sabun yang sesuai dengan jenis kulit, durasi waktunya juga perlu diperhatikan.
+              Menurut para ahli, idealnya mencuci muka dilakukan tak lebih dari 60 detik.
+
+              Artikel ini telah tayang di Kompas.com dengan judul "Manfaat Cuci Muka Tak Lebih dari Semenit",
+
+            </p>
+
+            <a href="https://health.kompas.com/read/24D27180000068/manfaat-cuci-muka-tak-lebih-dari-semenit"
+              class="btn-text title-lg">Read More</a>
+
+
+          </div>
+
+        <li>
+          <div class="blog-card has-before has-after" data-reveal="bottom">
+
+            <div class="meta-wrapper">
+
+              <div class="card-meta">
+                <ion-icon name="person-outline"></ion-icon>
+
+                <span class="span">Daniel</span>
+              </div>
+
+              <div class="card-meta">
+                <ion-icon name="folder-outline"></ion-icon>
+
+                <span class="span">Admin</span>
+              </div>
+
+            </div>
+
+            <h3 class="headline-sm card-title"> "Alergi pada Anak Disebabkan Apa? Berikut 5 Daftarnya"</h3>
+
+            <time class="title-sm date" datetime="2024-04-27">27 April, 2024</time>
+
+            <p class="card-text">
+              Ternyata, alergi pada anak bisa terjadi karena beberapa faktor, yaitu: Keturunan Ras Usia Jenis kelamin
+              Faktor lingkungan, seperti paparan asap rokok, asap industri, dan makanan tertentu.
+            </p>
+
+            <a href="https://health.kompas.com/read/24D27160000868/alergi-pada-anak-disebabkan-apa-berikut-5-daftarnya"
+              class="btn-text title-lg">Read More</a>
+
+
+          </div>
+
+        <li>
+          <div class="blog-card has-before has-after" data-reveal="bottom">
+
+            <div class="meta-wrapper">
+
+              <div class="card-meta">
+                <ion-icon name="person-outline"></ion-icon>
+
+                <span class="span">Daniel</span>
+              </div>
+
+              <div class="card-meta">
+                <ion-icon name="folder-outline"></ion-icon>
+
+                <span class="span">Admin</span>
+              </div>
+
+            </div>
+
+            <h3 class="headline-sm card-title">Bagaimana Cara Mengelola Stres? Ini Penjelasan Psikolog...
+
+            </h3>
+
+            <time class="title-sm date" datetime="2024-04-27">27 April, 2024</time>
+
+            <p class="card-text">
+              sikolog klinis Nirmala Ika Kusumaningrum M.Psi mengatakan mengelola stres adalah cara redakan emosi yang
+              harus terus dilatih setiap hari agar tidak mudah emosional saat menghadapi situasi yang tidak sesuai
+              harapan. “Kalau kita nggak terbiasa untuk manage, kita pasti akan gampang banget untuk jadi meledak atau
+              jadi breakdown dengan kondisi seperti itu kalau nggak biasa mengelola, maka itu perlu dilakukan setiap
+              hari,”
+            </p>
+
+            <a href="https://health.kompas.com/read/24D27140000768/bagaimana-cara-mengelola-stres-ini-penjelasan-psikolog-"
+              class="btn-text title-lg">Read More</a>
+
+
+          </div>
+
+        </li>
+
+      </ul>
+
+    </div>
+  </section>
+
+
+  </article>
+  </main>
+
+  <header>
+    <h1 id="article-section">Berita Kesehatan Terkini</h1>
+  </header>
+  <section class="article">
+    <div class="image">
+      <img src="./images/flu1.jpeg" alt="Ilustrasi Berita">
+    </div>
+    <div class="content" id="article-section">
+      <h2>LEBARAN TIBA, WASPADA TERPAAN FLU SINGAPURA</h2>
+      <p id="teksAwal">Menjelang libur panjang, penyebaran flu Singapura mengalami kenaikan di Indonesia. Bagaimana
+        mencegah penularannya?
+        "Lumayan cepat penyebarannya, Mas. Jadi kayak pagi-pagi itu kan baru titik, baru dua titik warna merah. Pas saya
+        ke dokter, itu kan jam agak siangan, itu udah nyebar ke seluruh tangan. Pas masuk ke ruangan dokter, itu udah
+        sampe tenggorokan. Jadi memang secepat itu penyebaran virusnya ke badan," ucap Ana kepada detikX pada Rabu, 3
+        April 2024.
+      </p>
+      <p id="teksLengkap" style="display: none;">Ana mengaku merasakan rasa gatal yang luar biasa, terutama di telapak
+        kaki, telapak tangan, hingga bagian siku. Namun bagian yang terasa gatal akan terasa perih saat disentuh atau
+        digaruk.
+        "Gatal-gatalnya itu benar-benar gatal banget. Terus kalau misalnya kita garuk, kan, misalnya nggak tahan banget,
+        itu bakal perih banget. Jadi memang semengganggu itu," ucap Ana.
+        Untuk kondisi itu, oleh dokter ia diberi obat oles. Selain itu, ia memperoleh semacam obat tetes yang digunakan
+        untuk luka di tenggorokan dan lidah. Setelahnya, Ana dapat membaik setelah dua minggu perawatan.
+        "Saya juga disuruh karantina. Jadi nggak boleh keluar. Saya tuh kayak COVID ya, jadi kayak menjaga jarak sama
+        orang sekitar, terus untuk tempat makan semuanya itu harus dipisah, jadi waktu itu sempat dipisah sama
+        keluarga," ucapnya.
+      </p>
+      <a href="#article-section" class="toggleBtn" onclick="toggleText()">Baca Selengkapnya</a>
+    </div>
+  </section>
+
+  <section class="article">
+    <div class="image">
+      <img src="./images/makan.jpg" alt="Ilustrasi Berita">
+    </div>
+    <div class="content">
+      <h2> Tak Disarankan Makan Gorengan Saat Buka Puasa, Kenapa? </h2>
+      <p id="teksAwal">“Berlebihan makan gorengan saat buka puasa bisa memicu berbagai masalah kesehatan. Termasuk
+        peningkatan risiko penyakit jantung dan diabetes.”
+        Kandungan lemak dalam minyak pada gorengan cenderung sulit dicerna. Hal ini membuat tubuh lebih lama mencerna
+        gorengan, sehingga bisa mengganggu dan menghambat saluran pencernaan untuk mencerna zat gizi lain.
+      </p>
+      <p id="teksLengkap" style="display: none;" id="article-section1">3. Meningkatkan Risiko Diabetes Tipe 2
+
+        Jika kamu mengira bahwa diabetes hanya bisa terjadi akibat makan makanan manis, anggapan tersebut keliru.
+        Nyatanya, makan gorengan berlebihan saat buka puasa juga bisa meningkatkan risiko penyakit ini.
+
+        Sebuah studi pada 2014 yang dilakukan oleh para peneliti di Harvard School of Public Health menemukan, bahwa
+        konsumsi gorengan yang sering secara signifikan dikaitkan dengan risiko pengembangan diabetes tipe 2.
+
+        Kesimpulan ini didapat setelah memeriksa data dari lebih dari 100.000 pria dan wanita selama 25 tahun. Mereka
+        menemukan bahwa peserta yang makan gorengan antara empat dan enam kali per minggu, memiliki 39 persen
+        peningkatan risiko terkena diabetes tipe 2. Hal ini jika dibandingkan dengan mereka yang makan gorengan kurang
+        dari sekali seminggu.
+
+        Bahkan, peserta yang makan gorengan 7 kali atau lebih per minggu memiliki 55 persen peningkatan risiko
+        mengembangkan kondisi ini, lo. Cukup menghawatirkan, bukan?
+
+        *Gorengan Berpotensi Mengandung Akrilamida Penyebab Kanker
+
+        Alasan lain mengapa kamu perlu membatasi makan gorengan saat buka puasa adalah karena berpotensi mengandung
+        akrilamida. Ini adalah zat beracun yang dapat terbentuk dalam makanan selama memasak suhu tinggi, seperti
+        menggoreng atau memanggang.
+
+      </p>
+      <a href="#article-section" class="toggleBtn" onclick="toggleText()">Baca Selengkapnya</a>
+    </div>
+  </section>
+
+  <%- include('layouts/footer.ejs') %>
+
+    <script src="./js/script.js"></script>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    </body>
+
+    </html>

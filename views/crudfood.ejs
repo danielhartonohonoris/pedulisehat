@@ -3,7 +3,6 @@
 
 <head>
     <%- include('layouts/header.ejs') %>
-
 </head>
 
 <body id="top">
@@ -66,7 +65,7 @@
                         <input type="text" name="title" class="editTitle" placeholder="Title" value="<%= item.title %>">
                         <textarea name="description" class="editDescription"
                             placeholder="Description"><%= item.description %></textarea>
-                        <select name="role" class="editRole"> <!-- Add select field for role -->
+                        <select name="role" class="editRole">
                             <option value="sayuran" <%=item.role==='sayuran' ? 'selected' : '' %>>Sayuran</option>
                             <option value="ikan" <%=item.role==='ikan' ? 'selected' : '' %>>Ikan</option>
                             <option value="buah" <%=item.role==='buah' ? 'selected' : '' %>>Buah</option>
@@ -86,114 +85,15 @@
             <input type="hidden" name="_method" value="PUT">
             <input type="text" name="title" id="updateTitle" placeholder="Title">
             <textarea name="description" id="updateDescription" placeholder="Description"></textarea>
-            <input type="text" name="role" id="updateRole" placeholder="Role"> <!-- Tambahkan input untuk role -->
+            <input type="text" name="role" id="updateRole" placeholder="Role">
             <input type="file" name="image" id="updateImage">
             <button type="button" onclick="submitUpdateForm()">Simpan</button>
         </form>
 
-
         <script src="/js/script.js"></script>
+        <script src="/js/crudfood.js"></script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
-        <script>
-            function showEditForm(foodId) {
-                var editFormContainer = document.getElementById('editFormContainer_' + foodId);
-                if (editFormContainer.style.display === 'none') {
-                    // Sembunyikan semua form edit terlebih dahulu
-                    var allEditFormContainers = document.querySelectorAll('[id^="editFormContainer_"]');
-                    allEditFormContainers.forEach(container => {
-                        container.style.display = 'none';
-                    });
-
-                    // Tampilkan form edit yang sesuai
-                    editFormContainer.style.display = 'block';
-                } else {
-                    // Sembunyikan form edit
-                    editFormContainer.style.display = 'none';
-                }
-            }
-            function cancelEditForm(foodId) {
-                var editFormContainer = document.getElementById('editFormContainer_' + foodId);
-                editFormContainer.style.display = 'none';
-            }
-
-            function submitEditForm(foodId) {
-                var form = document.getElementById("editForm_" + foodId);
-                var formData = new FormData(form);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", form.action, true);
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        console.log("Perubahan berhasil disimpan!");
-                        window.location.reload();
-                    } else {
-                        console.error("Terjadi kesalahan saat menyimpan perubahan.");
-                    }
-                };
-                xhr.onerror = function () {
-                    console.error("Terjadi kesalahan koneksi.");
-                };
-                xhr.send(formData);
-            }
-
-            function submitFormFood() {
-                var form = document.getElementById("foodForm");
-                var formData = new FormData(form);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", form.action, true);
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        console.log("Makanan berhasil ditambahkan!");
-                        window.location.reload();
-                    } else {
-                        console.error("Terjadi kesalahan saat menambahkan makanan.");
-                    }
-                };
-                xhr.onerror = function () {
-                    console.error("Terjadi kesalahan koneksi.");
-                };
-                xhr.send(formData);
-            }
-
-            function submitUpdateForm() {
-                var form = document.getElementById("updateForm");
-                var formData = new FormData(form);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("PUT", form.action, true);
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        console.log("Perubahan berhasil disimpan crudFood!");
-                        window.location.reload();
-                    } else {
-                        console.error("Terjadi kesalahan saat menyimpan perubahan.");
-                    }
-                };
-                xhr.onerror = function () {
-                    console.error("Terjadi kesalahan koneksi.");
-                };
-                xhr.send(formData);
-            }
-
-            function deleteFood(foodId) {
-                if (confirm("Apakah Anda yakin ingin menghapus makanan ini?")) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("DELETE", "/food/" + foodId, true);
-                    xhr.onload = function () {
-                        if (xhr.status === 200) {
-                            console.log("Makanan berhasil dihapus!");
-                            window.location.reload();
-                        } else {
-                            console.error("Terjadi kesalahan saat menghapus makanan.");
-                        }
-                    };
-                    xhr.send();
-                }
-            }
-        </script>
 
 </body>
 
