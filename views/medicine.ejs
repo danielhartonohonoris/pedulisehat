@@ -1,68 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('layouts/header.ejs') %>
-<body id="top">
-  <%- include('layouts/navbar.ejs') %>
-  <main>
-    <article>
-      <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
-        <div class="container">
-    
-          <div class="hero-content">
-    
-            <p class="hero-subtitle has-before" data-reveal="left">Pusat Obat</p>
-            <div class="search-container">
-              <input type="text" id="searchInput" placeholder="Nama Obat">
+<%- include('layouts/header.ejs') %>
+
+  <body id="top">
+    <%- include('layouts/navbar.ejs') %>
+      <main>
+        <article>
+          <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
+            <div class="container">
+
+              <div class="hero-content">
+
+                <p class="hero-subtitle has-before" data-reveal="left">Pusat Obat</p>
+                <div class="search-container">
+                  <input type="text" id="searchInput" placeholder="Nama Obat">
+                </div>
+
+
+                <h1 class="headline-lg hero-title" data-reveal="left">
+                  Layanan Informasi
+                  Cepat Dan Tepat. <br>
+                </h1>
+              </div>
             </div>
-
-    
-            <h1 class="headline-lg hero-title" data-reveal="left">
-              Layanan Informasi 
-              Cepat Dan Tepat. <br>
-            </h1>
+          </section>
+        </article>
+      </main>
+      <div class="box-container">
+        <% todoListItems.forEach(item=> { %>
+          <div class="box">
+            <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
+            <h3>
+              <%= item.title %>
+            </h3>
+            <p>
+              <%= item.description %>
+            </p>
           </div>
-        </div>
-      </section>
-    </article>
-  </main>
-  <div class="box-container">
-    <% todoListItems.forEach(item => { %>
-        <div class="box">
-          <img src="../uploads/<%= item.image %>" alt="<%= item.image %>">
-          <h3><%= item.title %></h3>
-          <p><%= item.description %></p>
-        </div>
-    <% }) %>
-  </div>
-  <%- include('layouts/footer.ejs') %>
-  
-  <script src="./js/script.js"></script>
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-  <script>
-    document.getElementById('searchInput').addEventListener('input', function() {
-      filterBoxes();
-    });
-    
-    function filterBoxes() {
-   
-      const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-      const boxes = document.querySelectorAll('.box');
-    
-      boxes.forEach(box => {
-       
-        const title = box.querySelector('h3').textContent.toLowerCase();
-        const matchSearch = title.includes(searchQuery);
-    
-        if (matchSearch) {
-          box.style.display = 'block';
-        } else {
-          box.style.display = 'none';
-        }
-      });
-    }
-  </script>
+          <% }) %>
+      </div>
+      <%- include('layouts/footer.ejs') %>
 
-</body>
+        <script src="./js/script.js"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script>
+          document.getElementById('searchInput').addEventListener('input', function () {
+            filterBoxes();
+          });
+
+          function filterBoxes() {
+
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const boxes = document.querySelectorAll('.box');
+
+            boxes.forEach(box => {
+
+              const title = box.querySelector('h3').textContent.toLowerCase();
+              const matchSearch = title.includes(searchQuery);
+
+              if (matchSearch) {
+                box.style.display = 'block';
+              } else {
+                box.style.display = 'none';
+              }
+            });
+          }
+        </script>
+
+  </body>
 
 </html>

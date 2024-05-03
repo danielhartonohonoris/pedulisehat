@@ -1,83 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('layouts/header.ejs') %>
-<body id="top">
-  <%- include('layouts/navdash.ejs') %>
+<%- include('layouts/header.ejs') %>
 
-  <main>
-    <article>
-      <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
+  <body id="top">
+    <%- include('layouts/navdash.ejs') %>
+
+      <main>
+        <article>
+          <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')" aria-label="home">
+            <div class="container">
+              <div class="hero-content">
+                <p class="hero-subtitle has-before" data-reveal="left">Selamat Datang di Admin Dashboard</p>
+                <h1 class="headline-lg hero-title" data-reveal="left">
+                  Adang Irawan <br>
+                  Amos Valentino <br>
+                  Daniel Hartono
+                </h1>
+              </div>
+            </div>
+          </section>
+        </article>
+      </main>
+
+      <section class="user-list">
         <div class="container">
-          <div class="hero-content">
-            <p class="hero-subtitle has-before" data-reveal="left">Selamat Datang di Admin Dashboard</p>
-            <h1 class="headline-lg hero-title" data-reveal="left">
-              Adang Irawan <br>
-              Amos Valentino <br>
-              Daniel Hartono
-            </h1>
-          </div>
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Login Terakhir</th> <!-- Tambah kolom baru -->
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% todoListItems.forEach(user=> { %>
+                <% if (user.role==='user' ) { %>
+                  <tr>
+                    <td>
+                      <%= user.name %>
+                    </td>
+                    <td>
+                      <%= user.email %>
+                    </td>
+                    <td>
+                      <%= user.lastLogin %>
+                    </td> <!-- Tampilkan waktu terakhir login -->
+                    <td>
+                      <div class="button-edit-group">
+                        <button type="button" class="delete-button"
+                          onclick="deleteUser('<%= user.email %>')">Hapus</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <% } %>
+                    <% }); %>
+            </tbody>
+          </table>
         </div>
       </section>
-    </article>
-  </main>
 
-  <section class="user-list">
-    <div class="container">
-      <table class="user-table">
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Email</th>
-            <th>Login Terakhir</th> <!-- Tambah kolom baru -->
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% todoListItems.forEach(user => { %>
-            <% if (user.role === 'user') { %>
-              <tr>
-                <td><%= user.name %></td>
-                <td><%= user.email %></td>
-                <td><%= user.lastLogin %></td> <!-- Tampilkan waktu terakhir login -->
-                <td>
-                  <div class="button-edit-group">
-                    <button type="button" class="delete-button" onclick="deleteUser('<%= user.email %>')">Hapus</button>
-                  </div>
-                </td>
-              </tr>
-            <% } %>
-          <% }); %>
-        </tbody>
-      </table>
-    </div>
-  </section>
+      <%- include('layouts/footer.ejs') %>
+        <script src="./js/script.js"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script>
+          // adminDashboard.js
 
-  <%- include('layouts/footer.ejs') %>
-  <script src="./js/script.js"></script>
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-  <script>
-    // adminDashboard.js
-
-    function deleteUser(email) {
-      if (confirm(`Apakah Anda yakin ingin menghapus akun ${email}?`)) {
-        fetch(`/delete-user/${email}`, {
-          method: 'DELETE'
-        })
-        .then(response => {
-          if (response.ok) {
-            alert('Akun pengguna berhasil dihapus.');
-            location.reload(); // Refresh halaman setelah penghapusan berhasil
-          } else {
-            alert('Terjadi kesalahan saat menghapus akun pengguna.');
+          function deleteUser(email) {
+            if (confirm(`Apakah Anda yakin ingin menghapus akun ${email}?`)) {
+              fetch(`/delete-user/${email}`, {
+                method: 'DELETE'
+              })
+                .then(response => {
+                  if (response.ok) {
+                    alert('Akun pengguna berhasil dihapus.');
+                    location.reload(); // Refresh halaman setelah penghapusan berhasil
+                  } else {
+                    alert('Terjadi kesalahan saat menghapus akun pengguna.');
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                  alert('Terjadi kesalahan koneksi.');
+                });
+            }
           }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          alert('Terjadi kesalahan koneksi.');
-        });
-      }
-    }
-  </script>
-</body>
+        </script>
+  </body>
+
 </html>
