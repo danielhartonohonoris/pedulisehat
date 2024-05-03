@@ -71,7 +71,7 @@
                         <input type="text" name="title" class="editTitle" placeholder="Title" value="<%= item.title %>">
                         <textarea name="description" class="editDescription"
                             placeholder="Description"><%= item.description %></textarea>
-                        <select name="jenis" class="editRole"> <!-- Add select field for role -->
+                        <select name="jenis" class="editRole">
                             <option value="Penyakit Jantung" <%=item.role==='Penyakit Jantung' ? 'selected' : '' %>
                                 >Penyakit Jantung</option>
                             <option value="Penyakit Saraf" <%=item.role==='Penyakit Saraf' ? 'selected' : '' %>>Penyakit
@@ -106,109 +106,10 @@
             <button type="button" onclick="submitUpdateForm()">Simpan</button>
         </form>
 
-
         <script src="/js/script.js"></script>
+        <script src="/js/crudsick.js"></script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
-        <script>
-            function showEditForm(sickness) {
-                var editFormContainer = document.getElementById('editFormContainer_' + sickness);
-                if (editFormContainer.style.display === 'none') {
-                    // Sembunyikan semua form edit terlebih dahulu
-                    var allEditFormContainers = document.querySelectorAll('[id^="editFormContainer_"]');
-                    allEditFormContainers.forEach(container => {
-                        container.style.display = 'none';
-                    });
-
-                    // Tampilkan form edit yang sesuai
-                    editFormContainer.style.display = 'block';
-                } else {
-                    // Sembunyikan form edit
-                    editFormContainer.style.display = 'none';
-                }
-            }
-            function cancelEditForm(sickness) {
-                var editFormContainer = document.getElementById('editFormContainer_' + sickness);
-                editFormContainer.style.display = 'none';
-            }
-
-            function submitEditForm(sickness) {
-                var form = document.getElementById("editForm_" + sickness);
-                var formData = new FormData(form);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", form.action, true);
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        console.log("Perubahan berhasil disimpan!");
-                        window.location.reload();
-                    } else {
-                        console.error("Terjadi kesalahan saat menyimpan perubahan.");
-                    }
-                };
-                xhr.onerror = function () {
-                    console.error("Terjadi kesalahan koneksi.");
-                };
-                xhr.send(formData);
-            }
-
-            function submitFormSickness() {
-                var form = document.getElementById("sicknessForm");
-                var formData = new FormData(form);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", form.action, true);
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        console.log("Makanan berhasil ditambahkan!");
-                        window.location.reload();
-                    } else {
-                        console.error("Terjadi kesalahan saat menambahkan makanan.");
-                    }
-                };
-                xhr.onerror = function () {
-                    console.error("Terjadi kesalahan koneksi.");
-                };
-                xhr.send(formData);
-            }
-
-            function submitUpdateForm() {
-                var form = document.getElementById("updateForm");
-                var formData = new FormData(form);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("PUT", form.action, true);
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        console.log("Perubahan berhasil disimpan crudFood!");
-                        window.location.reload();
-                    } else {
-                        console.error("Terjadi kesalahan saat menyimpan perubahan.");
-                    }
-                };
-                xhr.onerror = function () {
-                    console.error("Terjadi kesalahan koneksi.");
-                };
-                xhr.send(formData);
-            }
-
-            function deleteSickness(sickness) {
-                if (confirm("Apakah Anda yakin ingin menghapus obat ini?")) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("DELETE", "/information/" + sickness, true);
-                    xhr.onload = function () {
-                        if (xhr.status === 200) {
-                            console.log("Daftar penyakit berhasil dihapus!");
-                            window.location.reload();
-                        } else {
-                            console.error("Terjadi kesalahan saat menghapus penyakit.");
-                        }
-                    };
-                    xhr.send();
-                }
-            }
-        </script>
 
 </body>
 

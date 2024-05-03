@@ -1363,7 +1363,7 @@ p {
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4; /* Tampilkan maksimal 5 baris */
+  -webkit-line-clamp: 6; /* Tampilkan maksimal 5 baris */
   line-height: 1.5; /* Sesuaikan line-height dengan kebutuhan */
   flex-grow: 1;
 }
