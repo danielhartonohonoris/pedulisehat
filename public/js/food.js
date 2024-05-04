@@ -5,7 +5,7 @@ document.getElementById('roleFilter').addEventListener('change', function () {
 document.getElementById('searchInput').addEventListener('input', function () {
     filterBoxes();
 });
-
+//fungsi untuk mencari makanan berdasarkan title dan menfilter makanan berdasarkan role / kategori
 function filterBoxes() {
     const selectedRole = document.getElementById('roleFilter').value;
     const searchQuery = document.getElementById('searchInput').value.toLowerCase();

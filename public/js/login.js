@@ -1,3 +1,4 @@
+// Menambahkan event listener untuk saat formulir login disubmit.
 document.getElementById('loginForm').addEventListener('submit', function (event) {
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');

@@ -5,6 +5,8 @@ body {
     padding: 0;
     background-image: url("../images/loginpage2.png") ; 
     background-size: cover;
+    background-position: center; /* Posisikan gambar latar belakang ke tengah */
+    background-repeat: no-repeat;
     }
   
   
@@ -28,11 +30,14 @@ body {
   
   /* Input Styles */
   .form-control {
+    width: 100%;
+    height: 40px;
     margin-bottom: 20px;
     border-radius: 8px;
     border: 1px solid #ced4da; /* Gray */
     padding: 12px;
     transition: border-color 0.3s ease;
+    box-sizing: border-box;
   }
   
   /* Input Focus Styles */

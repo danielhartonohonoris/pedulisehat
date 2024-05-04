@@ -1,3 +1,4 @@
+//Fungsi untuk menamilkan box sesuai filter spesialisasi dokter
 function filterBoxes() {
     const selectedRole = document.getElementById('roleFilter').value;
     const boxes = document.querySelectorAll('.box');
@@ -9,7 +10,7 @@ function filterBoxes() {
         box.style.display = display;
     });
 }
-
+//fungsi untuk mensortir box berdasarkan rating dokter
 function sortBoxes() {
     const sortDirection = document.getElementById('sort').value;
     const boxes = document.querySelectorAll('.box');

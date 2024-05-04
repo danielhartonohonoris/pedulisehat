@@ -1,7 +1,7 @@
 document.getElementById('searchInput').addEventListener('input', function () {
     filterBoxes();
 });
-
+// fungsi untuk mencari obat berdasarkan title
 function filterBoxes() {
 
     const searchQuery = document.getElementById('searchInput').value.toLowerCase();

@@ -5,7 +5,7 @@ document.getElementById('roleFilter').addEventListener('change', filterBoxes);
 document.addEventListener('DOMContentLoaded', () => {
     filterBoxes();
 });
-
+//fungsi untuk mencari penyakit berdasarkan title dan memfilter penyakit berdasarkan jenis / kategori
 function filterBoxes() {
     const selectedRole = document.getElementById('roleFilter').value;
     const searchQuery = document.getElementById('searchInput').value.toLowerCase();

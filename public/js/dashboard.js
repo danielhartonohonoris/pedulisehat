@@ -1,3 +1,4 @@
+// Fungsi untuk menghapus email user
 function deleteUser(email) {
   if (confirm(`Apakah Anda yakin ingin menghapus akun ${email}?`)) {
     fetch(`/delete-user/${email}`, {
