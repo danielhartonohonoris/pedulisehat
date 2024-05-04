@@ -1,3 +1,4 @@
+// Fungsi untuk menampilkan atau menyembunyikan formulir edit
 function showEditForm(medicineId) {
     var editFormContainer = document.getElementById('editFormContainer_' + medicineId);
     if (editFormContainer.style.display === 'none') {
@@ -10,31 +11,12 @@ function showEditForm(medicineId) {
         editFormContainer.style.display = 'none';
     }
 }
+// Fungsi untuk membatalkan edit formulir
 function cancelEditForm(medicineId) {
     var editFormContainer = document.getElementById('editFormContainer_' + medicineId);
     editFormContainer.style.display = 'none';
 }
-
-function submitEditForm(medicineId) {
-    var form = document.getElementById("editForm_" + medicineId);
-    var formData = new FormData(form);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", form.action, true);
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            console.log("Perubahan berhasil disimpan!");
-            window.location.reload();
-        } else {
-            console.error("Terjadi kesalahan saat menyimpan perubahan.");
-        }
-    };
-    xhr.onerror = function () {
-        console.error("Terjadi kesalahan koneksi.");
-    };
-    xhr.send(formData);
-}
-
+// Fungsi untuk menambahkan obat ke server
 function submitFormMedicine() {
     var form = document.getElementById("medicineForm");
     var formData = new FormData(form);
@@ -54,7 +36,7 @@ function submitFormMedicine() {
     };
     xhr.send(formData);
 }
-
+// Fungsi untuk mengupdate obat ke server menggunakan metode PUT.
 function submitUpdateForm() {
     var form = document.getElementById("updateForm");
     var formData = new FormData(form);
@@ -74,7 +56,7 @@ function submitUpdateForm() {
     };
     xhr.send(formData);
 }
-
+// Fungsi untuk menghapus data obat dari server
 function deleteMedicine(medicineId) {
     if (confirm("Apakah Anda yakin ingin menghapus obat ini?")) {
         var xhr = new XMLHttpRequest();

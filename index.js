@@ -18,7 +18,7 @@ const TodoListItems = require("./models/TodoListItems");
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
-
+//connect mongodb
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
@@ -28,6 +28,7 @@ mongoose
     console.log(err.message);
   });
 
+//fungsi mencari user bedasarkan email
 const getUserByEmail = async (email) => {
   try {
     const user = await UserAcc.findOne({ email: email });
@@ -38,11 +39,13 @@ const getUserByEmail = async (email) => {
   }
 };
 
+//inisisalisasi passport
 initializePassport(passport, getUserByEmail, id => UserAcc.findById(id));
 
 const app = express();
 const port = process.env.PORT || 5000;
 
+//middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: false }));
@@ -55,6 +58,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+//konfig storage untuk file yang di upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -99,6 +103,16 @@ app.post('/login', passport.authenticate('local', {
 
 app.post('/register', async (req, res) => {
   try {
+    const existingUsername = await UserAcc.findOne({ name: req.body.name });
+    if (existingUsername) {
+      req.flash('error', 'Username already exists. Please choose a different username.');
+      return res.redirect('/register');
+    }
+    const existingUser = await UserAcc.findOne({ email: req.body.email });
+    if (existingUser) {
+      req.flash('error', 'Email already registered. Please use a different email.');
+      return res.redirect('/register');
+    }
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const newUser = new UserAcc({
       name: req.body.name,
@@ -113,6 +127,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
+//fungsi middleware untuk mengecek apakah sudah terotentikasi
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -120,6 +135,7 @@ function checkAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
+//fungsi middleware untuk mengecek apakah belum terotentikasi
 function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return res.redirect('/');
@@ -127,6 +143,7 @@ function checkNotAuthenticated(req, res, next) {
   next();
 }
 
+//fungsi untuk mengecek apakah pengguna adalah admin 
 function checkAdmin(req, res, next) {
   if (req.isAuthenticated() && req.session.isAdmin) {
     return next();
@@ -134,7 +151,7 @@ function checkAdmin(req, res, next) {
   res.redirect('/');
 }
 
-
+// Route untuk menampilkan halaman dashboard admin
 app.get("/admindashboard", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const todoListItems = await DaftarUser.find();
@@ -144,7 +161,7 @@ app.get("/admindashboard", checkAuthenticated, checkAdmin, async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat memuat halaman dashboard");
   }
 });
-
+// Route untuk menghapus email user dari admin dashboard
 app.delete("/delete-user/:email", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const email = req.params.email;
@@ -159,12 +176,12 @@ app.delete("/delete-user/:email", checkAuthenticated, checkAdmin, async (req, re
   }
 });
 
-
+// Route untuk menampilkan halaman bmi kalkulator
 app.get("/bmi", checkAuthenticated, (req, res) => {
   res.render('bmi', { nama: req.user.name, title: "BMI" });
 });
 
-
+// Route untuk menampilkan halaman crudFood di dashboard admin
 app.get("/admindashboard/crudFood", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const todoListItems = await DaftarMakanan.find();
@@ -174,23 +191,7 @@ app.get("/admindashboard/crudFood", checkAuthenticated, checkAdmin, async (req, 
     res.status(500).send("Terjadi kesalahan saat memuat halaman makanan");
   }
 });
-app.post("/admindashboard/crudFood", upload.single("image"), async (req, res) => {
-  try {
-    const { title, description, role } = req.body;
-    const newFood = new DaftarMakanan({
-      title,
-      description,
-      role,
-      image: req.file ? `../uploads/${req.file.filename}` : null
-    });
-    await newFood.save();
-    res.redirect("/food");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan makanan");
-  }
-});
-
+// Route untuk mengupdate makanan berdasarkan ID
 app.post("/food/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
   try {
     const { title, description, role } = req.body;
@@ -210,7 +211,7 @@ app.post("/food/:id", checkAuthenticated, checkAdmin, upload.single("image"), as
     res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
   }
 });
-
+// Route untuk menghapus makanan berdasarkan ID
 app.delete("/food/:id", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const deletedFood = await DaftarMakanan.findByIdAndDelete(req.params.id);
@@ -223,7 +224,7 @@ app.delete("/food/:id", checkAuthenticated, checkAdmin, async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat menghapus makanan");
   }
 });
-
+// Route untuk menampilkan halaman makanan
 app.get("/food", checkAuthenticated, async (req, res) => {
   try {
     const todoListItems = await DaftarMakanan.find();
@@ -233,6 +234,7 @@ app.get("/food", checkAuthenticated, async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat memuat halaman makanan");
   }
 });
+// Route untuk menambahkan makanan baru
 app.post("/food", upload.single("image"), async (req, res) => {
   try {
     const { title, description, role } = req.body;
@@ -250,7 +252,7 @@ app.post("/food", upload.single("image"), async (req, res) => {
   }
 });
 
-
+// Route untuk menampilkan halaman crudMedicine di dashboard admin
 app.get("/admindashboard/crudMedicine", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const todoListItems = await TodoListItems.find();
@@ -260,22 +262,7 @@ app.get("/admindashboard/crudMedicine", checkAuthenticated, checkAdmin, async (r
     res.status(500).send("Terjadi kesalahan saat memuat halaman obat");
   }
 });
-app.post("/admindashboard/crudMedicine", upload.single("image"), async (req, res) => {
-  try {
-    const { title, description, } = req.body;
-    const newMedicine = new TodoListItems({
-      title,
-      description,
-      image: req.file ? `../uploads/${req.file.filename}` : null
-    });
-    await newMedicine.save();
-    res.redirect("/medicine");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan obat");
-  }
-});
-
+// Route untuk menghapus obat berdasarkan ID
 app.delete("/medicine/:id", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const deletedMedicine = await TodoListItems.findByIdAndDelete(req.params.id);
@@ -288,7 +275,7 @@ app.delete("/medicine/:id", checkAuthenticated, checkAdmin, async (req, res) => 
     res.status(500).send("Terjadi kesalahan saat menghapus obat");
   }
 });
-
+// Route untuk mengupdate obat berdasarkan ID
 app.post("/medicine/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
   try {
     const { title, description, } = req.body;
@@ -307,7 +294,7 @@ app.post("/medicine/:id", checkAuthenticated, checkAdmin, upload.single("image")
     res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
   }
 });
-
+// Route untuk menampilkan halaman obat
 app.get("/medicine", checkAuthenticated, async (req, res) => {
   try {
     const todoListItems = await TodoListItems.find();
@@ -317,14 +304,14 @@ app.get("/medicine", checkAuthenticated, async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat memuat halaman medicine");
   }
 });
-
+// Route untuk menambahkan obat baru
 app.post("/medicine", upload.single("image"), async (req, res) => {
   try {
     const { title, description } = req.body;
     const newMedicine = new TodoListItems({
       title,
       description,
-      image: req.file.filename,
+      image: req.file ? `../uploads/${req.file.filename}` : null
     });
     await newMedicine.save();
     res.redirect("/medicine");
@@ -334,7 +321,7 @@ app.post("/medicine", upload.single("image"), async (req, res) => {
   }
 });
 
-
+// Route untuk menampilkan halaman crudSickness di dashboard admin
 app.get("/admindashboard/crudSickness", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const todoListItems = await DaftarPenyakit.find();
@@ -344,24 +331,7 @@ app.get("/admindashboard/crudSickness", checkAuthenticated, checkAdmin, async (r
     res.status(500).send("Terjadi kesalahan saat memuat halaman penyakit");
   }
 });
-
-app.post("/admindashboard/crudSickness", upload.single("image"), async (req, res) => {
-  try {
-    const { title, description, jenis } = req.body;
-    const newSickness = new DaftarPenyakit({
-      title,
-      description,
-      jenis,
-      image: req.file ? `../uploads/${req.file.filename}` : null
-    });
-    await newSickness.save();
-    res.redirect("/information");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan penyakit");
-  }
-});
-
+// Route untuk mengupdate penyakit berdasarkan ID
 app.post("/information/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
   try {
     const { title, description, jenis } = req.body;
@@ -383,7 +353,7 @@ app.post("/information/:id", checkAuthenticated, checkAdmin, upload.single("imag
     res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
   }
 });
-
+// Route untuk menghapus penyakit berdasarkan ID
 app.delete("/information/:id", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const deletedSickness = await DaftarPenyakit.findByIdAndDelete(req.params.id);
@@ -396,6 +366,7 @@ app.delete("/information/:id", checkAuthenticated, checkAdmin, async (req, res) 
     res.status(500).send("Terjadi kesalahan saat menghapus penyakit");
   }
 });
+// Route untuk menampilkan halaman penyakit
 app.get("/information", checkAuthenticated, async (req, res) => {
   try {
     const todoListItems = await DaftarPenyakit.find();
@@ -405,7 +376,7 @@ app.get("/information", checkAuthenticated, async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat memuat halaman penyakit");
   }
 });
-
+// Route untuk menambahkan penyakit baru
 app.post("/information", upload.single("image"), async (req, res) => {
   try {
     const { title, description, jenis } = req.body;
@@ -423,7 +394,7 @@ app.post("/information", upload.single("image"), async (req, res) => {
   }
 });
 
-
+// Route untuk menampilkan halaman crudDoctor di dashboard admin
 app.get("/admindashboard/crudDoctor", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const todoListItems = await DaftarDokter.find();
@@ -433,24 +404,7 @@ app.get("/admindashboard/crudDoctor", checkAuthenticated, checkAdmin, async (req
     res.status(500).send("Terjadi kesalahan saat memuat halaman dokter");
   }
 });
-app.post("/admindashboard/crudDoctor", upload.single("image"), async (req, res) => {
-  try {
-    const { title, description, rating, specialization } = req.body;
-    const newdoctor = new DaftarDokter({
-      title,
-      description,
-      rating,
-      specialization,
-      image: req.file ? `../uploads/${req.file.filename}` : null
-    });
-    await newdoctor.save();
-    res.redirect("/doctor");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menyimpan dokter");
-  }
-});
-
+// Route untuk menghapus dokter berdasarkan ID
 app.delete("/doctors/:id", checkAuthenticated, checkAdmin, async (req, res) => {
   try {
     const deletedDoctor = await DaftarDokter.findByIdAndDelete(req.params.id);
@@ -463,7 +417,7 @@ app.delete("/doctors/:id", checkAuthenticated, checkAdmin, async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat menghapus dokter");
   }
 });
-
+// Route untuk mengupdate dokter berdasarkan ID
 app.post("/doctors/:id", checkAuthenticated, checkAdmin, upload.single("image"), async (req, res) => {
   try {
     const { title, description, rating, specialization } = req.body;
@@ -484,6 +438,7 @@ app.post("/doctors/:id", checkAuthenticated, checkAdmin, upload.single("image"),
     res.status(500).send("Terjadi kesalahan saat menyimpan perubahan");
   }
 });
+// Route untuk menampilkan halaman dokter
 app.get("/doctors", checkAuthenticated, async (req, res) => {
   try {
     const todoListItems = await DaftarDokter.find();
@@ -493,7 +448,7 @@ app.get("/doctors", checkAuthenticated, async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat memuat halaman Dokter");
   }
 });
-
+// Route untuk menambahkan dokter baru
 app.post("/doctors", upload.single("image"), async (req, res) => {
   try {
     const { title, description, rating, specialization } = req.body;

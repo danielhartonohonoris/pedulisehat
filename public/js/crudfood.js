@@ -1,3 +1,4 @@
+// Fungsi untuk menampilkan atau menyembunyikan formulir edit
 function showEditForm(foodId) {
     var editFormContainer = document.getElementById('editFormContainer_' + foodId);
     if (editFormContainer.style.display === 'none') {
@@ -10,31 +11,12 @@ function showEditForm(foodId) {
         editFormContainer.style.display = 'none';
     }
 }
+// Fungsi untuk membatalkan edit formulir
 function cancelEditForm(foodId) {
     var editFormContainer = document.getElementById('editFormContainer_' + foodId);
     editFormContainer.style.display = 'none';
 }
-
-function submitEditForm(foodId) {
-    var form = document.getElementById("editForm_" + foodId);
-    var formData = new FormData(form);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", form.action, true);
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            console.log("Perubahan berhasil disimpan!");
-            window.location.reload();
-        } else {
-            console.error("Terjadi kesalahan saat menyimpan perubahan.");
-        }
-    };
-    xhr.onerror = function () {
-        console.error("Terjadi kesalahan koneksi.");
-    };
-    xhr.send(formData);
-}
-
+// Fungsi untuk menambahkan makanan ke server
 function submitFormFood() {
     var form = document.getElementById("foodForm");
     var formData = new FormData(form);
@@ -54,7 +36,7 @@ function submitFormFood() {
     };
     xhr.send(formData);
 }
-
+// Fungsi untuk mengupdate makanan ke server menggunakan metode PUT.
 function submitUpdateForm() {
     var form = document.getElementById("updateForm");
     var formData = new FormData(form);
@@ -74,7 +56,7 @@ function submitUpdateForm() {
     };
     xhr.send(formData);
 }
-
+// Fungsi untuk menghapus data makanan dari server
 function deleteFood(foodId) {
     if (confirm("Apakah Anda yakin ingin menghapus makanan ini?")) {
         var xhr = new XMLHttpRequest();
